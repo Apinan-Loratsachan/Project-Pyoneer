@@ -31,6 +31,10 @@ class _Lesson1ScreenState extends State<Lesson1Screen> {
         ),
         const Text(
           "การอ่านภาษาไพทอนเบื้องต้น",
+          style: TextStyle(
+            fontSize: PyoneerText.bodyTextSize,
+            fontWeight: FontWeight.normal,
+          ),
         ),
         LessonComponent().lessonImage(
           context,
@@ -40,7 +44,14 @@ class _Lesson1ScreenState extends State<Lesson1Screen> {
           height: PyoneerText.textSpaceSize,
         ),
         const Text(
-          "การทำงานของภาษาไพทอนเบื้องต้น\n\nภาษาไพทอน execute ได้ 2 mode คือ\n\n1. INTERACTIVE MODE PROGRAMMING : เป็น mode ที่เราพิมพ์คำสั่ง ภาษาไพทอนจะแปลและทำงานทันที เช่น",
+          'การทำงานของภาษาไพทอนเบื้องต้น',
+          style: TextStyle(
+            fontSize: PyoneerText.bodyTextSize,
+            fontWeight: FontWeight.normal,
+          ),
+        ),
+        const Text(
+          "\nภาษาไพทอน execute ได้ 2 mode คือ\n\n1. INTERACTIVE MODE PROGRAMMING : เป็น mode ที่เราพิมพ์คำสั่ง ภาษาไพทอนจะแปลและทำงานทันที เช่น\n",
         ),
         LessonComponent().lessonImage(
           context,

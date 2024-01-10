@@ -12,11 +12,10 @@ class ContentScreen extends StatefulWidget {
 }
 
 class _ContentScreenState extends State<ContentScreen> {
-  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
+      appBar: AppBar(
         centerTitle: true,
         title: const Text("บทเรียน"),
       ),
@@ -24,8 +23,8 @@ class _ContentScreenState extends State<ContentScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           ListTile(
-            leading:
-                LessonComponent.lessonCover('assets/images/lesson1/cover.png', 'lesson-1-cover'),
+            leading: LessonComponent.lessonCover(
+                'assets/images/lesson1/cover.png', 'lesson-1-cover'),
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => const Lesson1Screen()),
@@ -35,23 +34,25 @@ class _ContentScreenState extends State<ContentScreen> {
             ),
           ),
           ListTile(
-            leading: LessonComponent.lessonCover('assets/images/lesson1/cover.png', 'lesson-2-cover'),
+            leading: LessonComponent.lessonCover(
+                'assets/images/lesson1/cover.png', 'lesson-2-cover'),
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => const Lesson2Screen()),
             ),
             title: const Text(
-              'บทเรียนที่ 2\nPython คืออะไร',
+              'บทเรียนที่ 2\nตัวแปรและชนิดข้อมูล',
             ),
           ),
           ListTile(
-            leading: LessonComponent.lessonCover('assets/images/lesson1/cover.png', 'lesson-3-cover'),
+            leading: LessonComponent.lessonCover(
+                'assets/images/lesson1/cover.png', 'lesson-3-cover'),
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => const Lesson3Screen()),
             ),
             title: const Text(
-              'บทเรียนที่ 3\nPython คืออะไร',
+              'บทเรียนที่ 3\nLolem ipsum',
             ),
           ),
         ],
