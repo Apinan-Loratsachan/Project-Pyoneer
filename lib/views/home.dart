@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:pyoneer/utils/color.dart';
+import 'package:pyoneer/views/content.dart';
+import 'package:pyoneer/views/ide.dart';
+import 'package:pyoneer/views/primary.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -8,56 +13,100 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final PageController _pageController = PageController(viewportFraction: 1);
+  int currentIndex = 1;
+  late final PageController _pageController;
+
+  final List<Widget> _children = [
+    const ContentScreen(),
+    const PrimaryScreen(),
+    const IDEScreen(),
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController(initialPage: currentIndex);
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  void onDestinationSelected(int index) {
+    _pageController.animateToPage(
+      index,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: Row(
+        centerTitle: true,
+        title: Column(
           children: [
-            const SizedBox(width: 0),
-            Image.asset(
-              "assets/icons/pyoneer_snake.png",
-              fit: BoxFit.cover,
-              height: 50,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Hero(
+                  tag: "hero-title",
+                  child: Image.asset(
+                    "assets/icons/pyoneer_snake.png",
+                    fit: BoxFit.cover,
+                    height: 60,
+                  ),
+                ),
+                Image.asset(
+                  "assets/icons/pyoneer_text.png",
+                  fit: BoxFit.cover,
+                  height: 40,
+                )
+              ],
             ),
-            const Text("หน้าหลัก"),
           ],
         ),
+        toolbarHeight: 60,
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Expanded(
-            child: PageView.builder(
-              controller: _pageController,
-              itemBuilder: (context, pageIndex) {
-                // Assuming each page has 2 rows with 3 items each
-                int itemsPerPage = 6; 
-                return GridView.builder(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3, // Three items per row
-                    crossAxisSpacing: 10, // Add some spacing for a better look
-                    mainAxisSpacing: 10,
-                  ),
-                  itemBuilder: (context, index) {
-                    // Adjust index to reflect correct item number
-                    int itemNumber = pageIndex * itemsPerPage + index + 1;
-                    return Card(
-                      child: Center(
-                        child: Text('Item $itemNumber'), // Replace with your content
-                      ),
-                    );
-                  },
-                  itemCount: itemsPerPage,
-                  shrinkWrap: true,
-                );
-              },
-              itemCount: (6 / 6).ceil(), // Adjust total item count
-            ),
+      body: PageView(
+        controller: _pageController,
+        onPageChanged: (int index) {
+          setState(() {
+            currentIndex = index;
+          });
+        },
+        children: _children,
+      ),
+      bottomNavigationBar: NavigationBar(
+        surfaceTintColor: Colors.white,
+        indicatorColor: AppColor.primarSnakeColor.withOpacity(0.5),
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        // onDestinationSelected: (int index) {
+        //   setState(() {
+        //     currentIndex = index;
+        //   });
+        // },
+        labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
+        onDestinationSelected: onDestinationSelected,
+        selectedIndex: currentIndex,
+        destinations: const <Widget>[
+          NavigationDestination(
+            icon: FaIcon(FontAwesomeIcons.bookOpen),
+            label: 'บทเรียน',
+            selectedIcon: FaIcon(FontAwesomeIcons.bookOpenReader),
+          ),
+          NavigationDestination(
+            icon: FaIcon(FontAwesomeIcons.home),
+            label: 'หน้าหลัก',
+            selectedIcon: FaIcon(FontAwesomeIcons.homeUser),
+          ),
+          NavigationDestination(
+            icon: FaIcon(FontAwesomeIcons.code),
+            label: 'IDE',
+            selectedIcon: FaIcon(FontAwesomeIcons.laptopCode),
           ),
         ],
       ),

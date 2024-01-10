@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:pyoneer/views/home.dart';
 // import 'package:pyoneer/utils/text.dart';
 import 'package:pyoneer/views/register.dart';
 
@@ -178,12 +179,29 @@ class _LoginScreenState extends State<LoginScreen>
                       opacity: _formFadeAnimation,
                       child: ElevatedButton(
                         onPressed: () {
-                          // Handle sign up logic
+                          Navigator.pushReplacement(
+                            context,
+                            PageRouteBuilder(
+                              pageBuilder:
+                                  (context, animation, secondaryAnimation) =>
+                                      const HomeScreen(),
+                              transitionDuration:
+                                  const Duration(milliseconds: 500),
+                              transitionsBuilder: (context, animation,
+                                  secondaryAnimation, child) {
+                                animation = CurvedAnimation(
+                                    parent: animation, curve: Curves.easeInOut);
+                                return FadeTransition(
+                                  opacity: animation,
+                                  child: child,
+                                );
+                              },
+                            ),
+                          );
                         },
                         style: ElevatedButton.styleFrom(
                           foregroundColor: Colors.white,
-                          backgroundColor:
-                              const Color(0xFF1ABDAD), // Text color
+                          backgroundColor: const Color(0xFF1ABDAD),
                         ),
                         child: const Text('Login'),
                       ),

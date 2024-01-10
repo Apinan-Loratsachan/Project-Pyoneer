@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pyoneer/utils/lesson_component.dart';
 import 'package:pyoneer/views/lessons/lesson1.dart';
 import 'package:pyoneer/views/lessons/lesson2.dart';
+import 'package:pyoneer/views/lessons/lesson3.dart';
 
 class ContentScreen extends StatefulWidget {
   const ContentScreen({super.key});
@@ -10,48 +11,21 @@ class ContentScreen extends StatefulWidget {
   State<ContentScreen> createState() => _ContentScreenState();
 }
 
-/// This class represents the state of the [ContentScreen] widget.
-/// It extends the [State] class and overrides the [build] method to build the UI.
 class _ContentScreenState extends State<ContentScreen> {
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        // backgroundColor: Colors.amber,
+        appBar: AppBar(
         centerTitle: true,
-        title: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Hero(
-                  tag: "hero-title",
-                  child: Image.asset(
-                    "assets/icons/pyoneer_snake.png",
-                    fit: BoxFit.cover,
-                    height: 60,
-                  ),
-                ),
-                Image.asset(
-                  "assets/icons/pyoneer_text.png",
-                  fit: BoxFit.cover,
-                  height: 40,
-                )
-              ],
-            ),
-            const SizedBox(height: 5),
-            const Text("บทเรียน")
-          ],
-        ),
-        toolbarHeight: 100,
+        title: const Text("บทเรียน"),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          const SizedBox(height: 20.0),
           ListTile(
             leading:
-                LessonComponent.lessonCover('assets/images/lesson1/cover.jpg'),
+                LessonComponent.lessonCover('assets/images/lesson1/cover.png', 'lesson-1-cover'),
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => const Lesson1Screen()),
@@ -61,19 +35,23 @@ class _ContentScreenState extends State<ContentScreen> {
             ),
           ),
           ListTile(
-            leading: Hero(
-              tag: 'lesson-2-cover',
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(8.0),
-                child: Image.asset('assets/images/lesson1/cover.jpg'),
-              ),
-            ),
+            leading: LessonComponent.lessonCover('assets/images/lesson1/cover.png', 'lesson-2-cover'),
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => const Lesson2Screen()),
             ),
             title: const Text(
               'บทเรียนที่ 2\nPython คืออะไร',
+            ),
+          ),
+          ListTile(
+            leading: LessonComponent.lessonCover('assets/images/lesson1/cover.png', 'lesson-3-cover'),
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const Lesson3Screen()),
+            ),
+            title: const Text(
+              'บทเรียนที่ 3\nPython คืออะไร',
             ),
           ),
         ],

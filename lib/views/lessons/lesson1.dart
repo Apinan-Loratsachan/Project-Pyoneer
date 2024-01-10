@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:photo_view/photo_view.dart';
 import 'package:pyoneer/utils/lesson_component.dart';
 import 'package:pyoneer/utils/text.dart';
+import 'package:pyoneer/models/Lesson_screen_model.dart';
 
 class Lesson1Screen extends StatefulWidget {
   const Lesson1Screen({super.key});
@@ -10,159 +10,48 @@ class Lesson1Screen extends StatefulWidget {
   State<Lesson1Screen> createState() => _Lesson1ScreenState();
 }
 
-class _Lesson1ScreenState extends State<Lesson1Screen>
-    with TickerProviderStateMixin {
-  late AnimationController _fadeController;
-  late AnimationController _slideController;
-  late Animation<double> _titleFadeAnimation;
-  late Animation<Offset> _titleSlideAnimation;
-  late Animation<double> _contentFadeAnimation;
-  late Animation<Offset> _contentSlideAnimation;
-
-  @override
-  void initState() {
-    super.initState();
-    _fadeController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 2000),
-    );
-    _slideController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 2000),
-    );
-
-    _titleFadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(
-        parent: _fadeController,
-        curve: const Interval(0.0, 0.5, curve: Curves.easeIn),
-      ),
-    );
-
-    _titleSlideAnimation =
-        Tween<Offset>(begin: const Offset(0.0, 1.0), end: Offset.zero).animate(
-      CurvedAnimation(
-        parent: _slideController,
-        curve: const Interval(0.0, 0.5, curve: Curves.easeIn),
-      ),
-    );
-
-    _contentFadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(
-        parent: _fadeController,
-        curve: const Interval(0.5, 1.0, curve: Curves.easeOut),
-      ),
-    );
-    _contentSlideAnimation =
-        Tween<Offset>(begin: const Offset(0.0, 0.2), end: Offset.zero).animate(
-      CurvedAnimation(
-        parent: _slideController,
-        curve: const Interval(0.5, 1.0, curve: Curves.easeIn),
-      ),
-    );
-
-    _fadeController.forward();
-    _slideController.forward();
-  }
-
-  @override
-  void dispose() {
-    _fadeController.dispose();
-    _slideController.dispose();
-    super.dispose();
-  }
-
+class _Lesson1ScreenState extends State<Lesson1Screen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: LessonComponent.lessonsAppbar('Lesson 1'),
-      body: SingleChildScrollView(
-        child: Center(
-          child: Column(
-            children: [
-              Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: LessonComponent.lessonCover(
-                      'assets/images/lesson1/cover.jpg')),
-              const SizedBox(height: 25),
-              SlideTransition(
-                position: _titleSlideAnimation,
-                child: FadeTransition(
-                  opacity: _titleFadeAnimation,
-                  child: const Text(
-                    "Python คืออะไร",
-                    style: TextStyle(
-                      fontSize: PyoneerText.titleTextSize,
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 25),
-              SlideTransition(
-                position: _contentSlideAnimation,
-                child: FadeTransition(
-                  opacity: _contentFadeAnimation,
-                  child: Container(
-                    width: MediaQuery.of(context).size.width * 0.9,
-                    child: Column(
-                      children: <Widget>[
-                        const Text(
-                            "- คุณลักษณะของภาษาไพทอน\n\n\t\t\t\tภาษาไพทอนเป็นภาษาที่นำลักษณะที่ดีของภาษาที่มีอยู่ก่อนแล้ว\nคือ ABC, Modula-3, C, C++, Algol-68, SmallTalk and Unix shell and other scripting languages และเพิ่มคุณลักษณะที่ดี เช่น คลาสและอื่นๆ รวมถึงมี interface ที่เข้าใจได้ง่ายทำให้การเขียนโปรแกรมสะดวกมากขึ้น ภาษาไพทอนเป็นภาษาระดับสูง และจัดอยู่ในกลุ่มภาษา Interpreter คือ แปลแล้วทำงานทีละคำสั่ง มีการประมวลผลทันที (process at runtime) นอกจากนี้ยังมีลักษณะ interactive คือ เราสามารถพิมพ์คำสั่ง ทำงานในลักษณะตอบโต้ได้ และเป็นภาษาที่ได้รับความนิยม เรียนรู้ได้ง่าย เหมาะกับผู้เริ่มต้นเขียนโปรแกรม",
-                            textAlign: TextAlign.left),
-                        const SizedBox(height: 25),
-                        const Text(
-                            "ภาษาไพทอนเป็นภาษาระดับสูง และจัดอยู่ในกลุ่มภาษา Interpreter คือ แปลแล้วทำงานทีละคำสั่ง มีการประมวลผลทันที (process at runtime) นอกจากนี้ยังมีลักษณะ interactive คือ เราสามารถพิมพ์คำสั่ง ทำงานในลักษณะตอบโต้ได้ และเป็นภาษาที่ได้รับความนิยม เรียนรู้ได้ง่าย เหมาะกับผู้เริ่มต้นเขียนโปรแกรม",
-                            textAlign: TextAlign.left),
-                        const SizedBox(
-                          height: 25,
-                        ),
-                        GestureDetector(
-  onTap: () {
-    showDialog(
-      context: context,
-      barrierColor: Colors.transparent,
-      builder: (BuildContext context) {
-        var screenSize = MediaQuery.of(context).size;
-
-        var width = screenSize.width * 0.8;
-        var height = screenSize.height * 0.3;
-
-        return Dialog(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          child: GestureDetector(
-            onTap: () {
-              Navigator.pop(context);
-            },
-            child: SizedBox(
-              width: width,
-              height: height,
-              child: PhotoView(
-                imageProvider: const AssetImage("assets/images/lesson1/lessonImage1.jpg"),
-                minScale: PhotoViewComputedScale.contained * 1,
-                maxScale: PhotoViewComputedScale.covered * 2,
-                initialScale: PhotoViewComputedScale.contained,
-                backgroundDecoration: const BoxDecoration(
-                  color: Colors.transparent,
-                ),
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  },
-  child: Image.asset("assets/images/lesson1/lessonImage1.jpg"),
-),
-                        const SizedBox(height: 25),
-                      ],
-                    ),
-                  ),
-                ),
-              )
-            ],
-          ),
+    return LessonScreenModel(
+      appBarTitle: "Lesson 1",
+      coverImagePath: "assets/images/lesson1/cover.png",
+      heroTag: "lesson-1-cover",
+      lessonTitle: "Python คืออะไร",
+      contentWidgets: [
+        const Text(
+          "คุณลักษณะของภาษาไพทอน\n${PyoneerText.startParagraph}ภาษาไพทอนเป็นภาษาที่นำลักษณะที่ดีของภาษาที่มีอยู่ก่อนแล้ว คือ ABC, Modula-3, C, C++, Algol-68, SmallTalk and Unix shell and other scripting languages และเพิ่มคุณลักษณะที่ดี เช่น คลาสและอื่นๆ รวมถึงมี interface ที่เข้าใจได้ง่ายทำให้การเขียนโปรแกรมสะดวกมากขึ้น",
         ),
-      ),
+        //const SizedBox(height: PyoneerText.textSpaceSize),
+        const Text(
+          "${PyoneerText.startParagraph}ภาษาไพทอนเป็นภาษาระดับสูง และจัดอยู่ในกลุ่มภาษา Interpreter คือ แปลแล้วทำงานทีละคำสั่ง มีการประมวลผลทันที (process at runtime) นอกจากนี้ยังมีลักษณะ interactive คือ เราสามารถพิมพ์คำสั่ง ทำงานในลักษณะตอบโต้ได้ และเป็นภาษาที่ได้รับความนิยม เรียนรู้ได้ง่าย เหมาะกับผู้เริ่มต้นเขียนโปรแกรม",
+        ),
+        const SizedBox(
+          height: PyoneerText.textSpaceSize,
+        ),
+        const Text(
+          "การอ่านภาษาไพทอนเบื้องต้น",
+        ),
+        LessonComponent().lessonImage(
+          context,
+          "assets/images/lesson1/lessonImage1-1.png",
+        ),
+        const SizedBox(
+          height: PyoneerText.textSpaceSize,
+        ),
+        const Text(
+          "การทำงานของภาษาไพทอนเบื้องต้น\n\nภาษาไพทอน execute ได้ 2 mode คือ\n\n1. INTERACTIVE MODE PROGRAMMING : เป็น mode ที่เราพิมพ์คำสั่ง ภาษาไพทอนจะแปลและทำงานทันที เช่น",
+        ),
+        LessonComponent().lessonImage(
+          context,
+          "assets/images/lesson1/lessonImage1.jpg",
+        ),
+        const SizedBox(height: PyoneerText.textSpaceSize),
+        const Text(
+          "ดังภาพ จะเห็นว่า เมื่อสั่งให้ทำงานด้วยคำสั่ง print ระบบจะทำการทำงานทันทีก่อนที่จะรับคำสั่งใหม่",
+          textAlign: TextAlign.center,
+        ),
+      ],
     );
   }
 }

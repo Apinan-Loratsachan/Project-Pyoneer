@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:pyoneer/views/content.dart';
 import 'package:flutter/services.dart';
+import 'package:pyoneer/views/login.dart';
 // import 'package:pyoneer/views/register.dart';
 
 void main() {
@@ -17,6 +17,6 @@ void main() {
       fontFamily: 'Noto Sans Thai',
     ),
     debugShowCheckedModeBanner: false,
-    home: const ContentScreen(),
+    home: const LoginScreen(),
   ));
 }

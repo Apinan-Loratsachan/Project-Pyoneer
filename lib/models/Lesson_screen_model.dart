@@ -2,14 +2,28 @@ import 'package:flutter/material.dart';
 import 'package:pyoneer/utils/lesson_component.dart';
 import 'package:pyoneer/utils/text.dart';
 
-class Lesson2Screen extends StatefulWidget {
-  const Lesson2Screen({super.key});
+class LessonScreenModel extends StatefulWidget {
+  final String appBarTitle;
+  final String coverImagePath;
+  final String heroTag;
+  final String lessonTitle;
+  final List<Widget> contentWidgets;
+
+  const LessonScreenModel({
+    super.key,
+    required this.appBarTitle,
+    required this.coverImagePath,
+    required this.heroTag,
+    required this.lessonTitle,
+    required this.contentWidgets,
+  });
 
   @override
-  State<Lesson2Screen> createState() => _Lesson2ScreenState();
+  _LessonScreenModelState createState() => _LessonScreenModelState();
 }
 
-class _Lesson2ScreenState extends State<Lesson2Screen> with TickerProviderStateMixin {
+class _LessonScreenModelState extends State<LessonScreenModel>
+    with TickerProviderStateMixin {
   late AnimationController _fadeController;
   late AnimationController _slideController;
   late Animation<double> _titleFadeAnimation;
@@ -72,28 +86,23 @@ class _Lesson2ScreenState extends State<Lesson2Screen> with TickerProviderStateM
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: LessonComponent.lessonsAppbar('Lesson 2'),
+      appBar: LessonComponent.lessonsAppbar(widget.appBarTitle),
       body: SingleChildScrollView(
         child: Center(
           child: Column(
             children: [
               Padding(
                 padding: const EdgeInsets.all(15.0),
-                child: Hero(
-                  tag: 'lesson-2-cover',
-                  child: ClipRRect(
-                      borderRadius: BorderRadius.circular(20.0),
-                      child: Image.asset('assets/images/lesson1/cover.png')),
-                ),
+                child: LessonComponent.lessonCover(widget.coverImagePath, widget.heroTag),
               ),
               const SizedBox(height: 25),
               SlideTransition(
                 position: _titleSlideAnimation,
                 child: FadeTransition(
                   opacity: _titleFadeAnimation,
-                  child: const Text(
-                    "Python คืออะไร",
-                    style: TextStyle(
+                  child: Text(
+                    widget.lessonTitle,
+                    style: const TextStyle(
                       fontSize: PyoneerText.titleTextSize,
                     ),
                   ),
@@ -104,22 +113,13 @@ class _Lesson2ScreenState extends State<Lesson2Screen> with TickerProviderStateM
                 position: _contentSlideAnimation,
                 child: FadeTransition(
                   opacity: _contentFadeAnimation,
-                  child: const Column(
-                    children: [
-                      Text("Introduction"),
-                      Row(
-                        children: [
-                          Flexible(
-                            child: Padding(
-                              padding: EdgeInsets.all(20),
-                              child: Text(
-                                "- คุณลักษณะของภาษาไพทอน\n\n\t\t\t\tภาษาไพทอนเป็นภาษาที่นำลักษณะที่ดีของภาษาที่มีอยู่ก่อนแล้ว\nคือ ABC, Modula-3, C, C++, Algol-68, SmallTalk and Unix shell and other scripting languages และเพิ่มคุณลักษณะที่ดี เช่น คลาสและอื่นๆ รวมถึงมี interface ที่เข้าใจได้ง่ายทำให้การเขียนโปรแกรมสะดวกมากขึ้น ภาษาไพทอนเป็นภาษาระดับสูง และจัดอยู่ในกลุ่มภาษา Interpreter คือ แปลแล้วทำงานทีละคำสั่ง มีการประมวลผลทันที (process at runtime) นอกจากนี้ยังมีลักษณะ interactive คือ เราสามารถพิมพ์คำสั่ง ทำงานในลักษณะตอบโต้ได้ และเป็นภาษาที่ได้รับความนิยม เรียนรู้ได้ง่าย เหมาะกับผู้เริ่มต้นเขียนโปรแกรม",
-                              ),
-                            ),
-                          )
-                        ],
-                      )
-                    ],
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.9,
+                    child: Column(
+                      children: <Widget>[
+                        ...widget.contentWidgets,
+                      ],
+                    ),
                   ),
                 ),
               )
