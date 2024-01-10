@@ -87,43 +87,46 @@ class _LessonScreenModelState extends State<LessonScreenModel>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: LessonComponent.lessonsAppbar(widget.appBarTitle),
-      body: SingleChildScrollView(
-        child: Center(
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: LessonComponent.lessonCover(widget.coverImagePath, widget.heroTag),
-              ),
-              const SizedBox(height: 25),
-              SlideTransition(
-                position: _titleSlideAnimation,
-                child: FadeTransition(
-                  opacity: _titleFadeAnimation,
-                  child: Text(
-                    widget.lessonTitle,
-                    style: const TextStyle(
-                      fontSize: PyoneerText.titleTextSize,
+      body: Scrollbar(
+        child: SingleChildScrollView(
+          child: Center(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: LessonComponent.lessonCover(
+                      widget.coverImagePath, widget.heroTag),
+                ),
+                const SizedBox(height: 25),
+                SlideTransition(
+                  position: _titleSlideAnimation,
+                  child: FadeTransition(
+                    opacity: _titleFadeAnimation,
+                    child: Text(
+                      widget.lessonTitle,
+                      style: const TextStyle(
+                        fontSize: PyoneerText.titleTextSize,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 25),
-              SlideTransition(
-                position: _contentSlideAnimation,
-                child: FadeTransition(
-                  opacity: _contentFadeAnimation,
-                  child: SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.9,
-                    child: Column(
-                      children: <Widget>[
-                        ...widget.contentWidgets,
-                      ],
+                const SizedBox(height: 25),
+                SlideTransition(
+                  position: _contentSlideAnimation,
+                  child: FadeTransition(
+                    opacity: _contentFadeAnimation,
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.9,
+                      child: Column(
+                        children: <Widget>[
+                          ...widget.contentWidgets,
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              )
-            ],
+                )
+              ],
+            ),
           ),
         ),
       ),
