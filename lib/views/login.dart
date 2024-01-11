@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pyoneer/views/home.dart';
@@ -226,28 +227,28 @@ class _LoginScreenState extends State<LoginScreen>
                           IconButton(
                             icon: const FaIcon(FontAwesomeIcons.google),
                             onPressed: () async {
-                              await signInWithGoogle();
-                              // ignore: use_build_context_synchronously
-                              Navigator.pushReplacement(
-                                context,
-                                PageRouteBuilder(
-                                  pageBuilder: (context, animation,
-                                          secondaryAnimation) =>
-                                      const HomeScreen(),
-                                  transitionDuration:
-                                      const Duration(milliseconds: 500),
-                                  transitionsBuilder: (context, animation,
-                                      secondaryAnimation, child) {
-                                    animation = CurvedAnimation(
-                                        parent: animation,
-                                        curve: Curves.easeInOut);
-                                    return FadeTransition(
-                                      opacity: animation,
-                                      child: child,
-                                    );
-                                  },
-                                ),
-                              );
+                              UserCredential? userCredential =
+                                  await signInWithGoogle();
+                              if (userCredential != null) {
+                                // ignore: use_build_context_synchronously
+                                Navigator.pushReplacement(
+                                  context,
+                                  PageRouteBuilder(
+                                    pageBuilder: (context, animation,
+                                            secondaryAnimation) =>
+                                        const HomeScreen(),
+                                    transitionDuration:
+                                        const Duration(milliseconds: 500),
+                                    transitionsBuilder: (context, animation,
+                                        secondaryAnimation, child) {
+                                      return FadeTransition(
+                                          opacity: animation, child: child);
+                                    },
+                                  ),
+                                );
+                              } else {
+                                // User cancelled the sign in process or sign in failed
+                              }
                             },
                             color: Colors.blue[500],
                           ),
