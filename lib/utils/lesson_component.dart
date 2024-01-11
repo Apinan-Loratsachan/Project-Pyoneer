@@ -35,7 +35,7 @@ class LessonComponent {
     );
   }
 
-  Widget lessonImage(BuildContext context, String imagePath) {
+  static Widget lessonImage(BuildContext context, String imagePath) {
     return GestureDetector(
       onTap: () {
         showDialog(

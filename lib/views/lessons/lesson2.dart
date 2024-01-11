@@ -51,7 +51,7 @@ class _Lesson2ScreenState extends State<Lesson2Screen> {
         const Text(
           "${PyoneerText.startParagraph}ตัวอย่างการประกาศตัวแปรในภาษาไพทอน ดังตัวอย่างต่อไปนี้",
         ),
-        LessonComponent().lessonImage(
+        LessonComponent.lessonImage(
           context,
           "assets/images/lesson1/lessonImage1.jpg",
         ),
