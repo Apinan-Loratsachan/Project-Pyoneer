@@ -2,27 +2,42 @@ import 'package:flutter/material.dart';
 
 class PyoneerText {
   static const double titleTextSize = 40;
-  static const double bodyTextSize = 20;
+  static const double bodyTextSize = 17;
   static const double brakeLineSize = 25;
-  static const String startParagraph = "\n\t\t\t\t\t\t\t\t\t\t\t";
+  static const String startParagraph = "\n\t\t\t\t\t";
 
-  static Text contentText(String text, {double fontSize = bodyTextSize, FontWeight fontWeight = FontWeight.normal, TextAlign textAlign = TextAlign.start, bool tabSpace = false}) {
+  static Align contentText(String text, {double fontSize = bodyTextSize, FontWeight fontWeight = FontWeight.normal, TextAlign textAlign = TextAlign.left, bool tabSpace = false, Alignment boxAlign = Alignment.centerLeft, TextDecoration textDecoration = TextDecoration.none, bool textSpaceSpan = false, FontStyle fontStyle = FontStyle.normal}) {
     if (tabSpace) {
-      text = startParagraph + text;
+      text = "\t\t\t\t\t$text";
     }
-    return Text(
-      text,
-      style: TextStyle(
-        fontSize: fontSize,
-        fontWeight: fontWeight,
+    if (textSpaceSpan) {
+      text = text.replaceAll(" ", "    ");
+    }
+    return Align(
+      alignment: boxAlign,
+      child: Text(
+        text,
+        style: TextStyle(
+          fontSize: fontSize,
+          fontWeight: fontWeight,
+          fontStyle: fontStyle,
+          decoration: textDecoration,
+        ),
+        textAlign: textAlign,
       ),
-      textAlign: textAlign,
     );
   }
 
-  static SizedBox brakeLine({double height = brakeLineSize}) {
+  static SizedBox brakeLine([double height = brakeLineSize]) {
     return SizedBox(
       height: height,
+    );
+  }
+
+  static Divider divider(double inDent) {
+    return Divider(
+      indent: inDent,
+      endIndent: inDent,
     );
   }
 }

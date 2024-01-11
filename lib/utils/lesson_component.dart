@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
 
 class LessonComponent {
-  static AppBar lessonsAppbar(String titleText) {
+  static AppBar lessonsAppbar(String titleText,String subTitleText) {
     return AppBar(
       title: Row(
         children: [
@@ -18,7 +18,24 @@ class LessonComponent {
             ),
           ),
           const SizedBox(width: 10),
-          Text(titleText)
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(titleText),
+              ),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+            subTitleText,
+            style: const TextStyle(
+              fontSize: 16
+            ),
+          ),
+              ),
+            ],
+          ),
         ],
       ),
       toolbarHeight: 70,

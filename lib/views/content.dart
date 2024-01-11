@@ -41,7 +41,7 @@ class _ContentScreenState extends State<ContentScreen> {
               MaterialPageRoute(builder: (context) => const Lesson2Screen()),
             ),
             title: const Text(
-              'บทเรียนที่ 2\nตัวแปรและชนิดข้อมูล',
+              'บทเรียนที่ 2\nตัวแปรและการกำหนดค่า',
             ),
           ),
           ListTile(
@@ -52,7 +52,7 @@ class _ContentScreenState extends State<ContentScreen> {
               MaterialPageRoute(builder: (context) => const Lesson3Screen()),
             ),
             title: const Text(
-              'บทเรียนที่ 3\nLolem ipsum',
+              'บทเรียนที่ 3\nชนิดข้อมูล',
             ),
           ),
         ],

@@ -4,6 +4,7 @@ import 'package:pyoneer/utils/text.dart';
 
 class LessonScreenModel extends StatefulWidget {
   final String appBarTitle;
+  final String appBarSubTitle;
   final String coverImagePath;
   final String heroTag;
   final String lessonTitle;
@@ -12,6 +13,7 @@ class LessonScreenModel extends StatefulWidget {
   const LessonScreenModel({
     super.key,
     required this.appBarTitle,
+    required this.appBarSubTitle,
     required this.coverImagePath,
     required this.heroTag,
     required this.lessonTitle,
@@ -87,7 +89,7 @@ class _LessonScreenModelState extends State<LessonScreenModel>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: LessonComponent.lessonsAppbar(widget.appBarTitle),
+      appBar: LessonComponent.lessonsAppbar(widget.appBarTitle, widget.appBarSubTitle),
       body: Scrollbar(
         child: SingleChildScrollView(
           child: Center(
@@ -119,6 +121,7 @@ class _LessonScreenModelState extends State<LessonScreenModel>
                     child: SizedBox(
                       width: MediaQuery.of(context).size.width * 0.9,
                       child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
                           ...widget.contentWidgets,
                         ],

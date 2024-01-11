@@ -10,6 +10,7 @@ class Lesson3Screen extends StatelessWidget {
   Widget build(BuildContext context) {
     return LessonScreenModel(
       appBarTitle: 'Lesson 3',
+      appBarSubTitle: "",
       coverImagePath: 'assets/images/lesson1/cover.png',
       heroTag: "lesson-3-cover",
       lessonTitle: "Lesson 3",
