@@ -110,6 +110,7 @@ class _LessonScreenModelState extends State<LessonScreenModel>
                       style: const TextStyle(
                         fontSize: PyoneerText.titleTextSize,
                       ),
+                      textAlign: TextAlign.center,
                     ),
                   ),
                 ),

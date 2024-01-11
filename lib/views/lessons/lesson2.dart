@@ -17,7 +17,7 @@ class _Lesson2ScreenState extends State<Lesson2Screen> {
       appBarSubTitle: "ตัวแปรและการกำหนดค่า",
       coverImagePath: "assets/images/lesson1/cover.png",
       heroTag: "lesson-2-cover",
-      lessonTitle: "ตัวแปรและการกำหนดค่า",
+      lessonTitle: "ตัวแปร และ\nการกำหนดค่า",
       contentWidgets: [
         PyoneerText.contentText("ตัวแปร (variable)",fontWeight: FontWeight.bold, fontSize: 20,),
         PyoneerText.brakeLine(10),
