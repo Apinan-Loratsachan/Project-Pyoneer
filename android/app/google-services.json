@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "389838344082",
+    "project_id": "pyoneer-project",
+    "storage_bucket": "pyoneer-project.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:389838344082:android:4209c58d98827cec043b4b",
+        "android_client_info": {
+          "package_name": "com.pyodev.pyoneer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "389838344082-f7nbf9tjpho2m8mkgqebab95j2le7bls.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pyodev.pyoneer",
+            "certificate_hash": "d563ebc891b39cc124ef2b47cb04a042bc791232"
+          }
+        },
+        {
+          "client_id": "389838344082-ub9qf21ujb2kvstc5d257o0d07e1i8c7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pyodev.pyoneer",
+            "certificate_hash": "a78020342c2b1cdeeea2b9942ce8166193a25164"
+          }
+        },
+        {
+          "client_id": "389838344082-jutufsmsslc1vblhip993cllnondth83.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCuc_c3URqEJU0RrA-93BhSaTd8AxJBv1g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "389838344082-2iciaj89p0pm8cavgedkc7e96k89sru9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

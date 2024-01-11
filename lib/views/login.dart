@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pyoneer/views/home.dart';
 // import 'package:pyoneer/utils/text.dart';
 import 'package:pyoneer/views/register.dart';
+import 'package:pyoneer/service/auth.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -224,8 +225,29 @@ class _LoginScreenState extends State<LoginScreen>
                         children: <Widget>[
                           IconButton(
                             icon: const FaIcon(FontAwesomeIcons.google),
-                            onPressed: () {
-                              // Handle Google login
+                            onPressed: () async {
+                              await signInWithGoogle();
+                              // ignore: use_build_context_synchronously
+                              Navigator.pushReplacement(
+                                context,
+                                PageRouteBuilder(
+                                  pageBuilder: (context, animation,
+                                          secondaryAnimation) =>
+                                      const HomeScreen(),
+                                  transitionDuration:
+                                      const Duration(milliseconds: 500),
+                                  transitionsBuilder: (context, animation,
+                                      secondaryAnimation, child) {
+                                    animation = CurvedAnimation(
+                                        parent: animation,
+                                        curve: Curves.easeInOut);
+                                    return FadeTransition(
+                                      opacity: animation,
+                                      child: child,
+                                    );
+                                  },
+                                ),
+                              );
                             },
                             color: Colors.blue[500],
                           ),
