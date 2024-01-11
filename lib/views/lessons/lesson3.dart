@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pyoneer/models/Lesson_screen_model.dart';
+import 'package:pyoneer/models/lesson_model.dart';
 import 'package:pyoneer/utils/lesson_component.dart';
 import 'package:pyoneer/utils/text.dart';
 
