@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pyoneer/utils/TypewriterText.dart';
 import 'package:pyoneer/utils/lesson_component.dart';
 import 'package:pyoneer/utils/text.dart';
 
@@ -89,7 +90,8 @@ class _LessonScreenModelState extends State<LessonScreenModel>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: LessonComponent.lessonsAppbar(widget.appBarTitle, widget.appBarSubTitle),
+      appBar: LessonComponent.lessonsAppbar(
+          widget.appBarTitle, widget.appBarSubTitle),
       body: Scrollbar(
         child: SingleChildScrollView(
           child: Center(

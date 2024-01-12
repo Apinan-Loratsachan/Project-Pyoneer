@@ -2,9 +2,10 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
+import 'package:pyoneer/utils/TypewriterText.dart';
 
 class LessonComponent {
-  static AppBar lessonsAppbar(String titleText,String subTitleText) {
+  static AppBar lessonsAppbar(String title, String subTitleText) {
     return AppBar(
       title: Row(
         children: [
@@ -23,16 +24,22 @@ class LessonComponent {
             children: [
               Align(
                 alignment: Alignment.centerLeft,
-                child: Text(titleText),
+                child: TypewriterText(
+                  text: title,
+                  textStyle: const TextStyle(
+                    fontSize: 20,
+                  ),
+                ),
               ),
               Align(
                 alignment: Alignment.centerLeft,
-                child: Text(
-            subTitleText,
-            style: const TextStyle(
-              fontSize: 16
-            ),
-          ),
+                child: TypewriterText(
+                  text: subTitleText,
+                  cursorSpeed: 700,
+                  textStyle: const TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
               ),
             ],
           ),
