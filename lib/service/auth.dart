@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:pyoneer/service/user_data.dart';
 
 Future<UserCredential?> signInWithGoogle() async {
   try {
@@ -18,7 +19,14 @@ Future<UserCredential?> signInWithGoogle() async {
       idToken: googleAuth.idToken,
     );
 
-    return await FirebaseAuth.instance.signInWithCredential(credential);
+    UserCredential userCredential =
+        await FirebaseAuth.instance.signInWithCredential(credential);
+
+    UserData.userName = userCredential.user?.displayName ?? "";
+    UserData.email = userCredential.user?.email ?? "";
+    UserData.image = userCredential.user?.photoURL ?? "";
+
+    return userCredential;
   } catch (e) {
     if (kDebugMode) {
       print('Error signing in with Google: $e');

@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pyoneer/views/home.dart';
 // import 'package:pyoneer/utils/text.dart';
@@ -181,25 +182,30 @@ class _LoginScreenState extends State<LoginScreen>
                       opacity: _formFadeAnimation,
                       child: ElevatedButton(
                         onPressed: () {
-                          Navigator.pushReplacement(
-                            context,
-                            PageRouteBuilder(
-                              pageBuilder:
-                                  (context, animation, secondaryAnimation) =>
-                                      const HomeScreen(),
-                              transitionDuration:
-                                  const Duration(milliseconds: 500),
-                              transitionsBuilder: (context, animation,
-                                  secondaryAnimation, child) {
-                                animation = CurvedAnimation(
-                                    parent: animation, curve: Curves.easeInOut);
-                                return FadeTransition(
-                                  opacity: animation,
-                                  child: child,
-                                );
-                              },
-                            ),
+                          Fluttertoast.showToast(
+                            msg: "ใช้ Google Login ไปก่อน",
+                            backgroundColor: Colors.black,
+                            textColor: Colors.white,
                           );
+                          // Navigator.pushReplacement(
+                          //   context,
+                          //   PageRouteBuilder(
+                          //     pageBuilder:
+                          //         (context, animation, secondaryAnimation) =>
+                          //             const HomeScreen(),
+                          //     transitionDuration:
+                          //         const Duration(milliseconds: 500),
+                          //     transitionsBuilder: (context, animation,
+                          //         secondaryAnimation, child) {
+                          //       animation = CurvedAnimation(
+                          //           parent: animation, curve: Curves.easeInOut);
+                          //       return FadeTransition(
+                          //         opacity: animation,
+                          //         child: child,
+                          //       );
+                          //     },
+                          //   ),
+                          // );
                         },
                         style: ElevatedButton.styleFrom(
                           foregroundColor: Colors.white,

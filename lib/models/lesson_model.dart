@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:pyoneer/utils/TypewriterText.dart';
 import 'package:pyoneer/utils/lesson_component.dart';
 import 'package:pyoneer/utils/text.dart';
 

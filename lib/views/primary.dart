@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:pyoneer/service/user_data.dart';
+import 'package:pyoneer/utils/color.dart';
 
 class PrimaryScreen extends StatefulWidget {
   const PrimaryScreen({super.key});
@@ -16,6 +18,55 @@ class _PrimaryScreenState extends State<PrimaryScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
+            Padding(
+              padding: const EdgeInsets.all(5.0),
+              child: Container(
+                decoration: const BoxDecoration(
+                  color: Colors.white70,
+                  // gradient: LinearGradient(
+                  //     colors: [AppColor.primarSnakeColor.withAlpha(100).withOpacity(0), AppColor.secondarySnakeColor.withAlpha(100).withOpacity(1)],
+                  //     begin: Alignment.topLeft,
+                  //     end: Alignment.bottomRight),
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColor.primarSnakeColor,
+                      offset: Offset(0, 10),
+                      blurStyle: BlurStyle.normal,
+                      blurRadius: 20,
+                    ),
+                  ],
+                ),
+                child: Row(
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(8.0),
+                      child: Image.network(UserData.image),
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          UserData.userName,
+                          textAlign: TextAlign.left,
+                          style: const TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          UserData.email,
+                          textAlign: TextAlign.left,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 30),
             Expanded(
               child: PageView.builder(
                 itemBuilder: (context, pageIndex) {
