@@ -54,21 +54,21 @@ class _LessonScreenModelState extends State<LessonScreenModel>
     );
 
     _titleSlideAnimation =
-        Tween<Offset>(begin: const Offset(0.0, 1.0), end: Offset.zero).animate(
+        Tween<Offset>(begin: const Offset(0.0, 0.5), end: Offset.zero).animate(
       CurvedAnimation(
         parent: _slideController,
         curve: const Interval(0.0, 0.5, curve: Curves.easeIn),
       ),
     );
 
-    _contentFadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+    _contentFadeAnimation = Tween<double>(begin: 0.0, end: 1).animate(
       CurvedAnimation(
         parent: _fadeController,
         curve: const Interval(0.5, 1.0, curve: Curves.easeOut),
       ),
     );
     _contentSlideAnimation =
-        Tween<Offset>(begin: const Offset(0.0, 0.2), end: Offset.zero).animate(
+        Tween<Offset>(begin: const Offset(0.1, 0.0), end: Offset.zero).animate(
       CurvedAnimation(
         parent: _slideController,
         curve: const Interval(0.5, 1.0, curve: Curves.easeIn),
