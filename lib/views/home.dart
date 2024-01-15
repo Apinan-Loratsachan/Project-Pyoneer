@@ -81,27 +81,32 @@ class _HomeScreenState extends State<HomeScreen> {
               onTap: () => Navigator.push(
                 context,
                 PageRouteBuilder(
-                  pageBuilder: (context, animation1, animation2) => const AccountSettigScreen(),
+                  pageBuilder: (context, animation1, animation2) =>
+                      const AccountSettigScreen(),
                   transitionDuration: const Duration(milliseconds: 500),
                   transitionsBuilder: (context, animation1, animation2, child) {
                     animation1 = CurvedAnimation(
                       parent: animation1,
                       curve: Curves.easeInOut,
                     );
-                    return SlideTransition(
-                      position: Tween<Offset>(
-                        begin: const Offset(1.0, 0.0),
-                        end: Offset.zero,
+                    return FadeTransition(
+                      opacity: Tween(
+                        begin: 0.0,
+                        end: 1.0,
                       ).animate(animation1),
-                      child: child,
+                      child: SlideTransition(
+                        position: Tween<Offset>(
+                          begin: const Offset(1.0, 0.0),
+                          end: Offset.zero,
+                        ).animate(animation1),
+                        child: child,
+                      ),
                     );
                   },
                 ),
               ),
-              borderRadius:
-                  BorderRadius.circular(50),
-              customBorder:
-                  const CircleBorder(),
+              borderRadius: BorderRadius.circular(50),
+              customBorder: const CircleBorder(),
               child: UserData.image == "" || UserData.image.isEmpty
                   ? const Icon(FontAwesomeIcons.person)
                   : Padding(
