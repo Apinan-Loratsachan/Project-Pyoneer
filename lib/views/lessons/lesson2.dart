@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pyoneer/models/lesson_component.dart';
 import 'package:pyoneer/utils/text.dart';
 import 'package:pyoneer/models/lesson_model.dart';
 
@@ -13,10 +14,10 @@ class _Lesson2ScreenState extends State<Lesson2Screen> {
   @override
   Widget build(BuildContext context) {
     return LessonScreenModel(
-      appBarTitle: "บทเรียนที่ 2",
-      appBarSubTitle: "ตัวแปรและการกำหนดค่า",
-      coverImagePath: "assets/images/lesson1/cover.png",
-      heroTag: "lesson-2-cover",
+      appBarTitle: LessonComponent.lessonTitle[2],
+      appBarSubTitle: LessonComponent.lessonSubTitle[2],
+      coverImagePath: LessonComponent.lessonImageSrc[2],
+      heroTag: LessonComponent.heroTag[2],
       lessonTitle: "ตัวแปร และ\nการกำหนดค่า",
       contentWidgets: [
         PyoneerText.contentText("ตัวแปร (variable)",fontWeight: FontWeight.bold, fontSize: 20,),

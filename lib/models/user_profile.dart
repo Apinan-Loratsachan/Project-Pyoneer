@@ -25,7 +25,9 @@ class _UserProfileState extends State<UserProfile> {
         size: const Size(200, 200),
       );
       dominantColor = generator.dominantColor?.color;
+      AppColor.profileColor = dominantColor;
       textColor = generator.dominantColor?.bodyTextColor;
+      AppColor.profileTextColor = textColor;
 
       setState(() {});
     }
@@ -34,7 +36,7 @@ class _UserProfileState extends State<UserProfile> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(5.0),
+      padding: const EdgeInsets.all(20.0),
       child: Container(
         decoration: BoxDecoration(
           color: dominantColor ?? Colors.white70,
@@ -56,26 +58,32 @@ class _UserProfileState extends State<UserProfile> {
                   ? Container()
                   : Image.network(UserData.image,),
             ),
-            const SizedBox(width: 10),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  UserData.userName,
-                  textAlign: TextAlign.left,
-                  style: TextStyle(
-                    fontSize: 18, 
-                    fontWeight: FontWeight.bold,
-                    color: textColor ?? Colors.black,
-                  ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(10),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      UserData.userName,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                        fontSize: 18, 
+                        fontWeight: FontWeight.bold,
+                        color: textColor ?? Colors.black,
+                      ),
+                    ),
+                    Text(
+                      UserData.email,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.left,
+                      style: TextStyle(color: textColor ?? Colors.black),
+                    ),
+                  ],
                 ),
-                Text(
-                  UserData.email,
-                  textAlign: TextAlign.left,
-                  style: TextStyle(color: textColor ?? Colors.black),
-                ),
-              ],
+              ),
             ),
           ],
         ),

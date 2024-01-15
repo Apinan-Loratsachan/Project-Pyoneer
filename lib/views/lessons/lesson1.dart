@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pyoneer/utils/lesson_component.dart';
+import 'package:pyoneer/models/lesson_component.dart';
 import 'package:pyoneer/utils/text.dart';
 import 'package:pyoneer/models/lesson_model.dart';
 
@@ -14,10 +14,10 @@ class _Lesson1ScreenState extends State<Lesson1Screen> {
   @override
   Widget build(BuildContext context) {
     return LessonScreenModel(
-      appBarTitle: "บทเรียนที่ 1",
-      appBarSubTitle: "Python คืออะไร",
-      coverImagePath: "assets/images/lesson1/cover.png",
-      heroTag: "lesson-1-cover",
+      appBarTitle: LessonComponent.lessonTitle[1],
+      appBarSubTitle: LessonComponent.lessonSubTitle[1],
+      coverImagePath: LessonComponent.lessonImageSrc[1],
+      heroTag: LessonComponent.heroTag[1],
       lessonTitle: "Python คืออะไร",
       contentWidgets: [
         PyoneerText.contentText("คุณลักษณะของภาษาไพทอน",fontWeight: FontWeight.bold, fontSize: 20),

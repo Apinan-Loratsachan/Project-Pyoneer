@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:pyoneer/utils/lesson_component.dart';
+import 'package:pyoneer/models/lesson_component.dart';
+import 'package:pyoneer/views/lessons/lesson0.dart';
 import 'package:pyoneer/views/lessons/lesson1.dart';
 import 'package:pyoneer/views/lessons/lesson2.dart';
 import 'package:pyoneer/views/lessons/lesson3.dart';
@@ -12,6 +13,23 @@ class ContentScreen extends StatefulWidget {
 }
 
 class _ContentScreenState extends State<ContentScreen> {
+  ListTile lessonTitle(String imageSrc, String heroTag, String title,
+      String subtitle, Widget targetScreen) {
+    return ListTile(
+      leading: LessonComponent.lessonCover(imageSrc, heroTag, true),
+      onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => targetScreen),
+      ),
+      title: Text(
+        title,
+      ),
+      subtitle: Text(
+        subtitle,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,39 +40,10 @@ class _ContentScreenState extends State<ContentScreen> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          ListTile(
-            leading: LessonComponent.lessonCover(
-                'assets/images/lesson1/cover.png', 'lesson-1-cover'),
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const Lesson1Screen()),
-            ),
-            title: const Text(
-              'บทเรียนที่ 1\nPython คืออะไร',
-            ),
-          ),
-          ListTile(
-            leading: LessonComponent.lessonCover(
-                'assets/images/lesson1/cover.png', 'lesson-2-cover'),
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const Lesson2Screen()),
-            ),
-            title: const Text(
-              'บทเรียนที่ 2\nตัวแปรและการกำหนดค่า',
-            ),
-          ),
-          ListTile(
-            leading: LessonComponent.lessonCover(
-                'assets/images/lesson1/cover.png', 'lesson-3-cover'),
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const Lesson3Screen()),
-            ),
-            title: const Text(
-              'บทเรียนที่ 3\nชนิดข้อมูล',
-            ),
-          ),
+          lessonTitle(LessonComponent.lessonImageSrc[0], LessonComponent.heroTag[0], LessonComponent.lessonTitle[0], LessonComponent.lessonSubTitle[0], const Lesson0Screen()),
+          lessonTitle(LessonComponent.lessonImageSrc[1], LessonComponent.heroTag[1], LessonComponent.lessonTitle[1], LessonComponent.lessonSubTitle[1], const Lesson1Screen()),
+          lessonTitle(LessonComponent.lessonImageSrc[2], LessonComponent.heroTag[2], LessonComponent.lessonTitle[2], LessonComponent.lessonSubTitle[2], const Lesson2Screen()),
+          lessonTitle(LessonComponent.lessonImageSrc[3], LessonComponent.heroTag[3], LessonComponent.lessonTitle[3], LessonComponent.lessonSubTitle[3], const Lesson3Screen()),
         ],
       ),
     );
