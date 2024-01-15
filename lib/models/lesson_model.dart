@@ -122,11 +122,13 @@ class _LessonScreenModelState extends State<LessonScreenModel>
                     opacity: _contentFadeAnimation,
                     child: SizedBox(
                       width: MediaQuery.of(context).size.width * 0.9,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          ...widget.contentWidgets,
-                        ],
+                      child: SingleChildScrollView(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: <Widget>[
+                            ...widget.contentWidgets,
+                          ],
+                        ),
                       ),
                     ),
                   ),

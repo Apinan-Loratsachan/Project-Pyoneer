@@ -20,7 +20,8 @@ class _UserProfileState extends State<UserProfile> {
 
   void _updatePaletteGenerator() async {
     if (UserData.image.isNotEmpty) {
-      final PaletteGenerator generator = await PaletteGenerator.fromImageProvider(
+      final PaletteGenerator generator =
+          await PaletteGenerator.fromImageProvider(
         NetworkImage(UserData.image),
         size: const Size(200, 200),
       );
@@ -56,7 +57,11 @@ class _UserProfileState extends State<UserProfile> {
               borderRadius: BorderRadius.circular(8.0),
               child: UserData.image.isEmpty
                   ? Container()
-                  : Image.network(UserData.image,),
+                  : Hero(
+                    tag: "profileImage",
+                      child: Image.network(
+                      UserData.image,
+                    )),
             ),
             Expanded(
               child: Padding(
@@ -70,7 +75,7 @@ class _UserProfileState extends State<UserProfile> {
                       overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.left,
                       style: TextStyle(
-                        fontSize: 18, 
+                        fontSize: 18,
                         fontWeight: FontWeight.bold,
                         color: textColor ?? Colors.black,
                       ),

@@ -94,6 +94,7 @@ flutter:
     - assets/images/lesson1/
     - assets/images/lesson2/
     - assets/images/lesson3/
+    - assets/images/lesson4/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

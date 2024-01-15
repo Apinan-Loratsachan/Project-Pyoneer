@@ -9,25 +9,47 @@ class LessonComponent {
     "assets/images/lesson0/cover.png",
     "assets/images/lesson1/cover.png",
     "assets/images/lesson2/cover.png",
-    "assets/images/lesson3/cover.png"
+    "assets/images/lesson3/cover.png",
+    "assets/images/lesson4/cover.png",
   ];
   static List<String> lessonTitle = [
     "บทนำ",
     "บทเรียนที่ 1",
     "บทเรียนที่ 2",
     "บทเรียนที่ 3",
+    "บทเรียนที่ 4",
+    "บทเรียนที่ 5",
+    "บทเรียนที่ 6",
+    "บทเรียนที่ 7",
+    "บทเรียนที่ 8",
+    "บทเรียนที่ 9",
+    "บทเรียนที่ 10",
   ];
   static List<String> lessonSubTitle = [
     "Python คืออะไร",
     "คุณลักษณะของภาษา Python",
     "ตัวแปรและการกำหนดค่า",
     "ชนิดข้อมูล",
+    "ตัวดำเนินการและนิพจน์",
+    "บทเรียนที่ 5",
+    "บทเรียนที่ 6",
+    "บทเรียนที่ 7",
+    "บทเรียนที่ 8",
+    "บทเรียนที่ 9",
+    "บทเรียนที่ 10",
   ];
   static List<String> heroTag = [
     "lesson-0-cover",
     "lesson-1-cover",
     "lesson-2-cover",
     "lesson-3-cover",
+    "lesson-4-cover",
+    "lesson-5-cover",
+    "lesson-6-cover",
+    "lesson-7-cover",
+    "lesson-8-cover",
+    "lesson-9-cover",
+    "lesson-10-cover",
   ];
 
   static AppBar lessonsAppbar(String title, String subTitleText) {

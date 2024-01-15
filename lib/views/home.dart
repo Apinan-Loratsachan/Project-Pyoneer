@@ -80,8 +80,22 @@ class _HomeScreenState extends State<HomeScreen> {
             InkWell(
               onTap: () => Navigator.push(
                 context,
-                MaterialPageRoute(
-                  builder: (context) => const AccountSettigScreen(),
+                PageRouteBuilder(
+                  pageBuilder: (context, animation1, animation2) => const AccountSettigScreen(),
+                  transitionDuration: const Duration(milliseconds: 500),
+                  transitionsBuilder: (context, animation1, animation2, child) {
+                    animation1 = CurvedAnimation(
+                      parent: animation1,
+                      curve: Curves.easeInOut,
+                    );
+                    return SlideTransition(
+                      position: Tween<Offset>(
+                        begin: const Offset(1.0, 0.0),
+                        end: Offset.zero,
+                      ).animate(animation1),
+                      child: child,
+                    );
+                  },
                 ),
               ),
               borderRadius:
@@ -94,8 +108,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       padding: const EdgeInsets.all(8.0),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(50),
-                        child: Image.network(
-                          UserData.image,
+                        child: Hero(
+                          tag: "profileImage",
+                          child: ClipOval(
+                            child: Image.network(
+                              UserData.image,
+                            ),
+                          ),
                         ),
                       ),
                     ),
