@@ -11,7 +11,7 @@ class TypewriterText extends StatefulWidget {
     Key? key,
     required this.text,
     this.textStyle,
-    this.typingSpeed = 100,
+    this.typingSpeed = 85,
     this.cursorSpeed = 500,
   }) : super(key: key);
 

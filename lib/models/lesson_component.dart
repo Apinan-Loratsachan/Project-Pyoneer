@@ -2,9 +2,34 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
-import 'package:pyoneer/utils/TypewriterText.dart';
+import 'package:pyoneer/utils/type_writer_text.dart';
 
 class LessonComponent {
+  static List<String> lessonImageSrc = [
+    "assets/images/lesson0/cover.png",
+    "assets/images/lesson1/cover.png",
+    "assets/images/lesson2/cover.png",
+    "assets/images/lesson3/cover.png"
+  ];
+  static List<String> lessonTitle = [
+    "บทนำ",
+    "บทเรียนที่ 1",
+    "บทเรียนที่ 2",
+    "บทเรียนที่ 3",
+  ];
+  static List<String> lessonSubTitle = [
+    "Python คืออะไร",
+    "คุณลักษณะของภาษา Python",
+    "ตัวแปรและการกำหนดค่า",
+    "ชนิดข้อมูล",
+  ];
+  static List<String> heroTag = [
+    "lesson-0-cover",
+    "lesson-1-cover",
+    "lesson-2-cover",
+    "lesson-3-cover",
+  ];
+
   static AppBar lessonsAppbar(String title, String subTitleText) {
     return AppBar(
       title: Row(
@@ -49,12 +74,16 @@ class LessonComponent {
     );
   }
 
-  static Hero lessonCover(String imagePath, String heroTag) {
+  static Hero lessonCover(String imagePath, String heroTag,
+      [bool listTile = false]) {
     return Hero(
       tag: heroTag,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(8.0),
-        child: Image.asset(imagePath),
+        child: Image.asset(
+          imagePath,
+          width: listTile ? 60 : double.infinity,
+        ),
       ),
     );
   }
