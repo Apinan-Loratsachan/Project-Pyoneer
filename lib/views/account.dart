@@ -18,7 +18,7 @@ class _AccountSettigScreenState extends State<AccountSettigScreen> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text("Account Settings"),
+        title: const Text("การตั้งค่าบัญชี"),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -30,12 +30,12 @@ class _AccountSettigScreenState extends State<AccountSettigScreen> {
                 children: [
                   ListTile(
                     leading: const Icon(FontAwesomeIcons.hashtag),
-                    title: const Text("UID"),
+                    title: const Text("รหัสผู้ใช้"),
                     trailing: Text(UserData.uid),
                   ),
                   ListTile(
                     leading: const Icon(FontAwesomeIcons.userPen),
-                    title: const Text("Username"),
+                    title: const Text("ชื่อผู้ใช้"),
                     trailing: Text(UserData.userName),
                   ),
                   ElevatedButton(
@@ -44,37 +44,62 @@ class _AccountSettigScreenState extends State<AccountSettigScreen> {
                       backgroundColor:
                           MaterialStateProperty.all(Colors.red[500]),
                     ),
-                    onPressed: () {
-                      UserData.clear();
-                      signOut();
-                      Navigator.pushReplacement(
-                        context,
-                        PageRouteBuilder(
-                          pageBuilder: (context, animation1, animation2) =>
-                              const LoginScreen(),
-                          transitionDuration: const Duration(milliseconds: 500),
-                          transitionsBuilder:
-                              (context, animation1, animation2, child) {
-                            animation1 = CurvedAnimation(
-                              parent: animation1,
-                              curve: Curves.easeInOut,
-                            );
-                            return FadeTransition(
-                              opacity: Tween(
-                                begin: 0.0,
-                                end: 1.0,
-                              ).animate(animation1),
-                              child: SlideTransition(
-                                position: Tween<Offset>(
-                                  begin: const Offset(0.0, 1.0),
-                                  end: Offset.zero,
-                                ).animate(animation1),
-                                child: child,
-                              ),
-                            );
-                          },
+                    onPressed: () async {
+                      final shouldLogout = await showDialog<bool>(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          backgroundColor: Colors.white,
+                          surfaceTintColor: Colors.white,
+                          title: const Text('ยืนยันการออกจากระบบ'),
+                          content:
+                              const Text('คุณต้องการออกจากระบบใช่หรือไม่?'),
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () => Navigator.of(context).pop(false),
+                              child: const Text('ยกเลิก',
+                                  style: TextStyle(color: Colors.black)),
+                            ),
+                            TextButton(
+                              onPressed: () => Navigator.of(context).pop(true),
+                              child: const Text('ออกจากระบบ',
+                                  style: TextStyle(color: Colors.red)),
+                            ),
+                          ],
                         ),
                       );
+
+                      if (shouldLogout == true) {
+                        UserData.clear();
+                        signOut();
+                        // ignore: use_build_context_synchronously
+                        Navigator.pushReplacement(
+                          context,
+                          PageRouteBuilder(
+                            pageBuilder: (context, animation1, animation2) =>
+                                const LoginScreen(),
+                            transitionDuration:
+                                const Duration(milliseconds: 500),
+                            transitionsBuilder:
+                                (context, animation1, animation2, child) {
+                              animation1 = CurvedAnimation(
+                                parent: animation1,
+                                curve: Curves.easeInOut,
+                              );
+                              return FadeTransition(
+                                opacity: Tween(begin: 0.0, end: 1.0)
+                                    .animate(animation1),
+                                child: SlideTransition(
+                                  position: Tween<Offset>(
+                                    begin: const Offset(0.0, 1.0),
+                                    end: Offset.zero,
+                                  ).animate(animation1),
+                                  child: child,
+                                ),
+                              );
+                            },
+                          ),
+                        );
+                      }
                     },
                     child: const Row(
                       mainAxisAlignment: MainAxisAlignment.center,
