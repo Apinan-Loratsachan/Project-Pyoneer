@@ -240,17 +240,30 @@ class _LoginScreenState extends State<LoginScreen>
                                 Navigator.pushReplacement(
                                   context,
                                   PageRouteBuilder(
-                                    pageBuilder: (context, animation,
-                                            secondaryAnimation) =>
-                                        const HomeScreen(),
-                                    transitionDuration:
-                                        const Duration(milliseconds: 500),
-                                    transitionsBuilder: (context, animation,
-                                        secondaryAnimation, child) {
-                                      return FadeTransition(
-                                          opacity: animation, child: child);
-                                    },
-                                  ),
+                          pageBuilder: (context, animation1, animation2) =>
+                              const HomeScreen(),
+                          transitionDuration: const Duration(milliseconds: 500),
+                          transitionsBuilder:
+                              (context, animation1, animation2, child) {
+                            animation1 = CurvedAnimation(
+                              parent: animation1,
+                              curve: Curves.easeInOut,
+                            );
+                            return FadeTransition(
+                              opacity: Tween(
+                                begin: 0.0,
+                                end: 1.0,
+                              ).animate(animation1),
+                              child: SlideTransition(
+                                position: Tween<Offset>(
+                                  begin: const Offset(0.0, 1.0),
+                                  end: Offset.zero,
+                                ).animate(animation1),
+                                child: child,
+                              ),
+                            );
+                          },
+                        ),
                                 );
                               } else {
                                 // User cancelled the sign in process or sign in failed
@@ -271,22 +284,30 @@ class _LoginScreenState extends State<LoginScreen>
                               Navigator.pushReplacement(
                                 context,
                                 PageRouteBuilder(
-                                  pageBuilder: (context, animation,
-                                          secondaryAnimation) =>
-                                      const HomeScreen(),
-                                  transitionDuration:
-                                      const Duration(milliseconds: 500),
-                                  transitionsBuilder: (context, animation,
-                                      secondaryAnimation, child) {
-                                    animation = CurvedAnimation(
-                                        parent: animation,
-                                        curve: Curves.easeInOut);
-                                    return FadeTransition(
-                                      opacity: animation,
-                                      child: child,
-                                    );
-                                  },
-                                ),
+                          pageBuilder: (context, animation1, animation2) =>
+                              const HomeScreen(),
+                          transitionDuration: const Duration(milliseconds: 500),
+                          transitionsBuilder:
+                              (context, animation1, animation2, child) {
+                            animation1 = CurvedAnimation(
+                              parent: animation1,
+                              curve: Curves.easeInOut,
+                            );
+                            return FadeTransition(
+                              opacity: Tween(
+                                begin: 0.0,
+                                end: 1.0,
+                              ).animate(animation1),
+                              child: SlideTransition(
+                                position: Tween<Offset>(
+                                  begin: const Offset(0.0, 1.0),
+                                  end: Offset.zero,
+                                ).animate(animation1),
+                                child: child,
+                              ),
+                            );
+                          },
+                        ),
                               );
                             },
                             color: Colors.grey,
