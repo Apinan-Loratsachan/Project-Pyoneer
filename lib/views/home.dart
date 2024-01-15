@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:pyoneer/service/user_data.dart';
 import 'package:pyoneer/utils/color.dart';
+import 'package:pyoneer/views/account.dart';
 import 'package:pyoneer/views/content.dart';
 import 'package:pyoneer/views/ide.dart';
 import 'package:pyoneer/views/primary.dart';
@@ -73,6 +75,32 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ],
           ),
+          leading: Container(),
+          actions: <Widget>[
+            InkWell(
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const AccountSettigScreen(),
+                ),
+              ),
+              borderRadius:
+                  BorderRadius.circular(50),
+              customBorder:
+                  const CircleBorder(),
+              child: UserData.image == "" || UserData.image.isEmpty
+                  ? const Icon(FontAwesomeIcons.person)
+                  : Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(50),
+                        child: Image.network(
+                          UserData.image,
+                        ),
+                      ),
+                    ),
+            )
+          ],
           toolbarHeight: 60,
         ),
         body: PageView(
