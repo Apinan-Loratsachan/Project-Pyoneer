@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:pyoneer/models/animated_navigation_Icon.dart';
 import 'package:pyoneer/service/user_data.dart';
 import 'package:pyoneer/utils/color.dart';
 import 'package:pyoneer/views/account.dart';
@@ -108,7 +109,10 @@ class _HomeScreenState extends State<HomeScreen> {
               borderRadius: BorderRadius.circular(50),
               customBorder: const CircleBorder(),
               child: UserData.image == "" || UserData.image.isEmpty
-                  ? const Icon(FontAwesomeIcons.person)
+                  ? const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Icon(FontAwesomeIcons.userSecret),
+                    )
                   : Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: ClipRRect(
@@ -140,29 +144,33 @@ class _HomeScreenState extends State<HomeScreen> {
           surfaceTintColor: Colors.white,
           indicatorColor: AppColor.primarSnakeColor.withOpacity(0.5),
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-          // onDestinationSelected: (int index) {
-          //   setState(() {
-          //     currentIndex = index;
-          //   });
-          // },
           labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
           onDestinationSelected: onDestinationSelected,
           selectedIndex: currentIndex,
-          destinations: const <Widget>[
+          destinations: <Widget>[
             NavigationDestination(
-              icon: FaIcon(FontAwesomeIcons.bookOpen),
+              icon: AnimatedNavigationIcon(
+                icon: FontAwesomeIcons.bookOpen,
+                selectedIcon: FontAwesomeIcons.bookOpenReader,
+                isSelected: currentIndex == 0,
+              ),
               label: 'บทเรียน',
-              selectedIcon: FaIcon(FontAwesomeIcons.bookOpenReader),
             ),
             NavigationDestination(
-              icon: FaIcon(FontAwesomeIcons.home),
+              icon: AnimatedNavigationIcon(
+                icon: FontAwesomeIcons.home,
+                selectedIcon: FontAwesomeIcons.homeUser,
+                isSelected: currentIndex == 1,
+              ),
               label: 'หน้าหลัก',
-              selectedIcon: FaIcon(FontAwesomeIcons.homeUser),
             ),
             NavigationDestination(
-              icon: FaIcon(FontAwesomeIcons.code),
+              icon: AnimatedNavigationIcon(
+                icon: FontAwesomeIcons.code,
+                selectedIcon: FontAwesomeIcons.laptopCode,
+                isSelected: currentIndex == 2,
+              ),
               label: 'IDE',
-              selectedIcon: FaIcon(FontAwesomeIcons.laptopCode),
             ),
           ],
         ),

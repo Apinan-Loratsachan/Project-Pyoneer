@@ -266,11 +266,30 @@ class _LoginScreenState extends State<LoginScreen>
                             color: Colors.blue,
                           ),
                           IconButton(
-                            icon: const FaIcon(FontAwesomeIcons.line),
+                            icon: const FaIcon(FontAwesomeIcons.userSecret),
                             onPressed: () {
-                              // Handle LinkedIn login
+                              Navigator.pushReplacement(
+                                context,
+                                PageRouteBuilder(
+                                  pageBuilder: (context, animation,
+                                          secondaryAnimation) =>
+                                      const HomeScreen(),
+                                  transitionDuration:
+                                      const Duration(milliseconds: 500),
+                                  transitionsBuilder: (context, animation,
+                                      secondaryAnimation, child) {
+                                    animation = CurvedAnimation(
+                                        parent: animation,
+                                        curve: Curves.easeInOut);
+                                    return FadeTransition(
+                                      opacity: animation,
+                                      child: child,
+                                    );
+                                  },
+                                ),
+                              );
                             },
-                            color: Colors.green[300],
+                            color: Colors.grey,
                           ),
                         ],
                       ),

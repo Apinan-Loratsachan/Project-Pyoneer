@@ -36,6 +36,9 @@ class _UserProfileState extends State<UserProfile> {
 
   @override
   Widget build(BuildContext context) {
+    if (UserData.uid.isEmpty) {
+      return Container();
+    }
     return Padding(
       padding: const EdgeInsets.all(20.0),
       child: Container(

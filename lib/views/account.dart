@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pyoneer/models/user_profile.dart';
+import 'package:pyoneer/service/auth.dart';
 import 'package:pyoneer/service/user_data.dart';
+import 'package:pyoneer/views/login.dart';
 
 class AccountSettigScreen extends StatefulWidget {
   const AccountSettigScreen({super.key});
@@ -26,10 +28,10 @@ class _AccountSettigScreenState extends State<AccountSettigScreen> {
               padding: const EdgeInsets.all(8.0),
               child: Column(
                 children: [
-                  const ListTile(
-                    leading: Icon(FontAwesomeIcons.hashtag),
-                    title: Text("UID"),
-                    trailing: Text("##########"),
+                  ListTile(
+                    leading: const Icon(FontAwesomeIcons.hashtag),
+                    title: const Text("UID"),
+                    trailing: Text(UserData.uid),
                   ),
                   ListTile(
                     leading: const Icon(FontAwesomeIcons.userPen),
@@ -42,7 +44,38 @@ class _AccountSettigScreenState extends State<AccountSettigScreen> {
                       backgroundColor:
                           MaterialStateProperty.all(Colors.red[500]),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      UserData.clear();
+                      signOut();
+                      Navigator.pushReplacement(
+                        context,
+                        PageRouteBuilder(
+                          pageBuilder: (context, animation1, animation2) =>
+                              const LoginScreen(),
+                          transitionDuration: const Duration(milliseconds: 500),
+                          transitionsBuilder:
+                              (context, animation1, animation2, child) {
+                            animation1 = CurvedAnimation(
+                              parent: animation1,
+                              curve: Curves.easeInOut,
+                            );
+                            return FadeTransition(
+                              opacity: Tween(
+                                begin: 0.0,
+                                end: 1.0,
+                              ).animate(animation1),
+                              child: SlideTransition(
+                                position: Tween<Offset>(
+                                  begin: const Offset(0.0, 1.0),
+                                  end: Offset.zero,
+                                ).animate(animation1),
+                                child: child,
+                              ),
+                            );
+                          },
+                        ),
+                      );
+                    },
                     child: const Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [

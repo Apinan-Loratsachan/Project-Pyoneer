@@ -25,6 +25,8 @@ Future<UserCredential?> signInWithGoogle() async {
     UserData.userName = userCredential.user?.displayName ?? "";
     UserData.email = userCredential.user?.email ?? "";
     UserData.image = userCredential.user?.photoURL ?? "";
+    UserData.tel = userCredential.user?.phoneNumber ?? "";
+    UserData.uid = userCredential.user?.uid ?? "";
 
     return userCredential;
   } catch (e) {
@@ -33,4 +35,10 @@ Future<UserCredential?> signInWithGoogle() async {
     }
     return null;
   }
+}
+
+Future<void> signOut() async {
+  await FirebaseAuth.instance.signOut();
+  await GoogleSignIn().signOut();
+  UserData.clear();
 }
