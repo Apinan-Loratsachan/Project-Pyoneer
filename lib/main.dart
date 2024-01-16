@@ -1,13 +1,28 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pyoneer/service/firebase_options.dart';
+import 'package:pyoneer/service/user_data.dart';
+import 'package:pyoneer/views/home.dart';
 import 'package:pyoneer/views/login.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await UserData.loadUserData();
+  // print('User uid loaded: ${UserData.uid}');
+  // print('User username loaded: ${UserData.userName}');
+  // print('User email loaded: ${UserData.email}');
+  // print('User image loaded: ${UserData.image}');
+
+  // Check if user is logged in
+  Widget initialScreen = const LoginScreen();
+  if (FirebaseAuth.instance.currentUser != null) {
+    initialScreen = const HomeScreen();
+  }
+
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
@@ -20,11 +35,12 @@ void main() async {
       systemNavigationBarIconBrightness: Brightness.dark,
     ),
   );
-  runApp(const MyApp());
+  runApp(MyApp(initialScreen: initialScreen));
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+  final Widget initialScreen;
+  const MyApp({Key? key, required this.initialScreen}) : super(key: key);
 
   @override
   _MyAppState createState() => _MyAppState();
@@ -60,7 +76,7 @@ class _MyAppState extends State<MyApp> {
           fontFamily: 'Noto Sans Thai',
         ),
         debugShowCheckedModeBanner: false,
-        home: const LoginScreen(),
+        home: widget.initialScreen,
       ),
     );
   }
