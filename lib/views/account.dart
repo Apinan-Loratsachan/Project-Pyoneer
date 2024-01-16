@@ -45,7 +45,7 @@ class _AccountSettigScreenState extends State<AccountSettigScreen> {
                           MaterialStateProperty.all(Colors.red[500]),
                     ),
                     onPressed: () async {
-                      final shouldLogout = await showDialog<bool>(
+                      showDialog<bool>(
                         context: context,
                         builder: (context) => AlertDialog(
                           backgroundColor: Colors.white,
@@ -60,46 +60,44 @@ class _AccountSettigScreenState extends State<AccountSettigScreen> {
                                   style: TextStyle(color: Colors.black)),
                             ),
                             TextButton(
-                              onPressed: () => Navigator.of(context).pop(true),
+                              onPressed: () {
+                                UserData.clear();
+                                signOut();
+                                Navigator.pushAndRemoveUntil(
+                                    context,
+                                    PageRouteBuilder(
+                                      pageBuilder:
+                                          (context, animation1, animation2) =>
+                                              const LoginScreen(),
+                                      transitionDuration:
+                                          const Duration(milliseconds: 500),
+                                      transitionsBuilder: (context, animation1,
+                                          animation2, child) {
+                                        animation1 = CurvedAnimation(
+                                          parent: animation1,
+                                          curve: Curves.easeInOut,
+                                        );
+                                        return FadeTransition(
+                                          opacity: Tween(begin: 0.0, end: 1.0)
+                                              .animate(animation1),
+                                          child: SlideTransition(
+                                            position: Tween<Offset>(
+                                              begin: const Offset(0.0, 1.0),
+                                              end: Offset.zero,
+                                            ).animate(animation1),
+                                            child: child,
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                    (Route<dynamic> route) => false);
+                              },
                               child: const Text('ออกจากระบบ',
                                   style: TextStyle(color: Colors.red)),
                             ),
                           ],
                         ),
                       );
-
-                      if (shouldLogout == true) {
-                        UserData.clear();
-                        signOut();
-                        // ignore: use_build_context_synchronously
-                        Navigator.pushReplacement(
-                          context,
-                          PageRouteBuilder(
-                            pageBuilder: (context, animation1, animation2) =>
-                                const LoginScreen(),
-                            transitionDuration:
-                                const Duration(milliseconds: 500),
-                            transitionsBuilder:
-                                (context, animation1, animation2, child) {
-                              animation1 = CurvedAnimation(
-                                parent: animation1,
-                                curve: Curves.easeInOut,
-                              );
-                              return FadeTransition(
-                                opacity: Tween(begin: 0.0, end: 1.0)
-                                    .animate(animation1),
-                                child: SlideTransition(
-                                  position: Tween<Offset>(
-                                    begin: const Offset(0.0, 1.0),
-                                    end: Offset.zero,
-                                  ).animate(animation1),
-                                  child: child,
-                                ),
-                              );
-                            },
-                          ),
-                        );
-                      }
                     },
                     child: const Row(
                       mainAxisAlignment: MainAxisAlignment.center,
