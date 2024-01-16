@@ -4,7 +4,8 @@ import 'package:pyoneer/views/lessons/lesson0.dart';
 import 'package:pyoneer/views/lessons/lesson1.dart';
 import 'package:pyoneer/views/lessons/lesson2.dart';
 import 'package:pyoneer/views/lessons/lesson3.dart';
-import 'package:pyoneer/views/lessons/lessson4.dart';
+import 'package:pyoneer/views/lessons/lesson4.dart';
+import 'package:pyoneer/views/lessons/lesson5.dart';
 
 class ContentScreen extends StatefulWidget {
   const ContentScreen({super.key});
@@ -48,6 +49,7 @@ class _ContentScreenState extends State<ContentScreen> {
             lessonTitle(LessonComponent.lessonImageSrc[2], LessonComponent.heroTag[2], LessonComponent.lessonTitle[2], LessonComponent.lessonSubTitle[2], const Lesson2Screen()),
             lessonTitle(LessonComponent.lessonImageSrc[3], LessonComponent.heroTag[3], LessonComponent.lessonTitle[3], LessonComponent.lessonSubTitle[3], const Lesson3Screen()),
             lessonTitle(LessonComponent.lessonImageSrc[4], LessonComponent.heroTag[4], LessonComponent.lessonTitle[4], LessonComponent.lessonSubTitle[4], const Lesson4Screen()),
+            lessonTitle(LessonComponent.lessonImageSrc[5], LessonComponent.heroTag[5], LessonComponent.lessonTitle[5], LessonComponent.lessonSubTitle[5], const Lesson5Screen()),
           ],
         ),
       ),

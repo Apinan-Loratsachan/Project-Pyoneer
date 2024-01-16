@@ -11,6 +11,7 @@ class LessonComponent {
     "assets/images/lesson2/cover.png",
     "assets/images/lesson3/cover.png",
     "assets/images/lesson4/cover.png",
+    "assets/images/lesson5/cover.png",
   ];
   static List<String> lessonTitle = [
     "บทนำ",
@@ -31,7 +32,7 @@ class LessonComponent {
     "ตัวแปรและการกำหนดค่า",
     "ชนิดข้อมูล",
     "ตัวดำเนินการและนิพจน์",
-    "บทเรียนที่ 5",
+    "คำสั่งรับค่าและแสดงผล",
     "บทเรียนที่ 6",
     "บทเรียนที่ 7",
     "บทเรียนที่ 8",
