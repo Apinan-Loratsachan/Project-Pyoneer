@@ -61,10 +61,10 @@ class _UserProfileState extends State<UserProfile> {
               child: UserData.image.isEmpty
                   ? Container()
                   : Hero(
-                    tag: "profileImage",
+                      tag: "profileImage",
                       child: Image.network(
-                      UserData.image,
-                    )),
+                        UserData.image,
+                      )),
             ),
             Expanded(
               child: Padding(
