@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "389838344082-3r5vded3ar8kk67dekr4nqdv58pcqj24.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pyodev.pyoneer",
+            "certificate_hash": "beccb93c2245181c3420bdad2a08be117a6cf1c1"
+          }
+        },
+        {
           "client_id": "389838344082-f7nbf9tjpho2m8mkgqebab95j2le7bls.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -45,6 +53,13 @@
             {
               "client_id": "389838344082-2iciaj89p0pm8cavgedkc7e96k89sru9.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "389838344082-1f36h3id2d4c4vm1eg1bhav773bhfa33.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.pyoneer.RunnerTests"
+              }
             }
           ]
         }
