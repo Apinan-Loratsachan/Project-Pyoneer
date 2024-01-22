@@ -108,7 +108,7 @@ class _AccountSettigScreenState extends State<AccountSettigScreen> {
                         ),
                         SizedBox(width: 10),
                         Text(
-                          "Logout",
+                          "ออกจากระบบ",
                           style: TextStyle(color: Colors.white),
                         ),
                       ],

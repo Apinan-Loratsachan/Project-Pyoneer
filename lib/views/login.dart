@@ -25,6 +25,8 @@ class _LoginScreenState extends State<LoginScreen>
   late Animation<double> _threePartyFadeAnimation;
   late Animation<Offset> _threePartySlideAnimation;
   bool _obscureText = true;
+  bool _isFieldEmpty = true;
+  TextEditingController _controller = TextEditingController();
 
   @override
   void initState() {
@@ -81,6 +83,18 @@ class _LoginScreenState extends State<LoginScreen>
       ),
     );
 
+    _controller.addListener(() {
+      if (_controller.text.isEmpty && !_isFieldEmpty) {
+        setState(() {
+          _isFieldEmpty = true;
+        });
+      } else if (_controller.text.isNotEmpty && _isFieldEmpty) {
+        setState(() {
+          _isFieldEmpty = false;
+        });
+      }
+    });
+
     _fadeController.forward();
     _slideController.forward();
   }
@@ -89,6 +103,7 @@ class _LoginScreenState extends State<LoginScreen>
   void dispose() {
     _fadeController.dispose();
     _slideController.dispose();
+    _controller.dispose();
     super.dispose();
   }
 
@@ -119,14 +134,14 @@ class _LoginScreenState extends State<LoginScreen>
                     position: _formSlideAnimation,
                     child: FadeTransition(
                       opacity: _formFadeAnimation,
-                      child: const Text(
-                        'LOGIN',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 24,
-                        ),
-                      ),
+                      // child: const Text(
+                      //   'Login',
+                      //   textAlign: TextAlign.center,
+                      //   style: TextStyle(
+                      //     fontWeight: FontWeight.bold,
+                      //     fontSize: 20,
+                      //   ),
+                      // ),
                     ),
                   ),
                   const SizedBox(height: 28),
@@ -137,7 +152,7 @@ class _LoginScreenState extends State<LoginScreen>
                       child: TextFormField(
                         keyboardType: TextInputType.emailAddress,
                         decoration: InputDecoration(
-                          labelText: 'Email',
+                          labelText: 'อีเมล',
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10.0),
                           ),
@@ -152,24 +167,27 @@ class _LoginScreenState extends State<LoginScreen>
                     child: FadeTransition(
                       opacity: _formFadeAnimation,
                       child: TextFormField(
+                        controller: _controller,
                         obscureText: _obscureText,
                         decoration: InputDecoration(
-                          labelText: 'Password',
+                          labelText: 'รหัสผ่าน',
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10.0),
                           ),
-                          suffixIcon: IconButton(
-                            icon: Icon(
-                              _obscureText
-                                  ? Icons.visibility
-                                  : Icons.visibility_off,
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                _obscureText = !_obscureText;
-                              });
-                            },
-                          ),
+                          suffixIcon: _isFieldEmpty
+                              ? null
+                              : IconButton(
+                                  icon: Icon(
+                                    _obscureText
+                                        ? Icons.visibility
+                                        : Icons.visibility_off,
+                                  ),
+                                  onPressed: () {
+                                    setState(() {
+                                      _obscureText = !_obscureText;
+                                    });
+                                  },
+                                ),
                         ),
                         autofillHints: const [AutofillHints.password],
                       ),
@@ -211,7 +229,7 @@ class _LoginScreenState extends State<LoginScreen>
                           foregroundColor: Colors.white,
                           backgroundColor: const Color(0xFF1ABDAD),
                         ),
-                        child: const Text('Login'),
+                        child: const Text('เข้าสู่ระบบ'),
                       ),
                     ),
                   ),
@@ -220,7 +238,7 @@ class _LoginScreenState extends State<LoginScreen>
                     position: _threePartySlideAnimation,
                     child: FadeTransition(
                         opacity: _threePartyFadeAnimation,
-                        child: const Center(child: Text('OR'))),
+                        child: const Center(child: Text('หรือ'))),
                   ),
                   const SizedBox(height: 16),
                   SlideTransition(
@@ -387,11 +405,11 @@ class _LoginScreenState extends State<LoginScreen>
                         child: RichText(
                           textAlign: TextAlign.center,
                           text: const TextSpan(
-                            text: 'Not have an account? ',
+                            text: 'ยังไม่มีบัญชี? ',
                             style: TextStyle(color: Colors.black),
                             children: <TextSpan>[
                               TextSpan(
-                                text: 'Register',
+                                text: 'สมัครสมาชิก',
                                 style: TextStyle(
                                   color: Colors.blue,
                                   fontWeight: FontWeight.bold,
