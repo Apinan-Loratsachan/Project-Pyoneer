@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pyoneer/views/home.dart';
-// import 'package:pyoneer/utils/text.dart';
 import 'package:pyoneer/views/register.dart';
 import 'package:pyoneer/service/auth.dart';
 
@@ -26,7 +25,7 @@ class _LoginScreenState extends State<LoginScreen>
   late Animation<Offset> _threePartySlideAnimation;
   bool _obscureText = true;
   bool _isFieldEmpty = true;
-  TextEditingController _controller = TextEditingController();
+  final TextEditingController _controller = TextEditingController();
 
   @override
   void initState() {

@@ -23,7 +23,7 @@ class _AccountSettigScreenState extends State<AccountSettigScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            UserProfile(),
+            const UserProfile(),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(

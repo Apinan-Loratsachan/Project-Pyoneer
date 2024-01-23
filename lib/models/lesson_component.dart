@@ -1,5 +1,4 @@
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:pyoneer/utils/type_writer_text.dart';
@@ -159,7 +158,7 @@ class LessonComponent {
         errorBuilder:
             (BuildContext context, Object exception, StackTrace? stackTrace) {
           return const Text(
-            'Image not found',
+            'ไม่พบรูปภาพ',
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 20,

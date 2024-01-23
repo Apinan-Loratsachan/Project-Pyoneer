@@ -4,7 +4,10 @@ import 'package:pyoneer/service/user_data.dart';
 import 'package:pyoneer/utils/color.dart';
 
 class UserProfile extends StatefulWidget {
+  const UserProfile({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _UserProfileState createState() => _UserProfileState();
 }
 

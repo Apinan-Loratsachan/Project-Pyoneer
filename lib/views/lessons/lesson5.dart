@@ -78,14 +78,8 @@ class _Lesson5ScreenState extends State<Lesson5Screen> {
         PyoneerText.contentText("บรรทัดที่ 2 จะแปลง string 55 ซึ่งเก็บี่ตัวแปร inp1 ให้เป็นตัวเลขจำนวนเต็มเก็บไว้ที่ตัวแปร no1 จากนี้เราสามารถ นำ no1 ไปคำนวณได้",tabSpace: true),
         PyoneerText.contentText("บรรทัดที่ 3 และ 4 ก็เช่นเดียวกันกับบรรทัดที่ 1 และ 2 เพียงแต่แปลง จาก string เป็น float ",tabSpace: true),
         PyoneerText.brakeLine(10),
-        Row(
-          children: [
-            PyoneerText.contentText("",tabSpace: true),
-            PyoneerText.contentText("ข้อควรระวัง ",textDecoration: TextDecoration.underline),
-            PyoneerText.contentText("เราต้องทราบว่าโปรแกรมเรามีข้อมูล"),
-          ],
-        ),
-        PyoneerText.contentText("อะไรที่เข้ามาบ้างเพื่อที่ว่าเราจะได้ออกแบบชนิดข้อมูลและนำไปเขียนโปรแกรมได้อย่างถูกต้อง เช่น"),
+        PyoneerText.contentText("ข้อควรระวัง ",textDecoration: TextDecoration.underline, fontWeight: FontWeight.bold),
+        PyoneerText.contentText("เราต้องทราบว่าโปรแกรมเรามีข้อมูลอะไรที่เข้ามาบ้างเพื่อที่ว่าเราจะได้ออกแบบชนิดข้อมูลและนำไปเขียนโปรแกรมได้อย่างถูกต้อง เช่น", tabSpace: true),
         PyoneerText.brakeLine(10),
         PyoneerText.contentText("inp=input(\"Input number : \")",tabSpace: true),
         PyoneerText.contentText("no=int(inp)",tabSpace: true),

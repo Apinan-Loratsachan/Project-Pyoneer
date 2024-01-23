@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:pyoneer/models/animated_navigation_Icon.dart';
+import 'package:pyoneer/models/animated_navigation_icon.dart';
 import 'package:pyoneer/service/user_data.dart';
 import 'package:pyoneer/utils/color.dart';
 import 'package:pyoneer/views/account.dart';
@@ -49,6 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: deprecated_member_use
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
@@ -158,8 +159,8 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             NavigationDestination(
               icon: AnimatedNavigationIcon(
-                icon: FontAwesomeIcons.home,
-                selectedIcon: FontAwesomeIcons.homeUser,
+                icon: FontAwesomeIcons.house,
+                selectedIcon: FontAwesomeIcons.houseUser,
                 isSelected: currentIndex == 1,
               ),
               label: 'หน้าหลัก',
@@ -184,7 +185,7 @@ class _HomeScreenState extends State<HomeScreen> {
         now.difference(lastPressedTime!) > const Duration(seconds: 2)) {
       lastPressedTime = now;
       Fluttertoast.showToast(
-        msg: "Press again to exit",
+        msg: "แตะอีกครั้งเพื่อออก",
         backgroundColor: Colors.black,
         textColor: Colors.white,
       );

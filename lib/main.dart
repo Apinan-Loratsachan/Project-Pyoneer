@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pyoneer/service/firebase_options.dart';
 import 'package:pyoneer/service/user_data.dart';
 import 'package:pyoneer/views/home.dart';
@@ -31,53 +30,34 @@ void main() async {
     const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
       statusBarIconBrightness: Brightness.dark,
-      systemNavigationBarColor: Colors.white,
+      systemNavigationBarColor: Colors.transparent,
+      systemNavigationBarDividerColor: Colors.transparent,
       systemNavigationBarIconBrightness: Brightness.dark,
     ),
   );
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge,
+      overlays: [SystemUiOverlay.top]);
   runApp(MyApp(initialScreen: initialScreen));
 }
 
 class MyApp extends StatefulWidget {
   final Widget initialScreen;
-  const MyApp({Key? key, required this.initialScreen}) : super(key: key);
+  const MyApp({super.key, required this.initialScreen});
 
   @override
+  // ignore: library_private_types_in_public_api
   _MyAppState createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
-  DateTime? lastPressedTime;
-
-  Future<bool> onWillPop() async {
-    final DateTime now = DateTime.now();
-    final bool backButton = lastPressedTime == null ||
-        now.difference(lastPressedTime!) > const Duration(seconds: 2);
-
-    if (backButton) {
-      lastPressedTime = now;
-      Fluttertoast.showToast(
-        msg: "Double tap to exit app",
-        backgroundColor: Colors.black,
-        textColor: Colors.white,
-      );
-      return false; // false will do nothing when back button is pressed
-    }
-
-    return true; // true will exit the app
-  }
-
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: onWillPop,
-      child: MaterialApp(
-        theme: ThemeData(
-          fontFamily: 'Noto Sans Thai',
-        ),
-        debugShowCheckedModeBanner: false,
-        home: widget.initialScreen,
+    return MaterialApp(
+      theme: ThemeData(
+        fontFamily: 'Noto Sans Thai',
       ),
+      debugShowCheckedModeBanner: false,
+      home: widget.initialScreen,
     );
   }
 }

@@ -7,16 +7,16 @@ class AnimatedNavigationIcon extends StatelessWidget {
   final bool isSelected;
 
   const AnimatedNavigationIcon({
-    Key? key,
+    super.key,
     required this.icon,
     required this.selectedIcon,
     required this.isSelected,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     return AnimatedSwitcher(
-      duration: const Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 200),
       transitionBuilder: (Widget child, Animation<double> animation) {
         return ScaleTransition(scale: animation, child: child);
       },
