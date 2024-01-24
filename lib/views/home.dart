@@ -12,6 +12,10 @@ import 'package:pyoneer/views/primary.dart';
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
+  static const Key contentScreenKey = PageStorageKey('contentScreen');
+  static const Key primaryScreenKey = PageStorageKey('primaryScreen');
+  static const Key ideScreenKey = PageStorageKey('ideScreen');
+
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
@@ -22,9 +26,9 @@ class _HomeScreenState extends State<HomeScreen> {
   late final PageController _pageController;
 
   final List<Widget> _children = [
-    const ContentScreen(),
-    const PrimaryScreen(),
-    const IDEScreen(),
+    const ContentScreen(key: HomeScreen.contentScreenKey),
+    const PrimaryScreen(key: HomeScreen.primaryScreenKey),
+    const IDEScreen(key: HomeScreen.ideScreenKey),
   ];
 
   @override

@@ -16,8 +16,11 @@ class PrimaryScreen extends StatefulWidget {
   State<PrimaryScreen> createState() => _PrimaryScreenState();
 }
 
-class _PrimaryScreenState extends State<PrimaryScreen> {
+class _PrimaryScreenState extends State<PrimaryScreen>
+    with AutomaticKeepAliveClientMixin {
   List<NewsItem> newsItems = [];
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   void initState() {
@@ -90,6 +93,7 @@ class _PrimaryScreenState extends State<PrimaryScreen> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(15),
@@ -257,8 +261,15 @@ class _NewsGridItemState extends State<NewsGridItem> {
               fit: BoxFit.cover,
               height: double.infinity,
               cacheManager: CustomCacheManager.instance,
-              placeholder: (context, url) => const CircularProgressIndicator(),
-              errorWidget: (context, url, error) => const Icon(Icons.error),
+              placeholder: (context, url) => const Center(
+                child: CircularProgressIndicator(
+                  color: Colors.white,
+                  strokeWidth: 5,
+                ),
+              ),
+              errorWidget: (context, url, error) => const Center(
+                child: Icon(Icons.error),
+              ),
             ),
             Positioned(
               top: 0,

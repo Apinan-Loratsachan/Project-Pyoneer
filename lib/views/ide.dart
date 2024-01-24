@@ -7,9 +7,14 @@ class IDEScreen extends StatefulWidget {
   State<IDEScreen> createState() => _IDEScreenState();
 }
 
-class _IDEScreenState extends State<IDEScreen> {
+class _IDEScreenState extends State<IDEScreen>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
