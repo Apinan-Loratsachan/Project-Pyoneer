@@ -1,8 +1,10 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:palette_generator/palette_generator.dart';
+import 'package:pyoneer/models/custom_cache_manager.dart';
 import 'package:pyoneer/service/user_data.dart';
 import 'package:pyoneer/views/login.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -109,61 +111,59 @@ class _PrimaryScreenState extends State<PrimaryScreen> {
                     NewsItem.fromMap(doc.data() as Map<String, dynamic>))
                 .toList();
 
-            return GridView.custom(
+            return GridView.builder(
               gridDelegate: SliverStairedGridDelegate(
-                crossAxisSpacing: 24,
-                mainAxisSpacing: 12,
+                crossAxisSpacing: 48,
+                mainAxisSpacing: 24,
                 startCrossAxisDirectionReversed: true,
                 pattern: [
-                  const StairedGridTile(0.5, 4 / 3),
-                  const StairedGridTile(0.5, 4 / 3),
-                  const StairedGridTile(1.0, 4 / 3),
+                  const StairedGridTile(0.5, 3 / 2),
+                  const StairedGridTile(0.5, 3 / 2),
+                  const StairedGridTile(1.0, 3 / 2),
                 ],
               ),
-              childrenDelegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  if (index < newsItems.length) {
-                    return NewsGridItem(newsItem: newsItems[index]);
-                  } else {
-                    if (UserData.uid.isNotEmpty) {
-                      return FloatingActionButton(
-                        onPressed: () {
-                          var currentUser = FirebaseAuth.instance.currentUser;
-                          if (currentUser != null) {
-                            showAddNewsDialog(context);
-                          } else {
-                            Navigator.pushReplacement(
-                              context,
-                              PageRouteBuilder(
-                                pageBuilder:
-                                    (context, animation, secondaryAnimation) =>
-                                        const LoginScreen(),
-                                transitionsBuilder: (context, animation,
-                                    secondaryAnimation, child) {
-                                  var begin = const Offset(1.0, 0.0);
-                                  var end = Offset.zero;
-                                  var curve = Curves.ease;
+              itemCount: newsItems.length + 1,
+              itemBuilder: (context, index) {
+                if (index < newsItems.length) {
+                  return NewsGridItem(newsItem: newsItems[index]);
+                } else {
+                  if (UserData.uid.isNotEmpty) {
+                    return FloatingActionButton(
+                      onPressed: () {
+                        var currentUser = FirebaseAuth.instance.currentUser;
+                        if (currentUser != null) {
+                          showAddNewsDialog(context);
+                        } else {
+                          Navigator.pushReplacement(
+                            context,
+                            PageRouteBuilder(
+                              pageBuilder:
+                                  (context, animation, secondaryAnimation) =>
+                                      const LoginScreen(),
+                              transitionsBuilder: (context, animation,
+                                  secondaryAnimation, child) {
+                                var begin = const Offset(1.0, 0.0);
+                                var end = Offset.zero;
+                                var curve = Curves.ease;
 
-                                  var tween = Tween(begin: begin, end: end)
-                                      .chain(CurveTween(curve: curve));
+                                var tween = Tween(begin: begin, end: end)
+                                    .chain(CurveTween(curve: curve));
 
-                                  return SlideTransition(
-                                    position: animation.drive(tween),
-                                    child: child,
-                                  );
-                                },
-                              ),
-                            );
-                          }
-                        },
-                        child: const Icon(Icons.add),
-                      );
-                    }
-                    return const SizedBox.shrink();
+                                return SlideTransition(
+                                  position: animation.drive(tween),
+                                  child: child,
+                                );
+                              },
+                            ),
+                          );
+                        }
+                      },
+                      child: const Icon(Icons.add),
+                    );
                   }
-                },
-                childCount: newsItems.length + 1,
-              ),
+                  return const SizedBox.shrink();
+                }
+              },
             );
           },
         ),
@@ -213,7 +213,7 @@ class NewsGridItem extends StatefulWidget {
 }
 
 class _NewsGridItemState extends State<NewsGridItem> {
-  Color textColor = Colors.black54;
+  Color textColor = Colors.white;
 
   @override
   void initState() {
@@ -252,10 +252,13 @@ class _NewsGridItemState extends State<NewsGridItem> {
         child: Stack(
           alignment: Alignment.center,
           children: [
-            Image.network(
-              widget.newsItem.imageUrl,
+            CachedNetworkImage(
+              imageUrl: widget.newsItem.imageUrl,
               fit: BoxFit.cover,
               height: double.infinity,
+              cacheManager: CustomCacheManager.instance,
+              placeholder: (context, url) => const CircularProgressIndicator(),
+              errorWidget: (context, url, error) => const Icon(Icons.error),
             ),
             Positioned(
               top: 0,
