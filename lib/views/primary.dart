@@ -1,5 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:palette_generator/palette_generator.dart';
+import 'package:pyoneer/service/user_data.dart';
+import 'package:pyoneer/views/login.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class PrimaryScreen extends StatefulWidget {
   const PrimaryScreen({super.key});
@@ -11,6 +17,17 @@ class PrimaryScreen extends StatefulWidget {
 class _PrimaryScreenState extends State<PrimaryScreen> {
   List<NewsItem> newsItems = [];
 
+  @override
+  void initState() {
+    super.initState();
+    _checkLoginStatus();
+  }
+
+  Future<void> _checkLoginStatus() async {
+    await UserData.loadUserData();
+    setState(() {});
+  }
+
   void showAddNewsDialog(BuildContext context) {
     String imageUrl = '', topic = '', newsLink = '';
 
@@ -18,39 +35,47 @@ class _PrimaryScreenState extends State<PrimaryScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Add News'),
+          title: const Text('เพิ่มข่าวใหม่'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
-                decoration: const InputDecoration(labelText: 'Image URL'),
+                decoration: const InputDecoration(
+                    labelText: 'ลิงก์รูปภาพ (https://...)'),
                 onChanged: (value) => imageUrl = value,
               ),
               TextField(
-                decoration: const InputDecoration(labelText: 'Topic'),
+                decoration:
+                    const InputDecoration(labelText: 'หัวข้อข่าว (ชื่อ)'),
                 onChanged: (value) => topic = value,
               ),
               TextField(
-                decoration: const InputDecoration(labelText: 'News Link'),
+                decoration:
+                    const InputDecoration(labelText: 'ลิงก์ข่าว (https://...)'),
                 onChanged: (value) => newsLink = value,
               ),
             ],
           ),
           actions: [
             TextButton(
-              child: const Text('Cancel'),
+              child: const Text('ยกเลิก'),
               onPressed: () => Navigator.of(context).pop(),
             ),
             TextButton(
-              child: const Text('Add'),
+              child: const Text('เพิ่มข่าว'),
               onPressed: () {
                 if (imageUrl.isNotEmpty &&
                     topic.isNotEmpty &&
                     newsLink.isNotEmpty) {
-                  setState(() {
-                    newsItems.add(NewsItem(
-                        imageUrl: imageUrl, topic: topic, newsLink: newsLink));
-                  });
+                  var newsItem = NewsItem(
+                    imageUrl: imageUrl,
+                    topic: topic,
+                    newsLink: newsLink,
+                    timestamp: DateTime.now(),
+                  );
+                  FirebaseFirestore.instance
+                      .collection('news')
+                      .add(newsItem.toMap());
                   Navigator.of(context).pop();
                 }
               },
@@ -66,30 +91,81 @@ class _PrimaryScreenState extends State<PrimaryScreen> {
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(15),
-        child: GridView.custom(
-          gridDelegate: SliverStairedGridDelegate(
-            crossAxisSpacing: 48,
-            mainAxisSpacing: 24,
-            startCrossAxisDirectionReversed: true,
-            pattern: [
-              const StairedGridTile(0.5, 1),
-              const StairedGridTile(0.5, 3 / 4),
-              const StairedGridTile(1.0, 10 / 4),
-            ],
-          ),
-          childrenDelegate: SliverChildBuilderDelegate(
-            (context, index) {
-              if (index < newsItems.length) {
-                return NewsGridItem(newsItem: newsItems[index]);
-              } else {
-                return FloatingActionButton(
-                  onPressed: () => showAddNewsDialog(context),
-                  child: const Icon(Icons.add),
-                );
-              }
-            },
-            childCount: newsItems.length + 1,
-          ),
+        child: StreamBuilder(
+          stream: FirebaseFirestore.instance
+              .collection('news')
+              .orderBy('timestamp', descending: true)
+              .snapshots(),
+          builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            if (snapshot.hasError) {
+              return Text('Error: ${snapshot.error}');
+            }
+
+            if (!snapshot.hasData) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            newsItems = snapshot.data!.docs
+                .map((doc) =>
+                    NewsItem.fromMap(doc.data() as Map<String, dynamic>))
+                .toList();
+
+            return GridView.custom(
+              gridDelegate: SliverStairedGridDelegate(
+                crossAxisSpacing: 24,
+                mainAxisSpacing: 12,
+                startCrossAxisDirectionReversed: true,
+                pattern: [
+                  const StairedGridTile(0.5, 4 / 3),
+                  const StairedGridTile(0.5, 4 / 3),
+                  const StairedGridTile(1.0, 4 / 3),
+                ],
+              ),
+              childrenDelegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  if (index < newsItems.length) {
+                    return NewsGridItem(newsItem: newsItems[index]);
+                  } else {
+                    if (UserData.uid.isNotEmpty) {
+                      return FloatingActionButton(
+                        onPressed: () {
+                          var currentUser = FirebaseAuth.instance.currentUser;
+                          if (currentUser != null) {
+                            showAddNewsDialog(context);
+                          } else {
+                            Navigator.pushReplacement(
+                              context,
+                              PageRouteBuilder(
+                                pageBuilder:
+                                    (context, animation, secondaryAnimation) =>
+                                        const LoginScreen(),
+                                transitionsBuilder: (context, animation,
+                                    secondaryAnimation, child) {
+                                  var begin = const Offset(1.0, 0.0);
+                                  var end = Offset.zero;
+                                  var curve = Curves.ease;
+
+                                  var tween = Tween(begin: begin, end: end)
+                                      .chain(CurveTween(curve: curve));
+
+                                  return SlideTransition(
+                                    position: animation.drive(tween),
+                                    child: child,
+                                  );
+                                },
+                              ),
+                            );
+                          }
+                        },
+                        child: const Icon(Icons.add),
+                      );
+                    }
+                    return const SizedBox.shrink();
+                  }
+                },
+                childCount: newsItems.length + 1,
+              ),
+            );
+          },
         ),
       ),
     );
@@ -100,27 +176,104 @@ class NewsItem {
   String imageUrl;
   String topic;
   String newsLink;
+  DateTime? timestamp;
 
   NewsItem(
-      {required this.imageUrl, required this.topic, required this.newsLink});
+      {required this.imageUrl,
+      required this.topic,
+      required this.newsLink,
+      this.timestamp});
+
+  factory NewsItem.fromMap(Map<String, dynamic> map) {
+    return NewsItem(
+      imageUrl: map['imageUrl'],
+      topic: map['topic'],
+      newsLink: map['newsLink'],
+      timestamp: map['timestamp']?.toDate(),
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'imageUrl': imageUrl,
+      'topic': topic,
+      'newsLink': newsLink,
+      'timestamp': timestamp,
+    };
+  }
 }
 
-class NewsGridItem extends StatelessWidget {
+class NewsGridItem extends StatefulWidget {
   final NewsItem newsItem;
 
-  const NewsGridItem({Key? key, required this.newsItem}) : super(key: key);
+  const NewsGridItem({super.key, required this.newsItem});
+
+  @override
+  _NewsGridItemState createState() => _NewsGridItemState();
+}
+
+class _NewsGridItemState extends State<NewsGridItem> {
+  Color textColor = Colors.black54;
+
+  @override
+  void initState() {
+    super.initState();
+    _updateTextColor();
+  }
+
+  Future<void> _updateTextColor() async {
+    final PaletteGenerator generator = await PaletteGenerator.fromImageProvider(
+      NetworkImage(widget.newsItem.imageUrl),
+      size: const Size(200, 110),
+    );
+
+    if (generator.dominantColor != null) {
+      textColor = generator.dominantColor!.color.computeLuminance() > 0.5
+          ? Colors.black
+          : Colors.white;
+      setState(() {});
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        // Implement the action to open the news link
+      onTap: () async {
+        if (await canLaunchUrl(Uri.parse(widget.newsItem.newsLink))) {
+          await launchUrl(Uri.parse(widget.newsItem.newsLink));
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('ไม่สามารถเปิดลิงก์ได้')),
+          );
+        }
       },
       child: Card(
-        child: Column(
+        clipBehavior: Clip.antiAlias,
+        child: Stack(
+          alignment: Alignment.center,
           children: [
-            Image.network(newsItem.imageUrl), // Display the news image
-            Text(newsItem.topic), // Display the news topic
+            Image.network(
+              widget.newsItem.imageUrl,
+              fit: BoxFit.cover,
+              height: double.infinity,
+            ),
+            Positioned(
+              top: 0,
+              left: 0,
+              child: Container(
+                padding: const EdgeInsets.all(8),
+                color: Colors.black.withOpacity(0.08),
+                child: Text(
+                  widget.newsItem.topic,
+                  style: TextStyle(
+                    overflow: TextOverflow.ellipsis,
+                    color: textColor,
+                    fontWeight: FontWeight.normal,
+                    fontSize: 12,
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),

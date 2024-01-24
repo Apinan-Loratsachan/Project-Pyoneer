@@ -55,7 +55,6 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       theme: ThemeData(
         fontFamily: 'Noto Sans Thai',
-        brightness: MediaQuery.of(context).platformBrightness,
       ),
       debugShowCheckedModeBanner: false,
       home: widget.initialScreen,

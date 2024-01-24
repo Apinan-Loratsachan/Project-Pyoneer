@@ -37,12 +37,4 @@ class UserData {
     image = prefs.getString('image') ?? "";
     tel = prefs.getString('tel') ?? "";
   }
-
-  // static clear() {
-  //   uid = "";
-  //   userName = "";
-  //   email = "";
-  //   image = "";
-  //   tel = "";
-  // }
 }

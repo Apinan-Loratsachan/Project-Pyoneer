@@ -42,23 +42,17 @@ Future<UserCredential?> signInWithGoogle() async {
 
 Future<UserCredential?> signInWithFacebook() async {
   try {
-    // Trigger the Facebook login process
     final LoginResult result = await FacebookAuth.instance.login();
 
-    // Check if the login was successful
     if (result.status == LoginStatus.success) {
-      // Get the Facebook authentication token
       final AccessToken accessToken = result.accessToken!;
 
-      // Create a Facebook auth credential
       final AuthCredential credential =
           FacebookAuthProvider.credential(accessToken.token);
 
-      // Sign in to Firebase with the Facebook auth credential
       UserCredential userCredential =
           await FirebaseAuth.instance.signInWithCredential(credential);
 
-      // Update user data
       UserData.uid = userCredential.user?.uid ?? "";
       UserData.userName = userCredential.user?.displayName ?? "";
       UserData.email = userCredential.user?.email ?? "";
