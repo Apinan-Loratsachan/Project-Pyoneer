@@ -6,7 +6,6 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:palette_generator/palette_generator.dart';
 import 'package:pyoneer/models/custom_cache_manager.dart';
 import 'package:pyoneer/service/user_data.dart';
-import 'package:pyoneer/views/login.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class PrimaryScreen extends StatefulWidget {
@@ -136,9 +135,17 @@ class _PrimaryScreenState extends State<PrimaryScreen>
                 mainAxisSpacing: 24,
                 startCrossAxisDirectionReversed: true,
                 pattern: [
+                  // แก้ขนาดตรงนี้
+                  const StairedGridTile(0.5, 6 / 5),
+                  const StairedGridTile(0.5, 6 / 5),
+                  const StairedGridTile(0.9, 8 / 4.4),
+                  const StairedGridTile(0.5, 6 / 4),
+                  const StairedGridTile(0.5, 6 / 3.2),
+                  const StairedGridTile(0.5, 16 / 9),
+                  const StairedGridTile(0.5, 5 / 3),
+                  const StairedGridTile(0.9, 8 / 4.4),
+                  const StairedGridTile(0.5, 8 / 4.6),
                   const StairedGridTile(0.5, 3 / 2),
-                  const StairedGridTile(0.5, 3 / 2),
-                  const StairedGridTile(1.0, 3 / 2),
                 ],
               ),
               itemCount: newsItems.length > 10 ? 11 : newsItems.length + 1,
@@ -159,39 +166,25 @@ class _PrimaryScreenState extends State<PrimaryScreen>
   }
 
   Widget _buildFloatingActionButton(BuildContext context) {
-    return UserData.uid.isNotEmpty
-        ? FloatingActionButton(
-            onPressed: () {
-              var currentUser = FirebaseAuth.instance.currentUser;
-              if (currentUser != null) {
-                showAddNewsDialog(context);
-              } else {
-                Navigator.pushReplacement(
-                  context,
-                  PageRouteBuilder(
-                    pageBuilder: (context, animation, secondaryAnimation) =>
-                        const LoginScreen(),
-                    transitionsBuilder:
-                        (context, animation, secondaryAnimation, child) {
-                      var begin = const Offset(1.0, 0.0);
-                      var end = Offset.zero;
-                      var curve = Curves.ease;
+    const List<String> allowedUIDs = [
+      '3XlCZTQFqTScyYE0YBz94MJlORs1',
+      'A0ILxjzDZeQk2okmGUcs85kMCSh2',
+      'wA2YJSiuLAQXMZH77esSNHmSVYI2',
+      'fLzQpFJOKVYLrRfcNLKoFqBLOZp1'
+    ];
 
-                      var tween = Tween(begin: begin, end: end)
-                          .chain(CurveTween(curve: curve));
+    var currentUser = FirebaseAuth.instance.currentUser;
 
-                      return SlideTransition(
-                        position: animation.drive(tween),
-                        child: child,
-                      );
-                    },
-                  ),
-                );
-              }
-            },
-            child: const Icon(Icons.add),
-          )
-        : const SizedBox.shrink();
+    if (currentUser != null && allowedUIDs.contains(currentUser.uid)) {
+      return FloatingActionButton(
+        onPressed: () {
+          showAddNewsDialog(context);
+        },
+        child: const Icon(Icons.add),
+      );
+    } else {
+      return const SizedBox.shrink();
+    }
   }
 }
 
@@ -338,27 +331,32 @@ class _NewsGridItemState extends State<NewsGridItem>
                     duration: const Duration(milliseconds: 300),
                     child: Container(
                       color: Colors.black.withOpacity(0.7),
-                      child: widget.newsItem.topic?.isEmpty ?? true
-                          ? Center(
-                              child: _buildReadMoreButton(),
-                            )
-                          : Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  widget.newsItem.topic ?? '',
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                  overflow: TextOverflow.fade,
+                      child: Center(
+                        child: SingleChildScrollView(
+                          physics: const NeverScrollableScrollPhysics(),
+                          child: widget.newsItem.topic?.isEmpty ?? true
+                              ? Center(
+                                  child: _buildReadMoreButton(),
+                                )
+                              : Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      widget.newsItem.topic ?? '',
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                      overflow: TextOverflow.fade,
+                                    ),
+                                    const SizedBox(height: 20),
+                                    _buildReadMoreButton(),
+                                  ],
                                 ),
-                                const SizedBox(height: 20),
-                                _buildReadMoreButton(),
-                              ],
-                            ),
+                        ),
+                      ),
                     ),
                   ),
                 ),
@@ -372,18 +370,20 @@ class _NewsGridItemState extends State<NewsGridItem>
 
   Widget _buildReadMoreButton() {
     return ElevatedButton(
-      onPressed: () async {
-        if (!mounted) return;
-        if (await canLaunchUrl(Uri.parse(widget.newsItem.newsLink))) {
-          await launchUrl(Uri.parse(widget.newsItem.newsLink));
-        } else {
-          if (mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Cannot open link')),
-            );
-          }
-        }
-      },
+      onPressed: isTopicVisible
+          ? () async {
+              if (!mounted) return;
+              if (await canLaunchUrl(Uri.parse(widget.newsItem.newsLink))) {
+                await launchUrl(Uri.parse(widget.newsItem.newsLink));
+              } else {
+                if (mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Cannot open link')),
+                  );
+                }
+              }
+            }
+          : null,
       child: const Text('อ่านต่อ'),
     );
   }
