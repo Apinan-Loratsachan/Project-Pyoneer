@@ -72,11 +72,14 @@ class _HomeScreenState extends State<HomeScreen> {
                       height: 60,
                     ),
                   ),
-                  Image.asset(
-                    "assets/icons/pyoneer_text.png",
-                    fit: BoxFit.cover,
-                    height: 40,
-                  )
+                  Hero(
+                    tag: "pyoneer_text-title",
+                    child: Image.asset(
+                      "assets/icons/pyoneer_text.png",
+                      fit: BoxFit.cover,
+                      height: 40,
+                    ),
+                  ),
                 ],
               ),
             ],

@@ -1,12 +1,9 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:palette_generator/palette_generator.dart';
-import 'package:pyoneer/models/custom_cache_manager.dart';
+import 'package:pyoneer/service/content_counter.dart';
 import 'package:pyoneer/service/user_data.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:pyoneer/utils/color.dart';
+import 'package:pyoneer/utils/hero.dart';
+import 'package:pyoneer/views/news.dart';
 
 class PrimaryScreen extends StatefulWidget {
   const PrimaryScreen({super.key});
@@ -15,376 +12,173 @@ class PrimaryScreen extends StatefulWidget {
   State<PrimaryScreen> createState() => _PrimaryScreenState();
 }
 
-class _PrimaryScreenState extends State<PrimaryScreen>
-    with AutomaticKeepAliveClientMixin {
-  List<NewsItem> newsItems = [];
-  @override
-  bool get wantKeepAlive => true;
+class _PrimaryScreenState extends State<PrimaryScreen> {
 
-  @override
-  void initState() {
-    super.initState();
-    _checkLoginStatus();
-  }
-
-  Future<void> _checkLoginStatus() async {
-    await UserData.loadUserData();
-    setState(() {});
-  }
-
-  void showAddNewsDialog(BuildContext context) {
-    // String imageUrl = '', topic = '', newsLink = '';
-    var imageUrlController = TextEditingController();
-    var topicController = TextEditingController();
-    var newsLinkController = TextEditingController();
-    final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('เพิ่มข่าวใหม่'),
-          content: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextFormField(
-                  controller: imageUrlController,
-                  decoration: const InputDecoration(
-                      labelText: 'ลิงก์รูปภาพ (https://...)'),
-                  validator: (value) =>
-                      value == null || !value.startsWith('https://')
-                          ? 'กรุณาใส่ลิงก์ที่ถูกต้อง (https://...)'
-                          : null,
-                ),
-                TextFormField(
-                  controller: topicController,
-                  decoration:
-                      const InputDecoration(labelText: 'หัวข้อข่าว (ชื่อ)'),
-                ),
-                TextFormField(
-                  controller: newsLinkController,
-                  decoration: const InputDecoration(
-                      labelText: 'ลิงก์ข่าว (https://...)'),
-                  validator: (value) =>
-                      value == null || !value.startsWith('https://')
-                          ? 'กรุณาใส่ลิงก์ที่ถูกต้อง (https://...)'
-                          : null,
-                ),
-              ],
-            ),
-          ),
-          actions: [
-            TextButton(
-              child: const Text('ยกเลิก'),
-              onPressed: () => Navigator.of(context).pop(),
-            ),
-            TextButton(
-              child: const Text('เพิ่มข่าว'),
-              onPressed: () {
-                if (_formKey.currentState!.validate()) {
-                  var newsItem = NewsItem(
-                    imageUrl: imageUrlController.text,
-                    topic: topicController.text.isNotEmpty
-                        ? topicController.text
-                        : null,
-                    newsLink: newsLinkController.text,
-                    timestamp: DateTime.now(),
-                  );
-                  FirebaseFirestore.instance
-                      .collection('news')
-                      .add(newsItem.toMap());
-                  Navigator.of(context).pop();
-                }
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
+  final double listTileSpace = 15;
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
+    String greetingWord = _getGreetingWord();
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(15),
-        child: StreamBuilder(
-          stream: FirebaseFirestore.instance
-              .collection('news')
-              .orderBy('timestamp', descending: true)
-              .snapshots(),
-          builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-            if (snapshot.hasError) {
-              return Text('Error: ${snapshot.error}');
-            }
-
-            if (!snapshot.hasData) {
-              return const Center(child: CircularProgressIndicator());
-            }
-            newsItems = snapshot.data!.docs
-                .map((doc) =>
-                    NewsItem.fromMap(doc.data() as Map<String, dynamic>))
-                .toList();
-
-            return GridView.builder(
-              gridDelegate: SliverStairedGridDelegate(
-                crossAxisSpacing: 48,
-                mainAxisSpacing: 24,
-                startCrossAxisDirectionReversed: true,
-                pattern: [
-                  // แก้ขนาดตรงนี้
-                  const StairedGridTile(0.5, 6 / 5),
-                  const StairedGridTile(0.5, 6 / 5),
-                  const StairedGridTile(0.9, 8 / 4.4),
-                  const StairedGridTile(0.5, 6 / 4),
-                  const StairedGridTile(0.5, 6 / 3.2),
-                  const StairedGridTile(0.5, 16 / 9),
-                  const StairedGridTile(0.5, 5 / 3),
-                  const StairedGridTile(0.9, 8 / 4.4),
-                  const StairedGridTile(0.5, 8 / 4.6),
-                  const StairedGridTile(0.5, 3 / 2),
-                ],
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                "$greetingWord ${UserData.userName}",
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.left,
+                style: TextStyle(
+                  shadows: [
+                    Shadow(
+                      blurRadius: 20.0,
+                      color: AppColor.primarSnakeColor.withOpacity(0.5),
+                      offset: const Offset(0.0, 5.0),
+                    ),
+                  ],
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
               ),
-              itemCount: newsItems.length > 10 ? 11 : newsItems.length + 1,
-              itemBuilder: (context, index) {
-                if (index < newsItems.length && index < 10) {
-                  return NewsGridItem(newsItem: newsItems[index]);
-                } else if (index < 10) {
-                  return _buildFloatingActionButton(context);
-                } else {
-                  return const SizedBox.shrink();
-                }
-              },
-            );
-          },
-        ),
-      ),
-    );
-  }
-
-  Widget _buildFloatingActionButton(BuildContext context) {
-    const List<String> allowedUIDs = [
-      '3XlCZTQFqTScyYE0YBz94MJlORs1',
-      'A0ILxjzDZeQk2okmGUcs85kMCSh2',
-      'wA2YJSiuLAQXMZH77esSNHmSVYI2',
-      'fLzQpFJOKVYLrRfcNLKoFqBLOZp1'
-    ];
-
-    var currentUser = FirebaseAuth.instance.currentUser;
-
-    if (currentUser != null && allowedUIDs.contains(currentUser.uid)) {
-      return FloatingActionButton(
-        onPressed: () {
-          showAddNewsDialog(context);
-        },
-        child: const Icon(Icons.add),
-      );
-    } else {
-      return const SizedBox.shrink();
-    }
-  }
-}
-
-class NewsItem {
-  String imageUrl;
-  String? topic;
-  String newsLink;
-  DateTime? timestamp;
-
-  NewsItem(
-      {required this.imageUrl,
-      this.topic,
-      required this.newsLink,
-      this.timestamp});
-
-  factory NewsItem.fromMap(Map<String, dynamic> map) {
-    return NewsItem(
-      imageUrl: map['imageUrl'],
-      topic: map['topic'],
-      newsLink: map['newsLink'],
-      timestamp: map['timestamp']?.toDate(),
-    );
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'imageUrl': imageUrl,
-      'topic': topic ?? "",
-      'newsLink': newsLink,
-      'timestamp': timestamp,
-    };
-  }
-}
-
-class NewsGridItem extends StatefulWidget {
-  final NewsItem newsItem;
-
-  const NewsGridItem({super.key, required this.newsItem});
-
-  @override
-  _NewsGridItemState createState() => _NewsGridItemState();
-}
-
-class _NewsGridItemState extends State<NewsGridItem>
-    with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
-  Color textColor = Colors.white;
-  AnimationController? _animationController;
-  Animation<double>? _fadeAnimation;
-  Animation<Offset>? _slideAnimation;
-
-  bool isTopicVisible = false;
-
-  @override
-  bool get wantKeepAlive => true;
-
-  @override
-  void initState() {
-    super.initState();
-    _updateTextColor();
-
-    _animationController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 1000),
-    );
-
-    _fadeAnimation =
-        Tween<double>(begin: 0.0, end: 1.0).animate(_animationController!);
-
-    _slideAnimation =
-        Tween<Offset>(begin: const Offset(0.0, 0.5), end: Offset.zero)
-            .animate(CurvedAnimation(
-      parent: _animationController!,
-      curve: Curves.ease,
-    ));
-
-    _animationController!.forward();
-  }
-
-  @override
-  void dispose() {
-    _animationController?.dispose();
-    super.dispose();
-  }
-
-  Future<void> _updateTextColor() async {
-    final PaletteGenerator generator = await PaletteGenerator.fromImageProvider(
-      NetworkImage(widget.newsItem.imageUrl),
-      size: const Size(200, 110),
-    );
-
-    if (generator.dominantColor != null) {
-      textColor = generator.dominantColor!.color.computeLuminance() > 0.5
-          ? Colors.black
-          : Colors.white;
-      setState(() {});
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    super.build(context);
-    return FadeTransition(
-      opacity: _fadeAnimation!,
-      child: SlideTransition(
-        position: _slideAnimation!,
-        child: GestureDetector(
-          onTap: () async {
-            setState(() {
-              isTopicVisible = !isTopicVisible;
-            });
-          },
-          child: Card(
-            clipBehavior: Clip.antiAlias,
-            child: Stack(
-              alignment: Alignment.center,
+            ),
+          ),
+          Card(
+            margin: const EdgeInsets.all(10),
+            child: Column(
               children: [
-                CachedNetworkImage(
-                  imageUrl: widget.newsItem.imageUrl,
-                  fit: BoxFit.cover,
-                  height: double.infinity,
-                  cacheManager: CustomCacheManager.instance,
-                  placeholder: (context, url) => const Center(
-                    child: CircularProgressIndicator(
-                      color: Colors.white,
-                      strokeWidth: 5,
-                    ),
-                  ),
-                  errorWidget: (context, url, error) => const Center(
-                    child: Icon(Icons.error),
+                const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Text(
+                    "เมนู",
+                    style: TextStyle(fontSize: 20),
                   ),
                 ),
-                if (isTopicVisible)
-                  const Positioned(
-                    top: 5,
-                    right: 5,
-                    child: Icon(
-                      Icons.info_outline,
-                      color: Colors.white,
+                ListTile(
+                  leading: PyoneerHero.hero(
+                      Image.asset("assets/icons/news.png"), "news-icon"),
+                  title: const Text(
+                    "ข่าวที่น่าสนใจ",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
-                Positioned.fill(
-                  child: AnimatedOpacity(
-                    opacity: isTopicVisible ? 1.0 : 0.0,
-                    duration: const Duration(milliseconds: 300),
-                    child: Container(
-                      color: Colors.black.withOpacity(0.7),
-                      child: Center(
-                        child: SingleChildScrollView(
-                          physics: const NeverScrollableScrollPhysics(),
-                          child: widget.newsItem.topic?.isEmpty ?? true
-                              ? Center(
-                                  child: _buildReadMoreButton(),
-                                )
-                              : Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      widget.newsItem.topic ?? '',
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                      textAlign: TextAlign.center,
-                                      overflow: TextOverflow.fade,
-                                    ),
-                                    const SizedBox(height: 20),
-                                    _buildReadMoreButton(),
-                                  ],
-                                ),
-                        ),
+                  trailing: FutureBuilder<int>(
+                    future: ContentCounter.getNewsItemCount(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        if (snapshot.hasError) {
+                          // Handle error case
+                          return const Text('Error loading news count');
+                        }
+
+                        // Display the news count as a string in the trailing
+                        return PyoneerHero.hero(
+                          Text(
+                            '${snapshot.data} รายการ',
+                            style: const TextStyle(fontSize: 12),
+                          ),
+                          "news-counter",
+                        );
+                      } else {
+                        // Display a loading indicator while waiting for the data
+                        return const CircularProgressIndicator();
+                      }
+                    },
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      PageRouteBuilder(
+                        pageBuilder: (context, animation1, animation2) =>
+                            const NewsScreen(),
+                        transitionDuration: const Duration(milliseconds: 300),
+                        transitionsBuilder:
+                            (context, animation1, animation2, child) {
+                          animation1 = CurvedAnimation(
+                            parent: animation1,
+                            curve: Curves.easeInOut,
+                          );
+                          return FadeTransition(
+                            opacity: Tween(
+                              begin: 0.0,
+                              end: 1.0,
+                            ).animate(animation1),
+                            child: SlideTransition(
+                              position: Tween<Offset>(
+                                begin: const Offset(0.0, 1.0),
+                                end: Offset.zero,
+                              ).animate(animation1),
+                              child: child,
+                            ),
+                          );
+                        },
                       ),
+                    );
+                  },
+                ),
+                SizedBox(height: listTileSpace),
+                ListTile(
+                  leading: PyoneerHero.hero(
+                      Image.asset("assets/icons/unknow1.png"), "menu2-icon"),
+                  title: const Text(
+                    "อะไรสักอย่าง 1",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
+                  trailing: const Text("0 รายการ"),
+                  onTap: () {},
                 ),
+                SizedBox(height: listTileSpace),
+                ListTile(
+                  leading: PyoneerHero.hero(
+                      Image.asset("assets/icons/unknow2.png"), "menu3-icon"),
+                  title: const Text(
+                    "อะไรสักอย่าง 2",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  trailing: const Text("0 รายการ"),
+                  onTap: () {},
+                ),
+                SizedBox(height: listTileSpace),
+                ListTile(
+                  leading: PyoneerHero.hero(
+                      Image.asset("assets/icons/unknow3.png"), "menu4-icon"),
+                  title: const Text(
+                    "อะไรสักอย่าง 3",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  trailing: const Text("ไม่รู้ ไม่รู้ ไม่รู้"),
+                  onTap: () {},
+                ),
+                SizedBox(height: listTileSpace),
               ],
             ),
           ),
-        ),
+        ],
       ),
     );
   }
+}
 
-  Widget _buildReadMoreButton() {
-    return ElevatedButton(
-      onPressed: isTopicVisible
-          ? () async {
-              if (!mounted) return;
-              if (await canLaunchUrl(Uri.parse(widget.newsItem.newsLink))) {
-                await launchUrl(Uri.parse(widget.newsItem.newsLink));
-              } else {
-                if (mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Cannot open link')),
-                  );
-                }
-              }
-            }
-          : null,
-      child: const Text('อ่านต่อ'),
-    );
+String _getGreetingWord() {
+  DateTime now = DateTime.now();
+  int hour = now.hour;
+
+  if (hour >= 4 && hour < 12) {
+    return '🌤️ อรุณสวัสดิ์';
+  } else if (hour >= 12 && hour < 16) {
+    return '☀️ สวัสดียามบ่าย';
+  } else if (hour >= 16 && hour < 19) {
+    return '🌥️ สายัณห์สวัสดิ์';
+  } else {
+    return '🌙 สวัสดียามค่ำ';
   }
 }

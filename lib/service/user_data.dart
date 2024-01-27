@@ -7,16 +7,17 @@ class UserData {
   static String email = "";
   static String image = "";
   static String tel = "";
-  static List<String> accountType = ["Email", "Google", "Facebook", "Line"];
+  static String accountType = "";
   static int loginType = 0;
 
-  static Future<void> saveUserData(UserCredential userCredential) async {
+  static Future<void> saveUserData(UserCredential userCredential, String accountType) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('uid', userCredential.user?.uid ?? "");
     await prefs.setString('userName', userCredential.user?.displayName ?? "");
     await prefs.setString('email', userCredential.user?.email ?? "");
     await prefs.setString('image', userCredential.user?.photoURL ?? "");
     await prefs.setString('tel', userCredential.user?.phoneNumber ?? "");
+    await prefs.setString('accountType', accountType);
   }
 
   static Future<void> clear() async {

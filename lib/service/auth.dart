@@ -28,8 +28,9 @@ Future<UserCredential?> signInWithGoogle() async {
     UserData.email = userCredential.user?.email ?? "";
     UserData.image = userCredential.user?.photoURL ?? "";
     UserData.tel = userCredential.user?.phoneNumber ?? "";
+    UserData.accountType = 'Google';
 
-    UserData.saveUserData(userCredential);
+    UserData.saveUserData(userCredential, 'Google');
 
     return userCredential;
   } catch (e) {
@@ -58,8 +59,9 @@ Future<UserCredential?> signInWithFacebook() async {
       UserData.email = userCredential.user?.email ?? "";
       UserData.image = userCredential.user?.photoURL ?? "";
       UserData.tel = userCredential.user?.phoneNumber ?? "";
+      UserData.accountType = 'Facebook';
 
-      UserData.saveUserData(userCredential);
+      UserData.saveUserData(userCredential, 'Facebook');
 
       return userCredential;
     } else {

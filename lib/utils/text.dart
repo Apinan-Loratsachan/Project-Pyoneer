@@ -7,7 +7,15 @@ class PyoneerText {
   static const double spanLineSize = 5;
   static const String startParagraph = "\n\t\t\t\t\t";
 
-  static Align contentText(String text, {double fontSize = bodyTextSize, FontWeight fontWeight = FontWeight.normal, TextAlign textAlign = TextAlign.left, bool tabSpace = false, Alignment boxAlign = Alignment.centerLeft, TextDecoration textDecoration = TextDecoration.none, bool textSpaceSpan = false, FontStyle fontStyle = FontStyle.normal}) {
+  static Align contentText(String text,
+      {double fontSize = bodyTextSize,
+      FontWeight fontWeight = FontWeight.normal,
+      TextAlign textAlign = TextAlign.left,
+      bool tabSpace = false,
+      Alignment boxAlign = Alignment.centerLeft,
+      TextDecoration textDecoration = TextDecoration.none,
+      bool textSpaceSpan = false,
+      FontStyle fontStyle = FontStyle.normal}) {
     if (tabSpace) {
       text = "\t\t\t\t\t$text";
     }

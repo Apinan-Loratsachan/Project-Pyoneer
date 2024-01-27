@@ -11,10 +11,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await UserData.loadUserData();
-  // print('User uid loaded: ${UserData.uid}');
-  // print('User username loaded: ${UserData.userName}');
-  // print('User email loaded: ${UserData.email}');
-  // print('User image loaded: ${UserData.image}');
 
   // Check if user is logged in
   Widget initialScreen = const LoginScreen();
@@ -30,8 +26,8 @@ void main() async {
     const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
       statusBarIconBrightness: Brightness.dark,
-      systemNavigationBarColor: Colors.transparent,
-      systemNavigationBarDividerColor: Colors.transparent,
+      systemNavigationBarColor: Colors.white,
+      systemNavigationBarDividerColor: Colors.white,
       systemNavigationBarIconBrightness: Brightness.dark,
     ),
   );

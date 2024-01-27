@@ -38,6 +38,11 @@ class _AccountSettigScreenState extends State<AccountSettigScreen> {
                     title: const Text("ชื่อผู้ใช้"),
                     trailing: Text(UserData.userName),
                   ),
+                  ListTile(
+                    leading: const Icon(Icons.link),
+                    title: const Text("ประเภทบัญชี"),
+                    trailing: Text(UserData.accountType),
+                  ),
                   ElevatedButton(
                     style: ButtonStyle(
                       overlayColor: MaterialStateProperty.all(Colors.redAccent),
