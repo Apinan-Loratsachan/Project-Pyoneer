@@ -21,8 +21,8 @@ class _RegisterScreenState extends State<RegisterScreen>
   bool _obscureText2 = true;
   bool _isFieldEmpty = true;
   bool _isFieldEmpty2 = true;
-  TextEditingController _controller1 = TextEditingController();
-  TextEditingController _controller2 = TextEditingController();
+  final TextEditingController _controller1 = TextEditingController();
+  final TextEditingController _controller2 = TextEditingController();
   bool _passwordsMatch = false;
   bool _hasInteractedWithField2 = false;
 

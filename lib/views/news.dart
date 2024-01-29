@@ -2,14 +2,14 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-// import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:palette_generator/palette_generator.dart';
 import 'package:pyoneer/models/custom_cache_manager.dart';
+import 'package:pyoneer/service/auth.dart';
 import 'package:pyoneer/service/content_counter.dart';
+import 'package:pyoneer/service/launch_url.dart';
 import 'package:pyoneer/service/user_data.dart';
 import 'package:pyoneer/utils/hero.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 
 class NewsScreen extends StatefulWidget {
   const NewsScreen({super.key});
@@ -65,6 +65,11 @@ class _NewsScreenState extends State<NewsScreen>
                   controller: topicController,
                   decoration:
                       const InputDecoration(labelText: 'หัวข้อข่าว (ชื่อ)'),
+                  validator: (value) => value == null ||
+                          value.trim() == ' ' ||
+                          value.trim().isEmpty
+                      ? 'กรุณาใส่หัวข้อข่าว'
+                      : null,
                 ),
                 TextFormField(
                   controller: newsLinkController,
@@ -85,7 +90,7 @@ class _NewsScreenState extends State<NewsScreen>
             ),
             TextButton(
               child: const Text('เพิ่มข่าว'),
-              onPressed: () {
+              onPressed: () async {
                 if (formKey.currentState!.validate()) {
                   var newsItem = NewsItem(
                     imageUrl: imageUrlController.text,
@@ -98,7 +103,8 @@ class _NewsScreenState extends State<NewsScreen>
                   FirebaseFirestore.instance
                       .collection('news')
                       .add(newsItem.toMap());
-                  Navigator.of(context).pop();
+                  Navigator.pop(context);
+                  await ContentCounter.updateNewsItemCount();
                 }
               },
             ),
@@ -156,29 +162,53 @@ class _NewsScreenState extends State<NewsScreen>
         actions: [
           Padding(
             padding: const EdgeInsets.all(20.0),
-            child: PyoneerHero.hero(
-              Text("${ContentCounter.newsCounter} รายการ"),
-              "news-counter",
+            child: FutureBuilder<int>(
+              future: ContentCounter.getNewsItemCount(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  if (snapshot.hasError) {
+                    // Handle error case
+                    return const Text('0 รายการ');
+                  }
+
+                  // Display the news count as a string in the trailing
+                  return PyoneerHero.hero(
+                    Text(
+                      '${snapshot.data} รายการ',
+                      style: const TextStyle(fontSize: 12),
+                    ),
+                    "news-counter",
+                  );
+                } else {
+                  // Display a loading indicator while waiting for the data
+                  return const CircularProgressIndicator();
+                }
+              },
             ),
           )
         ],
       ),
+      floatingActionButton: _buildFloatingActionButton(context),
       body: Padding(
         padding: const EdgeInsets.all(0),
         child: SingleChildScrollView(
           child: Column(
             children: [
-              StreamBuilder(
-                stream: FirebaseFirestore.instance
+              FutureBuilder<QuerySnapshot>(
+                future: FirebaseFirestore.instance
                     .collection('news')
                     .orderBy('timestamp', descending: true)
-                    .snapshots(),
+                    .get(),
                 builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                   if (snapshot.hasError) {
                     return Text('Error: ${snapshot.error}');
                   }
 
-                  if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+
+                  if (snapshot.data == null || snapshot.data!.docs.isEmpty) {
                     return const Center(child: Text('No news available'));
                   }
 
@@ -186,37 +216,6 @@ class _NewsScreenState extends State<NewsScreen>
                       .map((doc) =>
                           NewsItem.fromMap(doc.data() as Map<String, dynamic>))
                       .toList();
-
-                  // return GridView.builder(
-                  //   gridDelegate: SliverStairedGridDelegate(
-                  //     crossAxisSpacing: 48,
-                  //     mainAxisSpacing: 24,
-                  //     startCrossAxisDirectionReversed: true,
-                  //     pattern: [
-                  //       // แก้ขนาดตรงนี้
-                  //       const StairedGridTile(0.5, 6 / 5),
-                  //       const StairedGridTile(0.5, 6 / 5),
-                  //       const StairedGridTile(0.9, 8 / 4.4),
-                  //       const StairedGridTile(0.5, 6 / 4),
-                  //       const StairedGridTile(0.5, 6 / 3.2),
-                  //       const StairedGridTile(0.5, 16 / 9),
-                  //       const StairedGridTile(0.5, 5 / 3),
-                  //       const StairedGridTile(0.9, 8 / 4.4),
-                  //       const StairedGridTile(0.5, 8 / 4.6),
-                  //       const StairedGridTile(0.5, 3 / 2),
-                  //     ],
-                  //   ),
-                  //   itemCount: newsItems.length > 10 ? 11 : newsItems.length + 1,
-                  //   itemBuilder: (context, index) {
-                  //     if (index < newsItems.length && index < 10) {
-                  //       return NewsGridItem(newsItem: newsItems[index]);
-                  //     } else if (index < 10) {
-                  //       return _buildFloatingActionButton(context);
-                  //     } else {
-                  //       return const SizedBox.shrink();
-                  //     }
-                  //   },
-                  // );
 
                   return Padding(
                     padding: const EdgeInsets.all(0.0),
@@ -237,19 +236,36 @@ class _NewsScreenState extends State<NewsScreen>
                                         child: Image.network(
                                           newsItems[i].imageUrl,
                                           width: 100,
+                                          height: 100,
+                                          loadingBuilder: (context, child,
+                                              loadingProgress) {
+                                            if (loadingProgress == null) {
+                                              return child;
+                                            }
+                                            return const SizedBox(
+                                              width: 100,
+                                              child: Center(
+                                                child:
+                                                    CircularProgressIndicator(),
+                                              ),
+                                            );
+                                          },
+                                          errorBuilder:
+                                              (context, error, stackTrace) {
+                                            return const Icon(Icons.error);
+                                          },
                                         ),
                                       ),
                                       title: Text(newsItems[i].topic!),
                                       titleTextStyle: const TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 14,
-                                        fontFamily: 'Noto Sans Thai'
-                                      ),
+                                          color: Colors.black,
+                                          fontSize: 14,
+                                          fontFamily: 'Noto Sans Thai'),
                                       onTap: () {
-                                        _launchURL(newsItems[i].newsLink);
+                                        LaunchURL.launchSrtingURL(
+                                            newsItems[i].newsLink);
                                       },
                                     ),
-                                    // if (i < newsItems.length - 1) PyoneerText.divider(15)
                                     const SizedBox(height: 10)
                                   ],
                                 ),
@@ -270,19 +286,13 @@ class _NewsScreenState extends State<NewsScreen>
   }
 
   Widget _buildFloatingActionButton(BuildContext context) {
-    const List<String> allowedUIDs = [
-      '3XlCZTQFqTScyYE0YBz94MJlORs1',
-      'A0ILxjzDZeQk2okmGUcs85kMCSh2',
-      'wA2YJSiuLAQXMZH77esSNHmSVYI2',
-      'fLzQpFJOKVYLrRfcNLKoFqBLOZp1'
-    ];
-
     var currentUser = FirebaseAuth.instance.currentUser;
 
-    if (currentUser != null && allowedUIDs.contains(currentUser.uid)) {
+    if (currentUser != null && Auth.adminUIDs.contains(currentUser.uid)) {
       return FloatingActionButton(
         onPressed: () {
           showAddNewsDialog(context);
+          ContentCounter.getNewsItemCount();
         },
         child: const Icon(Icons.add),
       );
@@ -491,14 +501,5 @@ class _NewsGridItemState extends State<NewsGridItem>
           : null,
       child: const Text('อ่านต่อ'),
     );
-  }
-}
-
-// Function to launch URL
-void _launchURL(String url) async {
-  if (await canLaunchUrlString(url)) {
-    await launchUrlString(url);
-  } else {
-    throw 'Could not launch $url';
   }
 }

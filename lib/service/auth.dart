@@ -4,7 +4,15 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:pyoneer/service/user_data.dart';
 
-Future<UserCredential?> signInWithGoogle() async {
+class Auth{
+  static const List<String> adminUIDs = [
+      '3XlCZTQFqTScyYE0YBz94MJlORs1',
+      'A0ILxjzDZeQk2okmGUcs85kMCSh2',
+      'wA2YJSiuLAQXMZH77esSNHmSVYI2',
+      'fLzQpFJOKVYLrRfcNLKoFqBLOZp1'
+    ];
+
+  static Future<UserCredential?> signInWithGoogle() async {
   try {
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
@@ -41,7 +49,7 @@ Future<UserCredential?> signInWithGoogle() async {
   }
 }
 
-Future<UserCredential?> signInWithFacebook() async {
+static Future<UserCredential?> signInWithFacebook() async {
   try {
     final LoginResult result = await FacebookAuth.instance.login();
 
@@ -78,8 +86,10 @@ Future<UserCredential?> signInWithFacebook() async {
   }
 }
 
-Future<void> signOut() async {
+static Future<void> signOut() async {
   await FirebaseAuth.instance.signOut();
   await GoogleSignIn().signOut();
   await UserData.clear();
+}
+
 }

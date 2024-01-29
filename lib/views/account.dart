@@ -67,7 +67,7 @@ class _AccountSettigScreenState extends State<AccountSettigScreen> {
                             TextButton(
                               onPressed: () {
                                 UserData.clear();
-                                signOut();
+                                Auth.signOut();
                                 Navigator.pushAndRemoveUntil(
                                     context,
                                     PageRouteBuilder(

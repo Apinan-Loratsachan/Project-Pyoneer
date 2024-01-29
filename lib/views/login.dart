@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:pyoneer/service/user_data.dart';
 import 'package:pyoneer/views/home.dart';
 import 'package:pyoneer/views/register.dart';
 import 'package:pyoneer/service/auth.dart';
@@ -251,7 +252,7 @@ class _LoginScreenState extends State<LoginScreen>
                             icon: const FaIcon(FontAwesomeIcons.google),
                             onPressed: () async {
                               UserCredential? userCredential =
-                                  await signInWithGoogle();
+                                  await Auth.signInWithGoogle();
                               if (userCredential != null) {
                                 // ignore: use_build_context_synchronously
                                 Navigator.pushReplacement(
@@ -295,7 +296,7 @@ class _LoginScreenState extends State<LoginScreen>
                             onPressed: () async {
                               // Handle Facebook login
                               UserCredential? userCredential =
-                                  await signInWithFacebook();
+                                  await Auth.signInWithFacebook();
                               if (userCredential != null) {
                                 // ignore: use_build_context_synchronously
                                 Navigator.pushReplacement(
@@ -337,6 +338,10 @@ class _LoginScreenState extends State<LoginScreen>
                           IconButton(
                             icon: const FaIcon(FontAwesomeIcons.userSecret),
                             onPressed: () {
+                              UserData.showProfile = false;
+                              UserData.uid = "ไม่ได้เข้าสู่ระบบ";
+                              UserData.userName = "ไม่ได้เข้าสู่ระบบ";
+                              UserData.accountType = 'ไม่ระบุตัวตน';
                               Navigator.pushReplacement(
                                 context,
                                 PageRouteBuilder(

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pyoneer/service/content_counter.dart';
+import 'package:pyoneer/service/launch_url.dart';
 import 'package:pyoneer/service/user_data.dart';
 import 'package:pyoneer/utils/color.dart';
 import 'package:pyoneer/utils/hero.dart';
@@ -13,8 +15,20 @@ class PrimaryScreen extends StatefulWidget {
 }
 
 class _PrimaryScreenState extends State<PrimaryScreen> {
-
   final double listTileSpace = 15;
+  Future<int>? newsItemCountFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    newsItemCountFuture = ContentCounter.getNewsItemCount();
+  }
+
+  void refreshNewsItemCount() {
+    setState(() {
+      newsItemCountFuture = ContentCounter.getNewsItemCount();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +66,7 @@ class _PrimaryScreenState extends State<PrimaryScreen> {
                 const Padding(
                   padding: EdgeInsets.all(8.0),
                   child: Text(
-                    "เมนู",
+                    "รายการ",
                     style: TextStyle(fontSize: 20),
                   ),
                 ),
@@ -65,8 +79,9 @@ class _PrimaryScreenState extends State<PrimaryScreen> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  trailing: FutureBuilder<int>(
-                    future: ContentCounter.getNewsItemCount(),
+                  trailing: const Icon(Icons.arrow_forward_ios),
+                  subtitle: FutureBuilder<int>(
+                    future: newsItemCountFuture,
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.done) {
                         if (snapshot.hasError) {
@@ -116,21 +131,40 @@ class _PrimaryScreenState extends State<PrimaryScreen> {
                           );
                         },
                       ),
-                    );
+                    ).then((value) => refreshNewsItemCount());
                   },
                 ),
                 SizedBox(height: listTileSpace),
                 ListTile(
-                  leading: PyoneerHero.hero(
-                      Image.asset("assets/icons/unknow1.png"), "menu2-icon"),
+                  leading: Image.asset("assets/images/lesson0/cover.png"),
                   title: const Text(
-                    "อะไรสักอย่าง 1",
+                    "Python",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  trailing: const Text("0 รายการ"),
-                  onTap: () {},
+                  subtitle: const Text("ข่าวล่าสุด"),
+                  trailing: const Icon(FontAwesomeIcons.arrowUpRightFromSquare),
+                  onTap: () {
+                    LaunchURL.launchSrtingURL(
+                        "https://blog.python.org/");
+                  },
+                ),
+                SizedBox(height: listTileSpace),
+                ListTile(
+                  leading: Image.asset("assets/icons/w3schools.png"),
+                  trailing: const Icon(FontAwesomeIcons.arrowUpRightFromSquare),
+                  title: const Text(
+                    "W3Schools",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  subtitle: const Text("w3schools.com"),
+                  onTap: () {
+                    LaunchURL.launchSrtingURL(
+                        "https://www.w3schools.com/python/");
+                  },
                 ),
                 SizedBox(height: listTileSpace),
                 ListTile(

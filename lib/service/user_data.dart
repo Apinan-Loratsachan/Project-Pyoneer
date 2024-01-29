@@ -8,6 +8,7 @@ class UserData {
   static String image = "";
   static String tel = "";
   static String accountType = "";
+  static bool showProfile = true;
   static int loginType = 0;
 
   static Future<void> saveUserData(UserCredential userCredential, String accountType) async {
@@ -28,6 +29,8 @@ class UserData {
     email = "";
     image = "";
     tel = "";
+    accountType = "";
+    showProfile = true;
   }
 
   static Future<void> loadUserData() async {

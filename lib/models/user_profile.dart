@@ -39,7 +39,7 @@ class _UserProfileState extends State<UserProfile> {
 
   @override
   Widget build(BuildContext context) {
-    if (UserData.uid.isEmpty) {
+    if (UserData.uid.isEmpty || UserData.showProfile == false) {
       return Container();
     }
     return Padding(
