@@ -41,7 +41,7 @@ class _AccountSettigScreenState extends State<AccountSettigScreen> {
                   ListTile(
                     leading: const Icon(Icons.link),
                     title: const Text("ประเภทบัญชี"),
-                    trailing: Text(UserData.accountType),
+                    trailing: UserData.getLoginProviderIcon()
                   ),
                   ElevatedButton(
                     style: ButtonStyle(

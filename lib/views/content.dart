@@ -28,6 +28,9 @@ class _ContentScreenState extends State<ContentScreen>
       ),
       title: Text(
         title,
+        style: const TextStyle(
+          fontWeight: FontWeight.bold
+        ),
       ),
       subtitle: Text(
         subtitle,
@@ -41,7 +44,12 @@ class _ContentScreenState extends State<ContentScreen>
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text("บทเรียน"),
+        title: const Text(
+          "บทเรียน",
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         surfaceTintColor: Colors.white,
       ),
       body: SingleChildScrollView(

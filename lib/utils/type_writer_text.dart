@@ -1,25 +1,26 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 
-class TypewriterText extends StatefulWidget {
+class TypeWriterText extends StatefulWidget {
   final String text;
   final TextStyle? textStyle;
   final int typingSpeed; // milliseconds for each character
   final int cursorSpeed; // milliseconds for cursor blink
 
-  const TypewriterText({
-    Key? key,
+  const TypeWriterText({
+    super.key,
     required this.text,
     this.textStyle,
     this.typingSpeed = 85,
     this.cursorSpeed = 500,
-  }) : super(key: key);
+  });
 
   @override
-  _TypewriterTextState createState() => _TypewriterTextState();
+  // ignore: library_private_types_in_public_api
+  _TypeWriterTextState createState() => _TypeWriterTextState();
 }
 
-class _TypewriterTextState extends State<TypewriterText> {
+class _TypeWriterTextState extends State<TypeWriterText> {
   String displayedText = "";
   String cursor = '|';
   int textIndex = 0;

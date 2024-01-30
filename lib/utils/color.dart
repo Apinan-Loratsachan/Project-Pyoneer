@@ -7,4 +7,6 @@ class AppColor {
 
   static Color? profileColor = Colors.black;
   static Color? profileTextColor = Colors.white;
+
+  static Color? ideColor = const Color.fromARGB(255, 35, 36, 31);
 }

@@ -71,16 +71,17 @@ class LessonComponent {
             children: [
               Align(
                 alignment: Alignment.centerLeft,
-                child: TypewriterText(
+                child: TypeWriterText(
                   text: title,
                   textStyle: const TextStyle(
                     fontSize: 20,
+                    fontWeight: FontWeight.bold
                   ),
                 ),
               ),
               Align(
                 alignment: Alignment.centerLeft,
-                child: TypewriterText(
+                child: TypeWriterText(
                   text: subTitleText,
                   cursorSpeed: 700,
                   textStyle: const TextStyle(

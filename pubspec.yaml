@@ -50,6 +50,7 @@ dependencies:
   cloud_firestore: ^4.14.0
   url_launcher: ^6.2.4
   cached_network_image: ^3.3.1
+  flutter_code_editor: ^0.3.1
   
 
 dev_dependencies:
