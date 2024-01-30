@@ -14,10 +14,10 @@ class _Lesson2ScreenState extends State<Lesson2Screen> {
   @override
   Widget build(BuildContext context) {
     return LessonScreenModel(
-      appBarTitle: LessonComponent.lessonTitle[2],
-      appBarSubTitle: LessonComponent.lessonSubTitle[2],
-      coverImagePath: LessonComponent.lessonImageSrc[2],
-      heroTag: LessonComponent.heroTag[2],
+      appBarTitle: LessonComponent.lessonContent[2].title,
+      appBarSubTitle: LessonComponent.lessonContent[2].subTitle,
+      coverImagePath: LessonComponent.lessonContent[2].imageSrc,
+      heroTag: LessonComponent.lessonContent[2].heroTag,
       lessonTitle: "ตัวแปร และ\nการกำหนดค่า",
       contentWidgets: [
         PyoneerText.contentText("ตัวแปร (variable)",fontWeight: FontWeight.bold, fontSize: 20,),

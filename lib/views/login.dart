@@ -342,6 +342,8 @@ class _LoginScreenState extends State<LoginScreen>
                               UserData.uid = "ไม่ได้เข้าสู่ระบบ";
                               UserData.userName = "ไม่ได้เข้าสู่ระบบ";
                               UserData.accountType = 'ไม่ระบุตัวตน';
+                              UserData.email = 'ไม่ได้เข้าสู่ระบบ';
+                              UserData.tel = 'ไม่ได้เข้าสู่ระบบ';
                               Navigator.pushReplacement(
                                 context,
                                 PageRouteBuilder(

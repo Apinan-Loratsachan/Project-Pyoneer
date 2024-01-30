@@ -14,10 +14,10 @@ class _Lesson3ScreenState extends State<Lesson3Screen> {
   @override
   Widget build(BuildContext context) {
     return LessonScreenModel(
-      appBarTitle: LessonComponent.lessonTitle[3],
-      appBarSubTitle: LessonComponent.lessonSubTitle[3],
-      coverImagePath: LessonComponent.lessonImageSrc[3],
-      heroTag: LessonComponent.heroTag[3],
+      appBarTitle: LessonComponent.lessonContent[3].title,
+      appBarSubTitle: LessonComponent.lessonContent[3].subTitle,
+      coverImagePath: LessonComponent.lessonContent[3].imageSrc,
+      heroTag: LessonComponent.lessonContent[3].heroTag,
       lessonTitle: "ชนิดของข้อมูล",
       contentWidgets: [
         PyoneerText.contentText("ชนิดข้อมูล (Data type)",fontWeight: FontWeight.bold, fontSize: 20,),

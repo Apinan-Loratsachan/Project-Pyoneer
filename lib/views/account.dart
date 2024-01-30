@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pyoneer/models/user_profile.dart';
 import 'package:pyoneer/service/auth.dart';
@@ -31,7 +33,25 @@ class _AccountSettigScreenState extends State<AccountSettigScreen> {
                   ListTile(
                     leading: const Icon(FontAwesomeIcons.hashtag),
                     title: const Text("รหัสผู้ใช้"),
-                    trailing: Text(UserData.uid),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        UserData.uid == 'ไม่ได้เข้าสู่ระบบ' ||
+                                UserData.uid == '' || UserData.uid.isEmpty
+                            ? Container()
+                            : IconButton(
+                                onPressed: () async {
+                                  await Clipboard.setData(
+                                      ClipboardData(text: UserData.uid));
+                                  Fluttertoast.showToast(
+                                      msg: "คัดลอก UID แล้ว");
+                                },
+                                icon: const Icon(Icons.copy),
+                                iconSize: 20,
+                              ),
+                        Text(UserData.uid),
+                      ],
+                    ),
                   ),
                   ListTile(
                     leading: const Icon(FontAwesomeIcons.userPen),
@@ -39,10 +59,21 @@ class _AccountSettigScreenState extends State<AccountSettigScreen> {
                     trailing: Text(UserData.userName),
                   ),
                   ListTile(
-                    leading: const Icon(Icons.link),
-                    title: const Text("ประเภทบัญชี"),
-                    trailing: UserData.getLoginProviderIcon()
+                    leading: const Icon(Icons.mail),
+                    title: const Text("อีเมล"),
+                    trailing:
+                        Text(UserData.email == '' ? 'ไม่ทราบ' : UserData.email),
                   ),
+                  ListTile(
+                    leading: const Icon(Icons.phone),
+                    title: const Text("เบอร์โทรศัพท์"),
+                    trailing:
+                        Text(UserData.tel == '' ? 'ไม่ทราบ' : UserData.tel),
+                  ),
+                  ListTile(
+                      leading: const Icon(Icons.link),
+                      title: const Text("ประเภทบัญชี"),
+                      trailing: UserData.getLoginProviderIcon()),
                   ElevatedButton(
                     style: ButtonStyle(
                       overlayColor: MaterialStateProperty.all(Colors.redAccent),

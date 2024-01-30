@@ -2,55 +2,94 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:pyoneer/utils/type_writer_text.dart';
+import 'package:pyoneer/views/lessons/lesson0.dart';
+import 'package:pyoneer/views/lessons/lesson1.dart';
+import 'package:pyoneer/views/lessons/lesson2.dart';
+import 'package:pyoneer/views/lessons/lesson3.dart';
+import 'package:pyoneer/views/lessons/lesson4.dart';
+import 'package:pyoneer/views/lessons/lesson5.dart';
+
+class LessonContent {
+  String imageSrc;
+  String title;
+  String subTitle;
+  String heroTag;
+  Widget targetScreen;
+
+  LessonContent({
+    required this.imageSrc,
+    required this.title,
+    required this.subTitle,
+    required this.heroTag,
+    required this.targetScreen,
+  });
+}
 
 class LessonComponent {
-  static List<String> lessonImageSrc = [
-    "assets/images/lesson0/cover.png",
-    "assets/images/lesson1/cover.png",
-    "assets/images/lesson2/cover.png",
-    "assets/images/lesson3/cover.png",
-    "assets/images/lesson4/cover.png",
-    "assets/images/lesson5/cover.png",
+  static List<LessonContent> lessonContent = [
+    LessonContent(
+      imageSrc: "assets/images/lesson0/cover.png",
+      title: "บทนำ",
+      subTitle: "Python คืออะไร",
+      heroTag: "lesson-0-cover",
+      targetScreen: const Lesson0Screen()
+    ),
+    LessonContent(
+      imageSrc: "assets/images/lesson1/cover.png",
+      title: "บทเรียนที่ 1",
+      subTitle: "คุณลักษณะของภาษา Python",
+      heroTag: "lesson-1-cover",
+      targetScreen: const Lesson1Screen()
+    ),
+    LessonContent(
+      imageSrc: "assets/images/lesson2/cover.png",
+      title: "บทเรียนที่ 2",
+      subTitle: "ตัวแปรและการกำหนดค่า",
+      heroTag: "lesson-2-cover",
+      targetScreen: const Lesson2Screen()
+    ),
+    LessonContent(
+      imageSrc: "assets/images/lesson3/cover.png",
+      title: "บทเรียนที่ 3",
+      subTitle: "ชนิดข้อมูล",
+      heroTag: "lesson-3-cover",
+      targetScreen: const Lesson3Screen()
+    ),
+    LessonContent(
+      imageSrc: "assets/images/lesson4/cover.png",
+      title: "บทเรียนที่ 4",
+      subTitle: "ตัวดำเนินการและนิพจน์",
+      heroTag: "lesson-4-cover",
+      targetScreen: const Lesson4Screen()
+    ),
+    LessonContent(
+      imageSrc: "assets/images/lesson5/cover.png",
+      title: "บทเรียนที่ 5",
+      subTitle: "คำสั่งรับค่าและแสดงผล",
+      heroTag: "lesson-5-cover",
+      targetScreen: const Lesson5Screen()
+    ),
   ];
-  static List<String> lessonTitle = [
-    "บทนำ",
-    "บทเรียนที่ 1",
-    "บทเรียนที่ 2",
-    "บทเรียนที่ 3",
-    "บทเรียนที่ 4",
-    "บทเรียนที่ 5",
-    "บทเรียนที่ 6",
-    "บทเรียนที่ 7",
-    "บทเรียนที่ 8",
-    "บทเรียนที่ 9",
-    "บทเรียนที่ 10",
-  ];
-  static List<String> lessonSubTitle = [
-    "Python คืออะไร",
-    "คุณลักษณะของภาษา Python",
-    "ตัวแปรและการกำหนดค่า",
-    "ชนิดข้อมูล",
-    "ตัวดำเนินการและนิพจน์",
-    "คำสั่งรับค่าและแสดงผล",
-    "บทเรียนที่ 6",
-    "บทเรียนที่ 7",
-    "บทเรียนที่ 8",
-    "บทเรียนที่ 9",
-    "บทเรียนที่ 10",
-  ];
-  static List<String> heroTag = [
-    "lesson-0-cover",
-    "lesson-1-cover",
-    "lesson-2-cover",
-    "lesson-3-cover",
-    "lesson-4-cover",
-    "lesson-5-cover",
-    "lesson-6-cover",
-    "lesson-7-cover",
-    "lesson-8-cover",
-    "lesson-9-cover",
-    "lesson-10-cover",
-  ];
+
+    static ListTile lessonTitle(String imageSrc, String heroTag, String title,
+      String subtitle, Widget targetScreen, BuildContext context) {
+    return ListTile(
+      leading: LessonComponent.lessonCover(imageSrc, heroTag, true),
+      onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => targetScreen),
+      ),
+      title: Text(
+        title,
+        style: const TextStyle(
+          fontWeight: FontWeight.bold
+        ),
+      ),
+      subtitle: Text(
+        subtitle,
+      ),
+    );
+  }
 
   static AppBar lessonsAppbar(String title, String subTitleText) {
     return AppBar(
