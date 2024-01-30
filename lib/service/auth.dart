@@ -4,6 +4,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:pyoneer/service/user_data.dart';
 
+
 class Auth{
   static const List<String> adminUIDs = [
       '3XlCZTQFqTScyYE0YBz94MJlORs1',
@@ -49,41 +50,16 @@ class Auth{
   }
 }
 
-static Future<UserCredential?> signInWithFacebook() async {
-  try {
-    final LoginResult result = await FacebookAuth.instance.login();
+static Future<UserCredential> signInWithFacebook() async {
+  
+  final LoginResult loginResult = await FacebookAuth.instance.login(
+    permissions: [
+      'email', 'public_profile'
+    ]
+  );
 
-    if (result.status == LoginStatus.success) {
-      final AccessToken accessToken = result.accessToken!;
-
-      final AuthCredential credential =
-          FacebookAuthProvider.credential(accessToken.token);
-
-      UserCredential userCredential =
-          await FirebaseAuth.instance.signInWithCredential(credential);
-
-      UserData.uid = userCredential.user?.uid ?? "";
-      UserData.userName = userCredential.user?.displayName ?? "";
-      UserData.email = userCredential.user?.email ?? "";
-      UserData.image = userCredential.user?.photoURL ?? "";
-      UserData.tel = userCredential.user?.phoneNumber ?? "";
-      UserData.accountType = 'Facebook';
-
-      UserData.saveUserData(userCredential, 'Facebook');
-
-      return userCredential;
-    } else {
-      if (kDebugMode) {
-        print('Error signing in with Facebook: ${result.status}');
-      }
-      return null;
-    }
-  } catch (e) {
-    if (kDebugMode) {
-      print('Error signing in with Facebook: $e');
-    }
-    return null;
-  }
+  final OAuthCredential facebookAuthCredential = FacebookAuthProvider.credential(loginResult.accessToken!.token);
+  return FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
 }
 
 static Future<void> signOut() async {
