@@ -6,6 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pyoneer/models/user_profile.dart';
 import 'package:pyoneer/service/auth.dart';
 import 'package:pyoneer/service/user_data.dart';
+import 'package:pyoneer/utils/color.dart';
 import 'package:pyoneer/views/login.dart';
 
 class AccountSettigScreen extends StatefulWidget {
@@ -34,29 +35,39 @@ class _AccountSettigScreenState extends State<AccountSettigScreen> {
                   ListTile(
                     leading: const Icon(FontAwesomeIcons.hashtag),
                     title: const Text("รหัสผู้ใช้"),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        UserData.uid == 'ไม่ได้เข้าสู่ระบบ' ||
-                                UserData.uid == '' ||
-                                UserData.uid.isEmpty
-                            ? Container()
-                            : IconButton(
-                                onPressed: () async {
-                                  await Clipboard.setData(
-                                      ClipboardData(text: UserData.uid));
-                                  Fluttertoast.showToast(
-                                      msg: "คัดลอก UID แล้ว");
-                                },
-                                icon: const Icon(Icons.copy),
-                                iconSize: 20,
-                              ),
-                        Text(UserData.uid),
-                      ],
-                    ),
+                    trailing: Text(UserData.uid),
                   ),
+                  UserData.uid == 'ไม่ได้เข้าสู่ระบบ' ||
+                          UserData.uid == '' ||
+                          UserData.uid.isEmpty
+                      ? Container()
+                      : ListTile(
+                          title: ElevatedButton(
+                            style: ButtonStyle(
+                              overlayColor: MaterialStateColor.resolveWith(
+                                  (states) => AppColor.primarSnakeColor),
+                              iconColor: MaterialStateColor.resolveWith(
+                                  (states) => Colors.black),
+                              foregroundColor: MaterialStateColor.resolveWith(
+                                  (states) => Colors.black),
+                            ),
+                            onPressed: () async {
+                              await Clipboard.setData(
+                                  ClipboardData(text: UserData.uid));
+                              Fluttertoast.showToast(msg: "คัดลอก UID แล้ว");
+                            },
+                            child: const Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(Icons.copy),
+                                SizedBox(width: 10),
+                                Text("คัดลอกรหัสผู้ใช้")
+                              ],
+                            ),
+                          ),
+                        ),
                   ListTile(
-                    leading: const Icon(FontAwesomeIcons.userPen),
+                    leading: const Icon(FontAwesomeIcons.userGraduate),
                     title: const Text("ชื่อผู้ใช้"),
                     trailing: Text(UserData.userName),
                   ),

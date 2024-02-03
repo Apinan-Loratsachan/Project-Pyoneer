@@ -74,9 +74,7 @@ class _ContentScreenState extends State<ContentScreen> {
             context,
             MaterialPageRoute(builder: (context) => targetScreen),
           ).then((value) {
-            if (value) {
-              setState(() {});
-            }
+            setState(() {});
           });
 
           // Check if the data already exists in Firestore

@@ -131,12 +131,12 @@ class _HomeScreenState extends State<HomeScreen> {
                         PageRouteBuilder(
                           pageBuilder: (context, animation1, animation2) =>
                               const AccountSettigScreen(),
-                          transitionDuration: const Duration(milliseconds: 500),
+                          transitionDuration: Duration(milliseconds: PyoneerAnimation.changeScreenDuration),
                           transitionsBuilder:
                               (context, animation1, animation2, child) {
                             animation1 = CurvedAnimation(
                               parent: animation1,
-                              curve: Curves.easeInOut,
+                              curve: Curves.easeOutQuart,
                             );
                             return FadeTransition(
                               opacity: Tween(
