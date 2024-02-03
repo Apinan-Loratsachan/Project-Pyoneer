@@ -28,71 +28,48 @@ class LessonContent {
 class LessonComponent {
   static List<LessonContent> lessonContent = [
     LessonContent(
-      imageSrc: "assets/images/lesson0/cover.png",
-      title: "บทนำ",
-      subTitle: "Python คืออะไร",
-      heroTag: "lesson-0-cover",
-      targetScreen: const Lesson0Screen()
-    ),
+        imageSrc: "assets/images/lesson0/cover.png",
+        title: "บทนำ",
+        subTitle: "Python คืออะไร",
+        heroTag: "lesson-0-cover",
+        targetScreen: const Lesson0Screen()),
     LessonContent(
-      imageSrc: "assets/images/lesson1/cover.png",
-      title: "บทเรียนที่ 1",
-      subTitle: "คุณลักษณะของภาษา Python",
-      heroTag: "lesson-1-cover",
-      targetScreen: const Lesson1Screen()
-    ),
+        imageSrc: "assets/images/lesson1/cover.png",
+        title: "บทเรียนที่ 1",
+        subTitle: "คุณลักษณะของภาษา Python",
+        heroTag: "lesson-1-cover",
+        targetScreen: const Lesson1Screen()),
     LessonContent(
-      imageSrc: "assets/images/lesson2/cover.png",
-      title: "บทเรียนที่ 2",
-      subTitle: "ตัวแปรและการกำหนดค่า",
-      heroTag: "lesson-2-cover",
-      targetScreen: const Lesson2Screen()
-    ),
+        imageSrc: "assets/images/lesson2/cover.png",
+        title: "บทเรียนที่ 2",
+        subTitle: "ตัวแปรและการกำหนดค่า",
+        heroTag: "lesson-2-cover",
+        targetScreen: const Lesson2Screen()),
     LessonContent(
-      imageSrc: "assets/images/lesson3/cover.png",
-      title: "บทเรียนที่ 3",
-      subTitle: "ชนิดข้อมูล",
-      heroTag: "lesson-3-cover",
-      targetScreen: const Lesson3Screen()
-    ),
+        imageSrc: "assets/images/lesson3/cover.png",
+        title: "บทเรียนที่ 3",
+        subTitle: "ชนิดข้อมูล",
+        heroTag: "lesson-3-cover",
+        targetScreen: const Lesson3Screen()),
     LessonContent(
-      imageSrc: "assets/images/lesson4/cover.png",
-      title: "บทเรียนที่ 4",
-      subTitle: "ตัวดำเนินการและนิพจน์",
-      heroTag: "lesson-4-cover",
-      targetScreen: const Lesson4Screen()
-    ),
+        imageSrc: "assets/images/lesson4/cover.png",
+        title: "บทเรียนที่ 4",
+        subTitle: "ตัวดำเนินการและนิพจน์",
+        heroTag: "lesson-4-cover",
+        targetScreen: const Lesson4Screen()),
     LessonContent(
-      imageSrc: "assets/images/lesson5/cover.png",
-      title: "บทเรียนที่ 5",
-      subTitle: "คำสั่งรับค่าและแสดงผล",
-      heroTag: "lesson-5-cover",
-      targetScreen: const Lesson5Screen()
-    ),
+        imageSrc: "assets/images/lesson5/cover.png",
+        title: "บทเรียนที่ 5",
+        subTitle: "คำสั่งรับค่าและแสดงผล",
+        heroTag: "lesson-5-cover",
+        targetScreen: const Lesson5Screen()),
   ];
 
-    static ListTile lessonTitle(String imageSrc, String heroTag, String title,
-      String subtitle, Widget targetScreen, BuildContext context) {
-    return ListTile(
-      leading: LessonComponent.lessonCover(imageSrc, heroTag, true),
-      onTap: () => Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => targetScreen),
-      ),
-      title: Text(
-        title,
-        style: const TextStyle(
-          fontWeight: FontWeight.bold
-        ),
-      ),
-      subtitle: Text(
-        subtitle,
-      ),
-    );
-  }
-
-  static AppBar lessonsAppbar(String title, String subTitleText) {
+  static AppBar lessonsAppbar(String title, String subTitleText, context) {
     return AppBar(
+      leading: IconButton(onPressed: () {
+        Navigator.pop(context, true);
+      }, icon: const Icon(Icons.arrow_back)),
       title: Row(
         children: [
           const SizedBox(width: 0),
@@ -113,9 +90,7 @@ class LessonComponent {
                 child: TypeWriterText(
                   text: title,
                   textStyle: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold
-                  ),
+                      fontSize: 20, fontWeight: FontWeight.bold),
                 ),
               ),
               Align(

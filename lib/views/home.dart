@@ -3,6 +3,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pyoneer/models/animated_navigation_icon.dart';
 import 'package:pyoneer/service/user_data.dart';
+import 'package:pyoneer/utils/animation.dart';
 import 'package:pyoneer/utils/color.dart';
 import 'package:pyoneer/utils/hero.dart';
 import 'package:pyoneer/views/account.dart';
@@ -46,12 +47,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void onDestinationSelected(int index) {
     FocusManager.instance.primaryFocus?.unfocus();
-
     Future.delayed(const Duration(milliseconds: 100), () {
       pageController.animateToPage(
         index,
-        duration: const Duration(milliseconds: 500),
-        curve: Curves.easeInOut,
+        duration: Duration(milliseconds: PyoneerAnimation.pageviewChangeScreenDuration),
+        curve: PyoneerAnimation.pageviewChangeScreenCurve,
       );
     });
   }
@@ -62,6 +62,9 @@ class _HomeScreenState extends State<HomeScreen> {
     return WillPopScope(
       onWillPop: _onWillPop,
       child: GestureDetector(
+        onTap: () {
+          FocusManager.instance.primaryFocus?.unfocus();
+        },
         child: Scaffold(
           appBar: currentIndex == 2
               ? AppBar(
@@ -181,6 +184,7 @@ class _HomeScreenState extends State<HomeScreen> {
             onPageChanged: (int index) {
               setState(() {
                 currentIndex = index;
+              FocusManager.instance.primaryFocus?.unfocus();
               });
             },
             children: _children,

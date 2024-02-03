@@ -90,7 +90,7 @@ class _LessonScreenModelState extends State<LessonScreenModel>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: LessonComponent.lessonsAppbar(
-          widget.appBarTitle, widget.appBarSubTitle),
+          widget.appBarTitle, widget.appBarSubTitle, context),
       body: Scrollbar(
         child: SingleChildScrollView(
           child: Center(

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_code_editor/flutter_code_editor.dart';
 import 'package:flutter_highlight/themes/monokai-sublime.dart';
 import 'package:highlight/languages/python.dart';
+import 'package:pyoneer/utils/color.dart';
 
 class IDEScreen extends StatefulWidget {
   const IDEScreen({super.key});
@@ -32,6 +33,7 @@ class _IDEScreenState extends State<IDEScreen>
       },
       child: Scaffold(
         appBar: AppBar(
+          surfaceTintColor: Colors.white,
           centerTitle: true,
           title: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -47,34 +49,58 @@ class _IDEScreenState extends State<IDEScreen>
             ],
           ),
         ),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              Padding(
+        body: Column(
+          children: [
+            Expanded(
+              child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8),
-                  child: CodeTheme(
-                    data: CodeThemeData(styles: monokaiSublimeTheme),
-                    child: SingleChildScrollView(
-                      child: GestureDetector(
-                        onHorizontalDragStart: (details) {
-                          _focusNode.unfocus();
-                          // i want to change pageview
-                        },
-                        child: CodeField(
-                          focusNode: _focusNode,
-                          minLines: 20,
-                          wrap: true,
-                          controller: controller,
+                  child: SingleChildScrollView(
+                    child: CodeTheme(
+                      data: CodeThemeData(styles: monokaiSublimeTheme),
+                      child: CodeField(
+                        focusNode: _focusNode,
+                        minLines: 50,
+                        wrap: true,
+                        controller: controller,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            const Text(
+              "Output",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+              ),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: SingleChildScrollView(
+                    child: Container(
+                      width: double.infinity,
+                      color: AppColor.ideColor,
+                      child: const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text(
+                          '1 Test String\n2 Test String\n3 Test String\n4 Test String\n5 Test String\n6 Test String\n7 Test String\n8 Test String\n9 Test String\n10 Test String\n11 Test String\n12 Test String\n13 Test String\n14 Test String\n15 Test String\n16 Test String',
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ),
                   ),
                 ),
               ),
-            ],
-          ),
+            )
+          ],
         ),
       ),
     );
