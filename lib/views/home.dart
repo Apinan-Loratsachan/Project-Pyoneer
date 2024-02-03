@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:pyoneer/models/animated_navigation_icon.dart';
+import 'package:pyoneer/models/navigation_bar_icon_animation.dart';
 import 'package:pyoneer/service/user_data.dart';
 import 'package:pyoneer/utils/animation.dart';
 import 'package:pyoneer/utils/color.dart';
