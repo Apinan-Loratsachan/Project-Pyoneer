@@ -22,6 +22,14 @@
           }
         },
         {
+          "client_id": "389838344082-d8oeg2536562bgc5smpse0svcctncqi2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pyodev.pyoneer",
+            "certificate_hash": "e15d57428c028bb0af03cadea097b60ff61157a2"
+          }
+        },
+        {
           "client_id": "389838344082-f7nbf9tjpho2m8mkgqebab95j2le7bls.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
