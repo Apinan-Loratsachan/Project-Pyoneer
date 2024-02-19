@@ -4,8 +4,8 @@ import 'package:pyoneer/service/content_counter.dart';
 import 'package:pyoneer/service/launch_url.dart';
 import 'package:pyoneer/utils/animation.dart';
 import 'package:pyoneer/utils/hero.dart';
-import 'package:pyoneer/views/news.dart';
-import 'package:pyoneer/views/quiz.dart';
+import 'package:pyoneer/views/menu/news.dart';
+import 'package:pyoneer/views/menu/learning_hub.dart';
 
 class MenuScreen extends StatefulWidget {
   const MenuScreen({super.key});
@@ -17,16 +17,19 @@ class MenuScreen extends StatefulWidget {
 class _PrimaryScreenState extends State<MenuScreen> {
   final double listTileSpace = 15;
   Future<int>? newsItemCountFuture;
+  Future<int>? learningItemCountFuture;
 
   @override
   void initState() {
     super.initState();
     newsItemCountFuture = ContentCounter.getNewsItemCount();
+    learningItemCountFuture = ContentCounter.getLearningItemCount();
   }
 
   void refreshNewsItemCount() {
     setState(() {
       newsItemCountFuture = ContentCounter.getNewsItemCount();
+      learningItemCountFuture = ContentCounter.getLearningItemCount();
     });
   }
 
@@ -119,33 +122,17 @@ class _PrimaryScreenState extends State<MenuScreen> {
               ),
               SizedBox(height: listTileSpace),
               ListTile(
-                leading: Image.asset("assets/icons/w3schools.png"),
-                trailing: const Icon(FontAwesomeIcons.arrowUpRightFromSquare),
-                title: const Text(
-                  "W3Schools",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                subtitle: const Text("w3schools.com"),
-                onTap: () {
-                  LaunchURL.launchSrtingURL(
-                      "https://www.w3schools.com/python/");
-                },
-              ),
-              SizedBox(height: listTileSpace),
-              ListTile(
                 leading: PyoneerHero.hero(
-                    Image.asset("assets/icons/quiz.png"), "quiz-icon"),
+                    Image.asset("assets/icons/library.png"), "library-icon"),
                 title: const Text(
-                  "Quiz",
+                  "ศูนย์การเรียนรู้",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 trailing: const Icon(Icons.arrow_forward_ios),
                 subtitle: FutureBuilder<int>(
-                  future: newsItemCountFuture,
+                  future: learningItemCountFuture,
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.done) {
                       if (snapshot.hasError) {
@@ -159,7 +146,7 @@ class _PrimaryScreenState extends State<MenuScreen> {
                           '${snapshot.data} รายการ',
                           style: const TextStyle(fontSize: 12),
                         ),
-                        "quiz-counter",
+                        "library-counter",
                       );
                     } else {
                       // Display a loading indicator while waiting for the data
@@ -180,7 +167,7 @@ class _PrimaryScreenState extends State<MenuScreen> {
                   },
                 ),
                 onTap: () {
-                  PyoneerAnimation.changeScreen(context, const QuizScreen())
+                  PyoneerAnimation.changeScreen(context, const LearningHubScreen())
                       .then((value) => refreshNewsItemCount());
                 },
               ),

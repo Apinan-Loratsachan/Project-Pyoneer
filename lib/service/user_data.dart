@@ -72,7 +72,7 @@ class UserData {
         ],
       );
     } else if (accountType == 'Google') {
-      return loginProvider("assets/icons/google-icon-2048x2048.png");
+      return loginProvider("assets/icons/google/google-icon-2048x2048.png");
     }
     return Text(accountType);
   }

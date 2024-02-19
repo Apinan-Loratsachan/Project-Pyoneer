@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:pyoneer/service/user_data.dart';
 import 'package:pyoneer/views/home.dart';
 import 'package:pyoneer/views/register.dart';
@@ -28,9 +30,12 @@ class _LoginScreenState extends State<LoginScreen>
   bool _isFieldEmpty = true;
   final TextEditingController _controller = TextEditingController();
 
+  String _appVersion = '';
+
   @override
   void initState() {
     super.initState();
+    _initPackageInfo();
     _fadeController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 2000),
@@ -99,6 +104,13 @@ class _LoginScreenState extends State<LoginScreen>
     _slideController.forward();
   }
 
+  Future<void> _initPackageInfo() async {
+    final info = await PackageInfo.fromPlatform();
+    setState(() {
+      _appVersion = 'v${info.version}';
+    });
+  }
+
   @override
   void dispose() {
     _fadeController.dispose();
@@ -134,14 +146,14 @@ class _LoginScreenState extends State<LoginScreen>
                     position: _formSlideAnimation,
                     child: FadeTransition(
                       opacity: _formFadeAnimation,
-                      // child: const Text(
-                      //   'Login',
-                      //   textAlign: TextAlign.center,
-                      //   style: TextStyle(
-                      //     fontWeight: FontWeight.bold,
-                      //     fontSize: 20,
-                      //   ),
-                      // ),
+                      child: const Text(
+                        'Created By DTI',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                        ),
+                      ),
                     ),
                   ),
                   const SizedBox(height: 28),
@@ -205,25 +217,6 @@ class _LoginScreenState extends State<LoginScreen>
                             backgroundColor: Colors.black,
                             textColor: Colors.white,
                           );
-                          // Navigator.pushReplacement(
-                          //   context,
-                          //   PageRouteBuilder(
-                          //     pageBuilder:
-                          //         (context, animation, secondaryAnimation) =>
-                          //             const HomeScreen(),
-                          //     transitionDuration:
-                          //         const Duration(milliseconds: 500),
-                          //     transitionsBuilder: (context, animation,
-                          //         secondaryAnimation, child) {
-                          //       animation = CurvedAnimation(
-                          //           parent: animation, curve: Curves.easeInOut);
-                          //       return FadeTransition(
-                          //         opacity: animation,
-                          //         child: child,
-                          //       );
-                          //     },
-                          //   ),
-                          // );
                         },
                         style: ElevatedButton.styleFrom(
                           foregroundColor: Colors.white,
@@ -248,16 +241,11 @@ class _LoginScreenState extends State<LoginScreen>
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
-                          InkWell(
-                            borderRadius: BorderRadius.circular(20),
-                            
-                            onTap: () {},
-                            child: Image.asset(
-                                'assets/icons/google-icon-2048x2048.png',
-                                height: 24),
-                          ),
                           IconButton(
-                            icon: const Icon(FontAwesomeIcons.google),
+                            icon: SvgPicture.asset(
+                              'assets/icons/google/icons8-google-48.svg',
+                              height: 26,
+                            ),
                             onPressed: () async {
                               UserCredential? userCredential =
                                   await Auth.signInWithGoogle();
@@ -356,52 +344,56 @@ class _LoginScreenState extends State<LoginScreen>
                     ),
                   ),
                   const SizedBox(height: 24),
-                  GestureDetector(
-                    onTap: () {
-                      // Navigate to login page
-                      Navigator.push(
-                        context,
-                        PageRouteBuilder(
-                          pageBuilder:
-                              (context, animation, secondaryAnimation) =>
-                                  const RegisterScreen(),
-                          transitionsBuilder:
-                              (context, animation, secondaryAnimation, child) {
-                            return SlideTransition(
-                              position: animation.drive(Tween(
-                                      begin: const Offset(0.0, 1.0),
-                                      end: Offset.zero)
-                                  .chain(CurveTween(curve: Curves.ease))),
-                              child: child,
-                            );
-                          },
-                        ),
-                      );
-                    },
-                    child: SlideTransition(
-                      position: _threePartySlideAnimation,
-                      child: FadeTransition(
-                        opacity: _threePartyFadeAnimation,
-                        child: RichText(
-                          textAlign: TextAlign.center,
-                          text: const TextSpan(
-                            text: 'ยังไม่มีบัญชี? ',
-                            style: TextStyle(color: Colors.black),
-                            children: <TextSpan>[
-                              TextSpan(
-                                text: 'สมัครสมาชิก',
-                                style: TextStyle(
-                                  color: Colors.blue,
-                                  fontWeight: FontWeight.bold,
+                  SlideTransition(
+                    position: _threePartySlideAnimation,
+                    child: FadeTransition(
+                      opacity: _threePartyFadeAnimation,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text("ยังไม่มีบัญชี?"),
+                          const SizedBox(width: 5),
+                          GestureDetector(
+                            onTap: () {
+                              // Navigate to login page
+                              Navigator.push(
+                                context,
+                                PageRouteBuilder(
+                                  pageBuilder: (context, animation,
+                                          secondaryAnimation) =>
+                                      const RegisterScreen(),
+                                  transitionsBuilder: (context, animation,
+                                      secondaryAnimation, child) {
+                                    return SlideTransition(
+                                      position: animation.drive(Tween(
+                                              begin: const Offset(0.0, 1.0),
+                                              end: Offset.zero)
+                                          .chain(
+                                              CurveTween(curve: Curves.ease))),
+                                      child: child,
+                                    );
+                                  },
                                 ),
+                              );
+                            },
+                            child: const Text(
+                              "สมัครสมาชิก",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.blue,
                               ),
-                            ],
+                            ),
                           ),
-                        ),
+                        ],
                       ),
                     ),
                   ),
                   const SizedBox(height: 24),
+                  Text(
+      _appVersion,
+      style: const TextStyle(color: Colors.grey, fontSize: 12),
+    ),
+    const SizedBox(height: 16),
                 ],
               ),
             ),

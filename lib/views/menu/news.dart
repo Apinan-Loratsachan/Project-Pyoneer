@@ -1,15 +1,11 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:palette_generator/palette_generator.dart';
-import 'package:pyoneer/models/custom_cache_manager.dart';
 import 'package:pyoneer/service/auth.dart';
 import 'package:pyoneer/service/content_counter.dart';
 import 'package:pyoneer/service/launch_url.dart';
 import 'package:pyoneer/service/user_data.dart';
 import 'package:pyoneer/utils/hero.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class NewsScreen extends StatefulWidget {
   const NewsScreen({super.key});
@@ -100,11 +96,11 @@ class _NewsScreenState extends State<NewsScreen>
                     newsLink: newsLinkController.text,
                     timestamp: DateTime.now(),
                   );
-                  FirebaseFirestore.instance
+                  Navigator.pop(context);
+                  await FirebaseFirestore.instance
                       .collection('news')
                       .add(newsItem.toMap());
-                  Navigator.pop(context);
-                  await ContentCounter.updateNewsItemCount();
+                  await ContentCounter.getNewsItemCount();
                 }
               },
             ),
@@ -209,7 +205,7 @@ class _NewsScreenState extends State<NewsScreen>
                   }
 
                   if (snapshot.data == null || snapshot.data!.docs.isEmpty) {
-                    return const Center(child: Text('No news available'));
+                    return const Center(child: Text('ไม่พบข่าว'));
                   }
 
                   newsItems = snapshot.data!.docs
@@ -230,6 +226,7 @@ class _NewsScreenState extends State<NewsScreen>
                                 Column(
                                   children: [
                                     ListTile(
+                                      minVerticalPadding: 10,
                                       leading: ClipRRect(
                                         borderRadius:
                                             BorderRadius.circular(5.0),
@@ -237,6 +234,7 @@ class _NewsScreenState extends State<NewsScreen>
                                           newsItems[i].imageUrl,
                                           width: 100,
                                           height: 100,
+                                          fit: BoxFit.cover,
                                           loadingBuilder: (context, child,
                                               loadingProgress) {
                                             if (loadingProgress == null) {
@@ -330,176 +328,5 @@ class NewsItem {
       'newsLink': newsLink,
       'timestamp': timestamp,
     };
-  }
-}
-
-class NewsGridItem extends StatefulWidget {
-  final NewsItem newsItem;
-
-  const NewsGridItem({super.key, required this.newsItem});
-
-  @override
-  // ignore: library_private_types_in_public_api
-  _NewsGridItemState createState() => _NewsGridItemState();
-}
-
-class _NewsGridItemState extends State<NewsGridItem>
-    with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
-  Color textColor = Colors.white;
-  AnimationController? _animationController;
-  Animation<double>? _fadeAnimation;
-  Animation<Offset>? _slideAnimation;
-
-  bool isTopicVisible = false;
-
-  @override
-  bool get wantKeepAlive => true;
-
-  @override
-  void initState() {
-    super.initState();
-    _updateTextColor();
-
-    _animationController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 1000),
-    );
-
-    _fadeAnimation =
-        Tween<double>(begin: 0.0, end: 1.0).animate(_animationController!);
-
-    _slideAnimation =
-        Tween<Offset>(begin: const Offset(0.0, 0.5), end: Offset.zero)
-            .animate(CurvedAnimation(
-      parent: _animationController!,
-      curve: Curves.ease,
-    ));
-
-    _animationController!.forward();
-  }
-
-  @override
-  void dispose() {
-    _animationController?.dispose();
-    super.dispose();
-  }
-
-  Future<void> _updateTextColor() async {
-    final PaletteGenerator generator = await PaletteGenerator.fromImageProvider(
-      NetworkImage(widget.newsItem.imageUrl),
-      size: const Size(200, 110),
-    );
-
-    if (generator.dominantColor != null) {
-      textColor = generator.dominantColor!.color.computeLuminance() > 0.5
-          ? Colors.black
-          : Colors.white;
-      setState(() {});
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    super.build(context);
-    return FadeTransition(
-      opacity: _fadeAnimation!,
-      child: SlideTransition(
-        position: _slideAnimation!,
-        child: GestureDetector(
-          onTap: () async {
-            setState(() {
-              isTopicVisible = !isTopicVisible;
-            });
-          },
-          child: Card(
-            clipBehavior: Clip.antiAlias,
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                CachedNetworkImage(
-                  imageUrl: widget.newsItem.imageUrl,
-                  fit: BoxFit.cover,
-                  height: double.infinity,
-                  cacheManager: CustomCacheManager.instance,
-                  placeholder: (context, url) => const Center(
-                    child: CircularProgressIndicator(
-                      color: Colors.white,
-                      strokeWidth: 5,
-                    ),
-                  ),
-                  errorWidget: (context, url, error) => const Center(
-                    child: Icon(Icons.error),
-                  ),
-                ),
-                if (isTopicVisible)
-                  const Positioned(
-                    top: 5,
-                    right: 5,
-                    child: Icon(
-                      Icons.info_outline,
-                      color: Colors.white,
-                    ),
-                  ),
-                Positioned.fill(
-                  child: AnimatedOpacity(
-                    opacity: isTopicVisible ? 1.0 : 0.0,
-                    duration: const Duration(milliseconds: 300),
-                    child: Container(
-                      color: Colors.black.withOpacity(0.7),
-                      child: Center(
-                        child: SingleChildScrollView(
-                          physics: const NeverScrollableScrollPhysics(),
-                          child: widget.newsItem.topic?.isEmpty ?? true
-                              ? Center(
-                                  child: _buildReadMoreButton(),
-                                )
-                              : Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      widget.newsItem.topic ?? '',
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                      textAlign: TextAlign.center,
-                                      overflow: TextOverflow.fade,
-                                    ),
-                                    const SizedBox(height: 20),
-                                    _buildReadMoreButton(),
-                                  ],
-                                ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildReadMoreButton() {
-    return ElevatedButton(
-      onPressed: isTopicVisible
-          ? () async {
-              if (!mounted) return;
-              if (await canLaunchUrl(Uri.parse(widget.newsItem.newsLink))) {
-                await launchUrl(Uri.parse(widget.newsItem.newsLink));
-              } else {
-                if (mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('ไม่สามารถเปิดลิงก์ได้')),
-                  );
-                }
-              }
-            }
-          : null,
-      child: const Text('อ่านต่อ'),
-    );
   }
 }

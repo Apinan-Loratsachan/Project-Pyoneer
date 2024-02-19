@@ -57,7 +57,7 @@ class _RegisterScreenState extends State<RegisterScreen>
       ),
     );
     _formSlideAnimation =
-        Tween<Offset>(begin: const Offset(0.0, 1.0), end: Offset.zero).animate(
+        Tween<Offset>(begin: const Offset(0.0, 0.2), end: Offset.zero).animate(
       CurvedAnimation(
         parent: _slideController,
         curve: const Interval(0.25, 0.75, curve: Curves.easeIn),
@@ -155,14 +155,14 @@ class _RegisterScreenState extends State<RegisterScreen>
                     position: _formSlideAnimation,
                     child: FadeTransition(
                       opacity: _formFadeAnimation,
-                      // child: const Text(
-                      //   'REGISTER',
-                      //   textAlign: TextAlign.center,
-                      //   style: TextStyle(
-                      //     fontWeight: FontWeight.bold,
-                      //     fontSize: 24,
-                      //   ),
-                      // ),
+                      child: const Text(
+                        'Created By DTI',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 24,
+                        ),
+                      ),
                     ),
                   ),
                   const SizedBox(height: 28),
@@ -170,171 +170,128 @@ class _RegisterScreenState extends State<RegisterScreen>
                     position: _formSlideAnimation,
                     child: FadeTransition(
                       opacity: _formFadeAnimation,
-                      child: TextFormField(
-                        keyboardType: TextInputType.emailAddress,
-                        decoration: InputDecoration(
-                          labelText: 'อีเมล',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                        ),
-                        autofillHints: const [AutofillHints.email],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  SlideTransition(
-                    position: _formSlideAnimation,
-                    child: FadeTransition(
-                      opacity: _formFadeAnimation,
-                      child: TextFormField(
-                        controller: _controller1,
-                        obscureText: _obscureText,
-                        decoration: InputDecoration(
-                          labelText: 'รหัสผ่าน',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                          suffixIcon: _isFieldEmpty
-                              ? null
-                              : IconButton(
-                                  icon: Icon(
-                                    _obscureText
-                                        ? Icons.visibility
-                                        : Icons.visibility_off,
-                                  ),
-                                  onPressed: () {
-                                    setState(() {
-                                      _obscureText = !_obscureText;
-                                    });
-                                  },
-                                ),
-                        ),
-                        autofillHints: const [AutofillHints.password],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  SlideTransition(
-                    position: _formSlideAnimation,
-                    child: FadeTransition(
-                      opacity: _formFadeAnimation,
-                      child: TextFormField(
-                        controller: _controller2,
-                        obscureText: _obscureText2,
-                        decoration: InputDecoration(
-                          labelText: 'ยืนยันรหัสผ่าน',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                          suffixIcon: _isFieldEmpty2
-                              ? null
-                              : IconButton(
-                                  icon: Icon(
-                                    _obscureText2
-                                        ? Icons.visibility
-                                        : Icons.visibility_off,
-                                  ),
-                                  onPressed: () {
-                                    setState(() {
-                                      _obscureText2 = !_obscureText2;
-                                    });
-                                  },
-                                ),
-                          errorText: (_controller1.text.isNotEmpty &&
-                                  _controller2.text.isNotEmpty &&
-                                  !_passwordsMatch)
-                              ? 'รหัสผ่านไม่ตรงกัน'
-                              : null,
-                        ),
-                        autofillHints: const [AutofillHints.password],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 24),
-                  SlideTransition(
-                    position: _formSlideAnimation,
-                    child: FadeTransition(
-                      opacity: _formFadeAnimation,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          // Handle sign up logic
-                        },
-                        style: ElevatedButton.styleFrom(
-                          foregroundColor: Colors.white,
-                          backgroundColor:
-                              const Color(0xFF1ABDAD), // Text color
-                        ),
-                        child: const Text('สมัครสมาชิก'),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  // SlideTransition(
-                  //   position: _threePartySlideAnimation,
-                  //   child: FadeTransition(
-                  //       opacity: _threePartyFadeAnimation,
-                  //       child: const Center(child: Text('OR'))),
-                  // ),
-                  // const SizedBox(height: 16),
-                  // SlideTransition(
-                  //   position: _threePartySlideAnimation,
-                  //   child: FadeTransition(
-                  //     opacity: _threePartyFadeAnimation,
-                  //     child: Row(
-                  //       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  //       children: <Widget>[
-                  //         IconButton(
-                  //           icon: const FaIcon(FontAwesomeIcons.google),
-                  //           onPressed: () {
-                  //             // Handle Google login
-                  //           },
-                  //           color: Colors.blue[500],
-                  //         ),
-                  //         IconButton(
-                  //           icon: const FaIcon(FontAwesomeIcons.facebook),
-                  //           onPressed: () {
-                  //             // Handle Facebook login
-                  //           },
-                  //           color: Colors.blue,
-                  //         ),
-                  //         IconButton(
-                  //           icon: const FaIcon(FontAwesomeIcons.line),
-                  //           onPressed: () {
-                  //             // Handle LinkedIn login
-                  //           },
-                  //           color: Colors.green[300],
-                  //         ),
-                  //       ],
-                  //     ),
-                  //   ),
-                  // ),
-                  const SizedBox(height: 24),
-                  GestureDetector(
-                    onTap: () {
-                      // Navigate to login page
-                      Navigator.pop(context);
-                    },
-                    child: SlideTransition(
-                      position: _threePartySlideAnimation,
-                      child: FadeTransition(
-                        opacity: _threePartyFadeAnimation,
-                        child: RichText(
-                          textAlign: TextAlign.center,
-                          text: const TextSpan(
-                            text: 'มีบัญชีอยู่แล้ว? ',
-                            style: TextStyle(color: Colors.black),
-                            children: <TextSpan>[
-                              TextSpan(
-                                text: 'ลงชื่อเข้าใช้',
-                                style: TextStyle(
-                                  color: Colors.blue,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                      child: Column(
+                        children: [
+                          TextFormField(
+                            keyboardType: TextInputType.emailAddress,
+                            decoration: InputDecoration(
+                              labelText: 'อีเมล',
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10.0),
                               ),
-                            ],
+                            ),
+                            autofillHints: const [AutofillHints.email],
                           ),
-                        ),
+                          const SizedBox(height: 16),
+                          TextFormField(
+                            keyboardType: TextInputType.emailAddress,
+                            decoration: InputDecoration(
+                              labelText: 'ชื่อผู้ใช้',
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                            ),
+                            autofillHints: const [AutofillHints.username],
+                          ),
+                          const SizedBox(height: 16),
+                          TextFormField(
+                            controller: _controller1,
+                            obscureText: _obscureText,
+                            decoration: InputDecoration(
+                              labelText: 'รหัสผ่าน',
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              suffixIcon: _isFieldEmpty
+                                  ? null
+                                  : IconButton(
+                                      icon: Icon(
+                                        _obscureText
+                                            ? Icons.visibility
+                                            : Icons.visibility_off,
+                                      ),
+                                      onPressed: () {
+                                        setState(() {
+                                          _obscureText = !_obscureText;
+                                        });
+                                      },
+                                    ),
+                            ),
+                            autofillHints: const [AutofillHints.password],
+                          ),
+                          const SizedBox(height: 16),
+                          TextFormField(
+                            controller: _controller2,
+                            obscureText: _obscureText2,
+                            decoration: InputDecoration(
+                              labelText: 'ยืนยันรหัสผ่าน',
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              suffixIcon: _isFieldEmpty2
+                                  ? null
+                                  : IconButton(
+                                      icon: Icon(
+                                        _obscureText2
+                                            ? Icons.visibility
+                                            : Icons.visibility_off,
+                                      ),
+                                      onPressed: () {
+                                        setState(() {
+                                          _obscureText2 = !_obscureText2;
+                                        });
+                                      },
+                                    ),
+                              errorText: (_controller1.text.isNotEmpty &&
+                                      _controller2.text.isNotEmpty &&
+                                      !_passwordsMatch)
+                                  ? 'รหัสผ่านไม่ตรงกัน'
+                                  : null,
+                            ),
+                            autofillHints: const [AutofillHints.password],
+                          ),
+                          const SizedBox(height: 24),
+                          ElevatedButton(
+                            onPressed: () {
+                              // Handle sign up logic
+                            },
+                            style: ElevatedButton.styleFrom(
+                              foregroundColor: Colors.white,
+                              backgroundColor:
+                                  const Color(0xFF1ABDAD), // Text color
+                            ),
+                            child: const Text('สมัครสมาชิก'),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  SlideTransition(
+                    position: _threePartySlideAnimation,
+                    child: FadeTransition(
+                      opacity: _threePartyFadeAnimation,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text("มีบัญชีอยู่แล้ว?"),
+                          const SizedBox(width: 5),
+                          GestureDetector(
+                            onTap: () {
+                              // Navigate to login page
+                              Navigator.pop(
+                                context,
+                              );
+                            },
+                            child: const Text(
+                              "เข้าสู่ระบบ",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.blue,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),

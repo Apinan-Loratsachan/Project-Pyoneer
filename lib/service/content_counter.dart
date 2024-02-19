@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 
 class ContentCounter {
   static int newsCounter = 0;
+  static int learningCounter = 0;
 
   static Future<int> getNewsItemCount() async {
     try {
@@ -21,27 +22,19 @@ class ContentCounter {
     }
   }
 
-  static Future<void> updateNewsItemCount() async {
+  static Future<int> getLearningItemCount() async {
     try {
-      var counterDocument = await FirebaseFirestore.instance
-          .collection('counters')
-          .doc('newsCounter')
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('learning')
           .get();
 
-      int currentCounter = counterDocument.exists
-          ? counterDocument.data()!['count']
-          : 0;
-
-      await FirebaseFirestore.instance
-          .collection('counters')
-          .doc('newsCounter')
-          .set({'count': currentCounter + 1});
-
-      newsCounter = currentCounter + 1;
+      learningCounter = querySnapshot.size;
+      return querySnapshot.size;
     } catch (e) {
       if (kDebugMode) {
-        print('Error updating news item count: $e');
+        print('Error getting news item count: $e');
       }
+      return 0;
     }
   }
 }
