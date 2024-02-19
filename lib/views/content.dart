@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:pyoneer/models/lesson_component.dart';
 import 'package:pyoneer/service/user_data.dart';
 import 'package:pyoneer/utils/color.dart';
+import 'package:timeline_tile/timeline_tile.dart';
 
 class ContentScreen extends StatefulWidget {
   const ContentScreen({super.key});
@@ -46,18 +47,56 @@ class _ContentScreenState extends State<ContentScreen> {
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            for (int i = 0; i < LessonComponent.lessonContent.length; i++)
-              lessonTitle(
-                LessonComponent.lessonContent[i].imageSrc,
-                LessonComponent.lessonContent[i].heroTag,
-                LessonComponent.lessonContent[i].title,
-                LessonComponent.lessonContent[i].subTitle,
-                LessonComponent.lessonContent[i].targetScreen,
-                context,
-                i,
-              )
-          ],
+          children:
+              List.generate(LessonComponent.lessonContent.length, (index) {
+            return FutureBuilder<bool>(
+              future: checkLessonReadStatus(UserData.email, index),
+              builder: (context, snapshot) {
+                bool isRead = snapshot.data ?? false;
+                return TimelineTile(
+                  alignment: TimelineAlign.manual,
+                  lineXY: 0.1,
+                  isFirst: index == 0,
+                  isLast: index == LessonComponent.lessonContent.length - 1,
+                  indicatorStyle: IndicatorStyle(
+                    width: 40,
+                    height: 30,
+                    indicator: Container(
+                      decoration: BoxDecoration(
+                        color: isRead ? Colors.green : Colors.grey,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Center(
+                        child: isRead
+                            ? const Icon(
+                                Icons.check,
+                                color: Colors.white,
+                              )
+                            : const Icon(
+                                Icons.check,
+                                color: Colors.white,
+                              ),
+                      ),
+                    ),
+                    padding: const EdgeInsets.all(6),
+                  ),
+                  endChild: lessonTitle(
+                    LessonComponent.lessonContent[index].imageSrc,
+                    LessonComponent.lessonContent[index].heroTag,
+                    LessonComponent.lessonContent[index].title,
+                    LessonComponent.lessonContent[index].subTitle,
+                    LessonComponent.lessonContent[index].targetScreen,
+                    context,
+                    index,
+                  ),
+                  beforeLineStyle: LineStyle(
+                    color: isRead ? Colors.green : Colors.grey,
+                    thickness: 2,
+                  ),
+                );
+              },
+            );
+          }),
         ),
       ),
     );
@@ -104,29 +143,29 @@ class _ContentScreenState extends State<ContentScreen> {
       subtitle: Text(
         subtitle,
       ),
-      trailing: FutureBuilder<bool>(
-        future: checkLessonReadStatus(UserData.email, index),
-        builder: (context, snapshot) {
-          Widget child;
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            child = const SizedBox();
-          } else if (snapshot.data! != true) {
-            child = const Icon(
-              Icons.check_circle_rounded,
-              color: Colors.transparent,
-            );
-          } else {
-            child = const Icon(
-              Icons.check_circle_rounded,
-              color: Colors.green,
-            );
-          }
-          return AnimatedSwitcher(
-            duration: const Duration(seconds: 1),
-            child: child,
-          );
-        },
-      ),
+      // trailing: FutureBuilder<bool>(
+      //   future: checkLessonReadStatus(UserData.email, index),
+      //   builder: (context, snapshot) {
+      //     Widget child;
+      //     if (snapshot.connectionState == ConnectionState.waiting) {
+      //       child = const SizedBox();
+      //     } else if (snapshot.data! != true) {
+      //       child = const Icon(
+      //         Icons.check_circle_rounded,
+      //         color: Colors.transparent,
+      //       );
+      //     } else {
+      //       child = const Icon(
+      //         Icons.check_circle_rounded,
+      //         color: Colors.green,
+      //       );
+      //     }
+      //     return AnimatedSwitcher(
+      //       duration: const Duration(seconds: 1),
+      //       child: child,
+      //     );
+      //   },
+      // ),
     );
   }
 }

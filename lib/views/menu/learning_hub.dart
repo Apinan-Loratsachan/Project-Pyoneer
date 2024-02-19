@@ -17,7 +17,6 @@ class LearningHubScreen extends StatefulWidget {
 
 class _LearningHubScreenState extends State<LearningHubScreen>
     with AutomaticKeepAliveClientMixin {
-      
   List<LearningResource> learningItem = [];
 
   @override
@@ -33,6 +32,7 @@ class _LearningHubScreenState extends State<LearningHubScreen>
     await UserData.loadUserData();
     setState(() {});
   }
+
   void showAddResourceDialog(BuildContext context) {
     var imageUrlController = TextEditingController();
     var titleController = TextEditingController();
@@ -63,10 +63,9 @@ class _LearningHubScreenState extends State<LearningHubScreen>
                 TextFormField(
                   controller: titleController,
                   decoration: const InputDecoration(labelText: 'Title'),
-                  validator: (value) =>
-                      value == null || value.trim().isEmpty
-                          ? 'Please enter a title'
-                          : null,
+                  validator: (value) => value == null || value.trim().isEmpty
+                      ? 'Please enter a title'
+                      : null,
                 ),
                 TextFormField(
                   controller: subtitleController,
@@ -213,8 +212,8 @@ class _LearningHubScreenState extends State<LearningHubScreen>
                   }
 
                   learningItem = snapshot.data!.docs
-                      .map((doc) =>
-                          LearningResource.fromMap(doc.data() as Map<String, dynamic>))
+                      .map((doc) => LearningResource.fromMap(
+                          doc.data() as Map<String, dynamic>))
                       .toList();
 
                   return Padding(
@@ -265,7 +264,8 @@ class _LearningHubScreenState extends State<LearningHubScreen>
                                           fontWeight: FontWeight.bold,
                                           fontFamily: 'Noto Sans Thai'),
                                       subtitle: Text(learningItem[i].subtitle),
-                                      trailing: const Icon(FontAwesomeIcons.arrowUpRightFromSquare),
+                                      trailing: const Icon(FontAwesomeIcons
+                                          .arrowUpRightFromSquare),
                                       onTap: () {
                                         LaunchURL.launchSrtingURL(
                                             learningItem[i].url);

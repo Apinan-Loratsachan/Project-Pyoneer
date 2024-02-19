@@ -146,13 +146,13 @@ class _LessonScreenModelState extends State<LessonScreenModel>
     }
   }
 
-  void _scrollDown() {
-    _scrollController.animateTo(
-      _scrollController.position.maxScrollExtent,
-      duration: const Duration(milliseconds: 500),
-      curve: Curves.easeIn,
-    );
-  }
+  // void _scrollDown() {
+  //   _scrollController.animateTo(
+  //     _scrollController.position.maxScrollExtent,
+  //     duration: const Duration(milliseconds: 500),
+  //     curve: Curves.easeIn,
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -161,10 +161,10 @@ class _LessonScreenModelState extends State<LessonScreenModel>
           LessonComponent.lessonContent[widget.index].title,
           LessonComponent.lessonContent[widget.index].subTitle,
           context),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _scrollDown,
-        child: const Icon(Icons.arrow_downward),
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: _scrollDown,
+      //   child: const Icon(Icons.arrow_downward),
+      // ),
       body: Scrollbar(
         child: SingleChildScrollView(
           controller: _scrollController,
