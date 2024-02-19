@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:pyoneer/models/lesson_component.dart';
 import 'package:pyoneer/service/user_data.dart';
+import 'package:pyoneer/utils/color.dart';
 
 class ContentScreen extends StatefulWidget {
   const ContentScreen({super.key});
@@ -13,16 +14,34 @@ class ContentScreen extends StatefulWidget {
 class _ContentScreenState extends State<ContentScreen> {
   @override
   Widget build(BuildContext context) {
+    String greetingWord = _getGreetingWord();
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true,
-        title: const Text(
-          "บทเรียน",
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-          ),
+        title: Column(
+          children: [
+            Text(
+              "$greetingWord ${UserData.userName}",
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                shadows: [
+                  Shadow(
+                    blurRadius: 20.0,
+                    color: AppColor.primarSnakeColor.withOpacity(0.5),
+                    offset: const Offset(0.0, 5.0),
+                  ),
+                ],
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
+            ),
+            const SizedBox(height: 20),
+            const Text("บทเรียน")
+          ],
         ),
+        centerTitle: true,
         surfaceTintColor: Colors.white,
+        toolbarHeight: 100,
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -64,11 +83,6 @@ class _ContentScreenState extends State<ContentScreen> {
       leading: LessonComponent.lessonCover(imageSrc, heroTag, true),
       onTap: () async {
         if (UserData.email != 'ไม่ได้เข้าสู่ระบบ') {
-          Map<String, dynamic> lessonData = {
-            'email': UserData.email,
-            'lessonRead': index,
-          };
-
           // Navigate to the target screen
           Navigator.push(
             context,
@@ -76,21 +90,6 @@ class _ContentScreenState extends State<ContentScreen> {
           ).then((value) {
             setState(() {});
           });
-
-          // Check if the data already exists in Firestore
-          QuerySnapshot<Map<String, dynamic>> querySnapshot =
-              await FirebaseFirestore.instance
-                  .collection('lessons')
-                  .where('email', isEqualTo: UserData.email)
-                  .where('lessonRead', isEqualTo: index)
-                  .get();
-
-          // If there are no documents matching the query, add the data to Firestore
-          if (querySnapshot.docs.isEmpty) {
-            await FirebaseFirestore.instance
-                .collection('lessons')
-                .add(lessonData);
-          }
         } else {
           Navigator.push(
             context,
@@ -129,5 +128,20 @@ class _ContentScreenState extends State<ContentScreen> {
         },
       ),
     );
+  }
+}
+
+String _getGreetingWord() {
+  DateTime now = DateTime.now();
+  int hour = now.hour;
+
+  if (hour >= 4 && hour < 12) {
+    return '🌤️ อรุณสวัสดิ์';
+  } else if (hour >= 12 && hour < 16) {
+    return '☀️ สวัสดียามบ่าย';
+  } else if (hour >= 16 && hour < 19) {
+    return '🌥️ สายัณห์สวัสดิ์';
+  } else {
+    return '🌙 สวัสดียามค่ำ';
   }
 }

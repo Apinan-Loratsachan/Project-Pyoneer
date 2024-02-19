@@ -14,10 +14,7 @@ class _Lesson4ScreenState extends State<Lesson4Screen> {
   @override
   Widget build(BuildContext context) {
     return LessonScreenModel(
-      appBarTitle: LessonComponent.lessonContent[4].title,
-      appBarSubTitle: LessonComponent.lessonContent[4].subTitle,
-      coverImagePath: LessonComponent.lessonContent[4].imageSrc,
-      heroTag: LessonComponent.lessonContent[4].heroTag,
+      index: 4,
       lessonTitle: "ตัวดำเนินการและนิพจน์",
       contentWidgets: [
         PyoneerText.contentText("ตัวดำเนินการ (Operator)",fontWeight: FontWeight.bold, fontSize: 20,),

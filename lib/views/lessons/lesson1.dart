@@ -14,10 +14,7 @@ class _Lesson1ScreenState extends State<Lesson1Screen> {
   @override
   Widget build(BuildContext context) {
     return LessonScreenModel(
-      appBarTitle: LessonComponent.lessonContent[1].title,
-      appBarSubTitle: LessonComponent.lessonContent[1].subTitle,
-      coverImagePath: LessonComponent.lessonContent[1].imageSrc,
-      heroTag: LessonComponent.lessonContent[1].heroTag,
+      index: 1,
       lessonTitle: "คุณลักษณะ\nของภาษาไพทอน",
       contentWidgets: [
         PyoneerText.contentText("คุณลักษณะของภาษาไพทอน",fontWeight: FontWeight.bold, fontSize: 20),

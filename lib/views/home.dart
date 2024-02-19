@@ -9,13 +9,12 @@ import 'package:pyoneer/utils/hero.dart';
 import 'package:pyoneer/views/account.dart';
 import 'package:pyoneer/views/content.dart';
 import 'package:pyoneer/views/ide.dart';
-import 'package:pyoneer/views/primary.dart';
+import 'package:pyoneer/views/menu.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
-
+  static const Key primaryScreenKey = PageStorageKey('menuScreen');
   static const Key contentScreenKey = PageStorageKey('contentScreen');
-  static const Key primaryScreenKey = PageStorageKey('primaryScreen');
   static const Key ideScreenKey = PageStorageKey('ideScreen');
 
   @override
@@ -28,8 +27,8 @@ class _HomeScreenState extends State<HomeScreen> {
   late final PageController pageController;
 
   final List<Widget> _children = [
+    const MenuScreen(key: HomeScreen.primaryScreenKey),
     const ContentScreen(key: HomeScreen.contentScreenKey),
-    const PrimaryScreen(key: HomeScreen.primaryScreenKey),
     const IDEScreen(key: HomeScreen.ideScreenKey),
   ];
 
@@ -50,7 +49,8 @@ class _HomeScreenState extends State<HomeScreen> {
     Future.delayed(const Duration(milliseconds: 100), () {
       pageController.animateToPage(
         index,
-        duration: Duration(milliseconds: PyoneerAnimation.pageviewChangeScreenDuration),
+        duration: Duration(
+            milliseconds: PyoneerAnimation.pageviewChangeScreenDuration),
         curve: PyoneerAnimation.pageviewChangeScreenCurve,
       );
     });
@@ -131,7 +131,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         PageRouteBuilder(
                           pageBuilder: (context, animation1, animation2) =>
                               const AccountSettigScreen(),
-                          transitionDuration: Duration(milliseconds: PyoneerAnimation.changeScreenDuration),
+                          transitionDuration: Duration(
+                              milliseconds:
+                                  PyoneerAnimation.changeScreenDuration),
                           transitionsBuilder:
                               (context, animation1, animation2, child) {
                             animation1 = CurvedAnimation(
@@ -184,7 +186,7 @@ class _HomeScreenState extends State<HomeScreen> {
             onPageChanged: (int index) {
               setState(() {
                 currentIndex = index;
-              FocusManager.instance.primaryFocus?.unfocus();
+                FocusManager.instance.primaryFocus?.unfocus();
               });
             },
             children: _children,
@@ -199,19 +201,19 @@ class _HomeScreenState extends State<HomeScreen> {
             destinations: <Widget>[
               NavigationDestination(
                 icon: AnimatedNavigationIcon(
-                  icon: FontAwesomeIcons.bookOpen,
-                  selectedIcon: FontAwesomeIcons.bookOpenReader,
+                  icon: FontAwesomeIcons.solidCompass,
+                  selectedIcon: FontAwesomeIcons.compass,
                   isSelected: currentIndex == 0,
                 ),
-                label: 'บทเรียน',
+                label: 'สำรวจ',
               ),
               NavigationDestination(
                 icon: AnimatedNavigationIcon(
-                  icon: FontAwesomeIcons.house,
-                  selectedIcon: FontAwesomeIcons.houseUser,
+                  icon: FontAwesomeIcons.book,
+                  selectedIcon: FontAwesomeIcons.bookOpen,
                   isSelected: currentIndex == 1,
                 ),
-                label: 'หน้าหลัก',
+                label: 'บทเรียน',
               ),
               NavigationDestination(
                 icon: AnimatedNavigationIcon(

@@ -248,8 +248,16 @@ class _LoginScreenState extends State<LoginScreen>
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
+                          InkWell(
+                            borderRadius: BorderRadius.circular(20),
+                            
+                            onTap: () {},
+                            child: Image.asset(
+                                'assets/icons/google-icon-2048x2048.png',
+                                height: 24),
+                          ),
                           IconButton(
-                            icon: const FaIcon(FontAwesomeIcons.google),
+                            icon: const Icon(FontAwesomeIcons.google),
                             onPressed: () async {
                               UserCredential? userCredential =
                                   await Auth.signInWithGoogle();
@@ -289,7 +297,6 @@ class _LoginScreenState extends State<LoginScreen>
                                 // User cancelled the sign in process or sign in failed
                               }
                             },
-                            color: Colors.blue[500],
                           ),
                           IconButton(
                             icon: const FaIcon(FontAwesomeIcons.facebook),
