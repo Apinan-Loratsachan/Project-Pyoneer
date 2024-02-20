@@ -14,6 +14,28 @@ class ContentScreen extends StatefulWidget {
 }
 
 class _ContentScreenState extends State<ContentScreen> {
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+
+  void _scrollDown() {
+    _scrollController.animateTo(
+      _scrollController.position.maxScrollExtent,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeIn,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     String greetingWord = _getGreetingWord();
@@ -45,7 +67,14 @@ class _ContentScreenState extends State<ContentScreen> {
         surfaceTintColor: Colors.white,
         toolbarHeight: 100,
       ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: AppColor.primarSnakeColor.withOpacity(0.5),
+        foregroundColor: Colors.black,
+        onPressed: _scrollDown,
+        child: const Icon(Icons.arrow_downward),
+      ),
       body: SingleChildScrollView(
+        controller: _scrollController,
         child: Column(
           children: [
             ElevatedButton(

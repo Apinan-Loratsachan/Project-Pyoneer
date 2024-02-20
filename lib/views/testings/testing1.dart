@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -5,6 +6,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:pyoneer/components/testing_component.dart';
 import 'package:pyoneer/services/user_data.dart';
 import 'package:pyoneer/utils/color.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
@@ -56,6 +58,23 @@ class _Testing1ScreenState extends State<Testing1Screen> {
   Future<bool> _onWillPop() {
     return TestingComponent.testingBackAlert(context);
   }
+
+  Future<void> _submitTestResults(int correctAnswers) async {
+  final prefs = await SharedPreferences.getInstance();
+
+  final testResult = {
+    'email': UserData.email,
+    'lessonTest': 1,
+    'testType': "pre-test",
+    'score': correctAnswers,
+    'totalScore': _testingContent.length,
+    'timestamp': DateTime.now().toIso8601String(),
+  };
+
+  String testResultString = jsonEncode(testResult);
+  await prefs.setString('testResult1', testResultString);
+  await FirebaseFirestore.instance.collection("testResult").add(testResult);
+}
 
   @override
   Widget build(BuildContext context) {
@@ -124,10 +143,12 @@ class _Testing1ScreenState extends State<Testing1Screen> {
                   child: SizedBox(
                     width: MediaQuery.of(context).size.width * 0.8,
                     child: ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async {
                         if (_allAnswersSelected()) {
                           int correctAnswers = _countCorrectAnswers();
+                          await _submitTestResults(correctAnswers);
                           showTopSnackBar(
+                            // ignore: use_build_context_synchronously
                             Overlay.of(context),
                             CustomSnackBar.success(
                               message:
@@ -152,6 +173,7 @@ class _Testing1ScreenState extends State<Testing1Screen> {
                               .add(toMap());
 
       
+                          // ignore: use_build_context_synchronously
                           Navigator.pop(context);
                         } else {
                           showTopSnackBar(
