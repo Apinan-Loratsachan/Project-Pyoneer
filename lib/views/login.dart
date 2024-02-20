@@ -4,10 +4,10 @@ import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:pyoneer/service/user_data.dart';
+import 'package:pyoneer/services/user_data.dart';
 import 'package:pyoneer/views/home.dart';
 import 'package:pyoneer/views/register.dart';
-import 'package:pyoneer/service/auth.dart';
+import 'package:pyoneer/services/auth.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});

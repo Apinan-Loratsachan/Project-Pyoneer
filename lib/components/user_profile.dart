@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:palette_generator/palette_generator.dart';
-import 'package:pyoneer/service/user_data.dart';
+import 'package:pyoneer/services/user_data.dart';
 import 'package:pyoneer/utils/color.dart';
 
 class UserProfile extends StatefulWidget {

@@ -1,0 +1,383 @@
+import 'package:flutter/material.dart';
+import 'package:pyoneer/utils/type_writer_text.dart';
+
+class TestingContent {
+  String proposition;
+  List<String> choice;
+  String correctChoice;
+
+  TestingContent({
+    required this.proposition,
+    required this.choice,
+    required this.correctChoice,
+  });
+}
+
+class Testing1 {
+  static List<TestingContent> testingContent = [
+    TestingContent(
+      proposition: "proposition1",
+      choice: [
+        "proposition1 choice1",
+        "proposition1 choice2",
+        "proposition1 choice3",
+        "proposition1 choice4"
+      ],
+      correctChoice: "proposition1 choice1",
+    ),
+    TestingContent(
+      proposition: "proposition2",
+      choice: [
+        "proposition2 choice1",
+        "proposition2 choice2",
+        "proposition2 choice3",
+        "proposition2 choice4"
+      ],
+      correctChoice: "proposition2 choice4",
+    ),
+    TestingContent(
+      proposition: "proposition3",
+      choice: [
+        "proposition3 choice1",
+        "proposition3 choice2",
+        "proposition3 choice3",
+        "proposition3 choice4"
+      ],
+      correctChoice: "proposition3 choice3",
+    ),
+    TestingContent(
+      proposition: "proposition4",
+      choice: [
+        "proposition4 choice1",
+        "proposition4 choice2",
+        "proposition4 choice3",
+        "proposition4 choice4"
+      ],
+      correctChoice: "proposition4 choice2",
+    ),
+    TestingContent(
+      proposition: "proposition5",
+      choice: [
+        "proposition5 choice1",
+        "proposition5 choice2",
+        "proposition5 choice3",
+        "proposition5 choice4"
+      ],
+      correctChoice: "proposition5 choice1",
+    ),
+  ];
+}
+
+class Testing2 {
+  static List<TestingContent> testingContent = [
+    TestingContent(
+      proposition: "proposition1",
+      choice: [
+        "proposition1 choice1",
+        "proposition1 choice2",
+        "proposition1 choice3",
+        "proposition1 choice4"
+      ],
+      correctChoice: "proposition1 choice1",
+    ),
+    TestingContent(
+      proposition: "proposition2",
+      choice: [
+        "proposition2 choice1",
+        "proposition2 choice2",
+        "proposition2 choice3",
+        "proposition2 choice4"
+      ],
+      correctChoice: "proposition2 choice4",
+    ),
+    TestingContent(
+      proposition: "proposition3",
+      choice: [
+        "proposition3 choice1",
+        "proposition3 choice2",
+        "proposition3 choice3",
+        "proposition3 choice4"
+      ],
+      correctChoice: "proposition3 choice3",
+    ),
+    TestingContent(
+      proposition: "proposition4",
+      choice: [
+        "proposition4 choice1",
+        "proposition4 choice2",
+        "proposition4 choice3",
+        "proposition4 choice4"
+      ],
+      correctChoice: "proposition4 choice2",
+    ),
+    TestingContent(
+      proposition: "proposition5",
+      choice: [
+        "proposition5 choice1",
+        "proposition5 choice2",
+        "proposition5 choice3",
+        "proposition5 choice4"
+      ],
+      correctChoice: "proposition5 choice1",
+    ),
+  ];
+}
+
+class Testing3 {
+  static List<TestingContent> testingContent = [
+    TestingContent(
+      proposition: "proposition1",
+      choice: [
+        "proposition1 choice1",
+        "proposition1 choice2",
+        "proposition1 choice3",
+        "proposition1 choice4"
+      ],
+      correctChoice: "proposition1 choice1",
+    ),
+    TestingContent(
+      proposition: "proposition2",
+      choice: [
+        "proposition2 choice1",
+        "proposition2 choice2",
+        "proposition2 choice3",
+        "proposition2 choice4"
+      ],
+      correctChoice: "proposition2 choice4",
+    ),
+    TestingContent(
+      proposition: "proposition3",
+      choice: [
+        "proposition3 choice1",
+        "proposition3 choice2",
+        "proposition3 choice3",
+        "proposition3 choice4"
+      ],
+      correctChoice: "proposition3 choice3",
+    ),
+    TestingContent(
+      proposition: "proposition4",
+      choice: [
+        "proposition4 choice1",
+        "proposition4 choice2",
+        "proposition4 choice3",
+        "proposition4 choice4"
+      ],
+      correctChoice: "proposition4 choice2",
+    ),
+    TestingContent(
+      proposition: "proposition5",
+      choice: [
+        "proposition5 choice1",
+        "proposition5 choice2",
+        "proposition5 choice3",
+        "proposition5 choice4"
+      ],
+      correctChoice: "proposition5 choice1",
+    ),
+  ];
+}
+
+class Testing4 {
+  static List<TestingContent> testingContent = [
+    TestingContent(
+      proposition: "proposition1",
+      choice: [
+        "proposition1 choice1",
+        "proposition1 choice2",
+        "proposition1 choice3",
+        "proposition1 choice4"
+      ],
+      correctChoice: "proposition1 choice1",
+    ),
+    TestingContent(
+      proposition: "proposition2",
+      choice: [
+        "proposition2 choice1",
+        "proposition2 choice2",
+        "proposition2 choice3",
+        "proposition2 choice4"
+      ],
+      correctChoice: "proposition2 choice4",
+    ),
+    TestingContent(
+      proposition: "proposition3",
+      choice: [
+        "proposition3 choice1",
+        "proposition3 choice2",
+        "proposition3 choice3",
+        "proposition3 choice4"
+      ],
+      correctChoice: "proposition3 choice3",
+    ),
+    TestingContent(
+      proposition: "proposition4",
+      choice: [
+        "proposition4 choice1",
+        "proposition4 choice2",
+        "proposition4 choice3",
+        "proposition4 choice4"
+      ],
+      correctChoice: "proposition4 choice2",
+    ),
+    TestingContent(
+      proposition: "proposition5",
+      choice: [
+        "proposition5 choice1",
+        "proposition5 choice2",
+        "proposition5 choice3",
+        "proposition5 choice4"
+      ],
+      correctChoice: "proposition5 choice1",
+    ),
+  ];
+}
+
+class Testing5 {
+  static List<TestingContent> testingContent = [
+    TestingContent(
+      proposition: "proposition1",
+      choice: [
+        "proposition1 choice1",
+        "proposition1 choice2",
+        "proposition1 choice3",
+        "proposition1 choice4"
+      ],
+      correctChoice: "proposition1 choice1",
+    ),
+    TestingContent(
+      proposition: "proposition2",
+      choice: [
+        "proposition2 choice1",
+        "proposition2 choice2",
+        "proposition2 choice3",
+        "proposition2 choice4"
+      ],
+      correctChoice: "proposition2 choice4",
+    ),
+    TestingContent(
+      proposition: "proposition3",
+      choice: [
+        "proposition3 choice1",
+        "proposition3 choice2",
+        "proposition3 choice3",
+        "proposition3 choice4"
+      ],
+      correctChoice: "proposition3 choice3",
+    ),
+    TestingContent(
+      proposition: "proposition4",
+      choice: [
+        "proposition4 choice1",
+        "proposition4 choice2",
+        "proposition4 choice3",
+        "proposition4 choice4"
+      ],
+      correctChoice: "proposition4 choice2",
+    ),
+    TestingContent(
+      proposition: "proposition5",
+      choice: [
+        "proposition5 choice1",
+        "proposition5 choice2",
+        "proposition5 choice3",
+        "proposition5 choice4"
+      ],
+      correctChoice: "proposition5 choice1",
+    ),
+  ];
+}
+
+class TestingComponent {
+  static AppBar testingAppbar(String title, String subTitleText, context) {
+    return AppBar(
+      leading: IconButton(
+          onPressed: () {
+            testingBackAlert(context);
+          },
+          icon: const Icon(Icons.arrow_back)),
+      title: Row(
+        children: [
+          const SizedBox(width: 0),
+          Hero(
+            tag: "hero-title",
+            child: Image.asset(
+              "assets/icons/pyoneer_snake.png",
+              fit: BoxFit.cover,
+              height: 60,
+            ),
+          ),
+          const SizedBox(width: 10),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Align(
+                alignment: Alignment.centerLeft,
+                child: TypeWriterText(
+                  text: title,
+                  textStyle: const TextStyle(
+                      fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+              ),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: TypeWriterText(
+                  text: subTitleText,
+                  cursorSpeed: 700,
+                  textStyle: const TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+      toolbarHeight: 70,
+    );
+  }
+
+  static Future<bool> testingBackAlert(context) async {
+    return await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: Colors.white,
+        surfaceTintColor: Colors.white,
+        title: const Text('ยืนยันการออกจากบททดสอบ?'),
+        content: RichText(
+          text: const TextSpan(
+            style: TextStyle(
+                color: Colors.black,
+                fontSize: 16,
+                fontFamily: 'Noto Sans Thai'),
+            children: <TextSpan>[
+              TextSpan(
+                text: 'การออกจากหน้านี้จะทำให้คำตอบที่คุณเลือกไว้ทั้งหมด',
+                // style: TextStyle(fontSize: 16),
+              ),
+              TextSpan(
+                text: 'หายไป!',
+                style:
+                    TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
+              ),
+            ],
+          ),
+        ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('ยกเลิก', style: TextStyle(color: Colors.black)),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context, true);
+              Navigator.pop(context, true);
+            },
+            child: const Text('ออกจากบททดสอบ',
+                style: TextStyle(color: Colors.red)),
+          ),
+        ],
+      ),
+    );
+  }
+}

@@ -2,8 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart'; 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:pyoneer/service/firebase_options.dart';
-import 'package:pyoneer/service/user_data.dart';
+import 'package:pyoneer/services/firebase_options.dart';
+import 'package:pyoneer/services/user_data.dart';
 import 'package:pyoneer/views/home.dart';
 import 'package:pyoneer/views/login.dart';
 
@@ -27,7 +27,7 @@ void main() async {
       statusBarColor: Colors.transparent,
       statusBarIconBrightness: Brightness.dark,
       systemNavigationBarColor: Colors.white,
-      systemNavigationBarDividerColor: Colors.white,
+      systemNavigationBarDividerColor: Colors.transparent,
       systemNavigationBarIconBrightness: Brightness.dark,
     ),
   );

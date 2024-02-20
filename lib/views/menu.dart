@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:pyoneer/service/content_counter.dart';
-import 'package:pyoneer/service/launch_url.dart';
+import 'package:pyoneer/services/content_counter.dart';
+import 'package:pyoneer/services/launch_url.dart';
 import 'package:pyoneer/utils/animation.dart';
 import 'package:pyoneer/utils/hero.dart';
 import 'package:pyoneer/views/menu/news.dart';

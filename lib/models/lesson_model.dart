@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:pyoneer/models/lesson_component.dart';
-import 'package:pyoneer/service/user_data.dart';
+import 'package:pyoneer/components/lesson_component.dart';
+import 'package:pyoneer/services/user_data.dart';
 import 'package:pyoneer/utils/text.dart';
 
 class LessonScreenModel extends StatefulWidget {

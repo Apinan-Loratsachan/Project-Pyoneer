@@ -1,8 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:pyoneer/models/lesson_component.dart';
-import 'package:pyoneer/service/user_data.dart';
+import 'package:pyoneer/components/lesson_component.dart';
+import 'package:pyoneer/services/user_data.dart';
 import 'package:pyoneer/utils/color.dart';
+import 'package:pyoneer/views/testings/testing1.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 
 class ContentScreen extends StatefulWidget {
@@ -46,57 +47,70 @@ class _ContentScreenState extends State<ContentScreen> {
       ),
       body: SingleChildScrollView(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children:
-              List.generate(LessonComponent.lessonContent.length, (index) {
-            return FutureBuilder<bool>(
-              future: checkLessonReadStatus(UserData.email, index),
-              builder: (context, snapshot) {
-                bool isRead = snapshot.data ?? false;
-                return TimelineTile(
-                  alignment: TimelineAlign.manual,
-                  lineXY: 0.1,
-                  isFirst: index == 0,
-                  isLast: index == LessonComponent.lessonContent.length - 1,
-                  indicatorStyle: IndicatorStyle(
-                    width: 40,
-                    height: 30,
-                    indicator: Container(
-                      decoration: BoxDecoration(
-                        color: isRead ? Colors.green : Colors.grey,
-                        shape: BoxShape.circle,
-                      ),
-                      child: Center(
-                        child: isRead
-                            ? const Icon(
-                                Icons.check,
-                                color: Colors.white,
-                              )
-                            : const Icon(
-                                Icons.check,
-                                color: Colors.white,
-                              ),
-                      ),
-                    ),
-                    padding: const EdgeInsets.all(6),
-                  ),
-                  endChild: lessonTitle(
-                    LessonComponent.lessonContent[index].imageSrc,
-                    LessonComponent.lessonContent[index].heroTag,
-                    LessonComponent.lessonContent[index].title,
-                    LessonComponent.lessonContent[index].subTitle,
-                    LessonComponent.lessonContent[index].targetScreen,
+          children: [
+            ElevatedButton(
+                onPressed: () => Navigator.push(
                     context,
-                    index,
-                  ),
-                  beforeLineStyle: LineStyle(
-                    color: isRead ? Colors.green : Colors.grey,
-                    thickness: 2,
-                  ),
-                );
-              },
-            );
-          }),
+                    MaterialPageRoute(
+                        builder: (context) => const Testing1Screen())),
+                child: const Text('Test')),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: List.generate(
+                LessonComponent.lessonContent.length,
+                (index) {
+                  return FutureBuilder<bool>(
+                    future: checkLessonReadStatus(UserData.email, index),
+                    builder: (context, snapshot) {
+                      bool isRead = snapshot.data ?? false;
+                      return TimelineTile(
+                        alignment: TimelineAlign.manual,
+                        lineXY: 0.1,
+                        isFirst: index == 0,
+                        isLast:
+                            index == LessonComponent.lessonContent.length - 1,
+                        indicatorStyle: IndicatorStyle(
+                          width: 40,
+                          height: 30,
+                          indicator: Container(
+                            decoration: BoxDecoration(
+                              color: isRead ? Colors.green : Colors.grey,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Center(
+                              child: isRead
+                                  ? const Icon(
+                                      Icons.check,
+                                      color: Colors.white,
+                                    )
+                                  : const Icon(
+                                      Icons.check,
+                                      color: Colors.white,
+                                    ),
+                            ),
+                          ),
+                          padding: const EdgeInsets.all(6),
+                        ),
+                        endChild: lessonTitle(
+                          LessonComponent.lessonContent[index].imageSrc,
+                          LessonComponent.lessonContent[index].heroTag,
+                          LessonComponent.lessonContent[index].title,
+                          LessonComponent.lessonContent[index].subTitle,
+                          LessonComponent.lessonContent[index].targetScreen,
+                          context,
+                          index,
+                        ),
+                        beforeLineStyle: LineStyle(
+                          color: isRead ? Colors.green : Colors.grey,
+                          thickness: 2,
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -173,7 +187,10 @@ class _ContentScreenState extends State<ContentScreen> {
 String _getGreetingWord() {
   DateTime now = DateTime.now();
   int hour = now.hour;
-
+  // ตั้งแต่ตี 4 ถึง 11:59 นาฬิกาเช้า
+  // ตั้งแต่ 12 ถึง 15:59 นาฬิกาเที่ยง
+  // ตั้งแต่ 16 ถึง 18:59 นาฬิกาเย็น
+  // ตั้งแต่ 19 ถึง 3:59 นาฬิกากลางคืน
   if (hour >= 4 && hour < 12) {
     return '🌤️ อรุณสวัสดิ์';
   } else if (hour >= 12 && hour < 16) {

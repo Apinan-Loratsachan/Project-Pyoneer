@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:pyoneer/models/user_profile.dart';
-import 'package:pyoneer/service/auth.dart';
-import 'package:pyoneer/service/user_data.dart';
+import 'package:pyoneer/components/user_profile.dart';
+import 'package:pyoneer/services/auth.dart';
+import 'package:pyoneer/services/user_data.dart';
 import 'package:pyoneer/utils/color.dart';
 import 'package:pyoneer/views/login.dart';
 
@@ -200,7 +200,7 @@ class _AccountSettigScreenState extends State<AccountSettigScreen> {
                             backgroundColor:
                                 MaterialStateProperty.all(Colors.red[500]),
                           ),
-                          onPressed: () async {
+                          onPressed: () {
                             showDialog<bool>(
                               context: context,
                               builder: (context) => AlertDialog(

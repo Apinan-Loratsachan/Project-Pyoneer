@@ -2,10 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:pyoneer/service/auth.dart';
-import 'package:pyoneer/service/content_counter.dart';
-import 'package:pyoneer/service/launch_url.dart';
-import 'package:pyoneer/service/user_data.dart';
+import 'package:pyoneer/services/auth.dart';
+import 'package:pyoneer/services/content_counter.dart';
+import 'package:pyoneer/services/launch_url.dart';
+import 'package:pyoneer/services/user_data.dart';
 import 'package:pyoneer/utils/hero.dart';
 
 class LearningHubScreen extends StatefulWidget {

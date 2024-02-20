@@ -1,8 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pyoneer/models/navigation_bar_icon_animation.dart';
-import 'package:pyoneer/service/user_data.dart';
+import 'package:pyoneer/services/user_data.dart';
 import 'package:pyoneer/utils/animation.dart';
 import 'package:pyoneer/utils/color.dart';
 import 'package:pyoneer/utils/hero.dart';
@@ -26,6 +27,8 @@ class _HomeScreenState extends State<HomeScreen> {
   int currentIndex = 1;
   late final PageController pageController;
 
+  List<Map<String, dynamic>> popups = [];
+
   final List<Widget> _children = [
     const MenuScreen(key: HomeScreen.primaryScreenKey),
     const ContentScreen(key: HomeScreen.contentScreenKey),
@@ -36,12 +39,69 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     pageController = PageController(initialPage: currentIndex);
+    fetchPopupData();
   }
 
   @override
   void dispose() {
     pageController.dispose();
     super.dispose();
+  }
+
+  void fetchPopupData() {
+    FirebaseFirestore.instance
+        .collection('popupnews')
+        .where('showStatus', isEqualTo: "1")
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+          final List<Map<String, dynamic>> fetchedPopups = querySnapshot.docs
+              .map((doc) => doc.data() as Map<String, dynamic>)
+              .where((data) => data['showStatus'] == "1")
+              .toList();
+          if (fetchedPopups.isNotEmpty) {
+            showPopupsSequentially(fetchedPopups, 0);
+          }
+        });
+  }
+
+  void showPopupsSequentially(List<Map<String, dynamic>> popups, int index) {
+    if (index < popups.length) {
+      showPopupDialog(popups[index]).then((_) {
+        showPopupsSequentially(popups, index + 1);
+      });
+    }
+  }
+
+  Future<void> showPopupDialog(Map<String, dynamic> currentPopup) async {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              if (currentPopup['imageUrl'] != null)
+                Image.network(currentPopup['imageUrl']),
+              if (currentPopup['text'] != null &&
+                  currentPopup['text'].isNotEmpty)
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: Text(currentPopup['text']),
+                ),
+            ],
+          ),
+          actionsAlignment: MainAxisAlignment.center,
+          actions: <Widget>[
+            IconButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              icon: const Icon(Icons.close),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   void onDestinationSelected(int index) {
