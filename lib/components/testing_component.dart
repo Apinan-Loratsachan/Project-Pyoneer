@@ -136,13 +136,9 @@ class Testing2 {
 }
 
 class TestingComponent {
-  static AppBar testingAppbar(String title, String subTitleText, context) {
+  static AppBar testingAppbar(
+      String title, String subTitleText, BuildContext context) {
     return AppBar(
-      // leading: IconButton(
-      //     onPressed: () {
-      //       testingBackAlert(context);
-      //     },
-      //     icon: const Icon(Icons.arrow_back)),
       title: Row(
         children: [
           const SizedBox(width: 0),
@@ -155,30 +151,32 @@ class TestingComponent {
             ),
           ),
           const SizedBox(width: 10),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Align(
-                alignment: Alignment.centerLeft,
-                child: TypeWriterText(
-                  text: title,
-                  textStyle: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: TypeWriterText(
+                    text: title,
+                    textStyle: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
-              ),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: TypeWriterText(
-                  text: subTitleText,
-                  cursorSpeed: 700,
-                  textStyle: const TextStyle(
-                    fontSize: 16,
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: TypeWriterText(
+                    text: subTitleText,
+                    cursorSpeed: 700,
+                    textStyle: const TextStyle(
+                      fontSize: 16,
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ],
       ),
