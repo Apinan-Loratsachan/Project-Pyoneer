@@ -22,11 +22,76 @@ class _Testing1ScreenState extends State<Testing1Screen> {
 
   final _testingContent = Testing1.testingContent;
   late bool checkAlreadyTesting;
+  bool _hasAlreadyTested = false;
+  int _userScore = 0;
+  int _totalQuestions = 0;
+
+  Future<void> _fetchTestResults() async {
+    String userEmail = UserData.email;
+    String testId = "1";
+
+    var doc = await FirebaseFirestore.instance
+        .collection('testResult')
+        .doc(userEmail)
+        .collection('pre-test')
+        .doc('lessonTest $testId')
+        .get();
+
+    if (doc.exists) {
+      setState(() {
+        _userScore = doc.data()?['score'] ?? 0;
+        _totalQuestions = doc.data()?['totalScore'] ?? 0;
+      });
+    }
+  }
 
   @override
   void initState() {
     super.initState();
+    _fetchUserChoices();
     _shufflePropositionsAndChoices();
+    _checkUserTestStatus();
+    _fetchTestResults();
+  }
+
+  void _checkUserTestStatus() async {
+    bool alreadyTested = await ContentCounter.checkAlreadyTesting(
+        UserData.email, 01, "pre-test");
+    setState(() {
+      _hasAlreadyTested = alreadyTested;
+    });
+  }
+
+  Future<void> _fetchUserChoices() async {
+    String testId = "01";
+    String userEmail = UserData.email;
+
+    var doc = await FirebaseFirestore.instance
+        .collection('userChoices')
+        .doc(userEmail)
+        .collection('pre-test')
+        .doc(testId)
+        .get();
+
+    if (doc.exists) {
+      Map<String, String?> fetchedChoices =
+          Map<String, String?>.from(doc.data() as Map);
+      setState(() {
+        selectedChoices = fetchedChoices;
+      });
+    }
+  }
+
+  Future<void> saveUserChoice(String proposition, String? choice) async {
+    String testId = "01";
+    String userEmail = UserData.email;
+
+    await FirebaseFirestore.instance
+        .collection('userChoices')
+        .doc(userEmail)
+        .collection('pre-test')
+        .doc(testId)
+        .set({proposition: choice}, SetOptions(merge: true));
   }
 
   void _shufflePropositionsAndChoices() {
@@ -56,26 +121,13 @@ class _Testing1ScreenState extends State<Testing1Screen> {
     return correctCount;
   }
 
-  Future<bool> _onWillPop() {
-    return TestingComponent.testingBackAlert(context);
+  Future<bool> _onWillPop() async {
+    if (_hasAlreadyTested) {
+      return Future(() => true);
+    } else {
+      return TestingComponent.testingBackAlert(context);
+    }
   }
-
-  // Future<void> _submitTestResults(int correctAnswers) async {
-  //   final prefs = await SharedPreferences.getInstance();
-
-  //   final testResult = {
-  //     'email': UserData.email,
-  //     'lessonTest': 1,
-  //     'testType': "pre-test",
-  //     'score': correctAnswers,
-  //     'totalScore': _testingContent.length,
-  //     'timestamp': DateTime.now().toIso8601String(),
-  //   };
-
-  //   String testResultString = jsonEncode(testResult);
-  //   await prefs.setString('testResult1', testResultString);
-  //   await FirebaseFirestore.instance.collection("testResult").add(testResult);
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -90,6 +142,18 @@ class _Testing1ScreenState extends State<Testing1Screen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Align(
+                  alignment: Alignment.center,
+                  child: Text(
+                    'คุณได้ $_userScore จาก $_totalQuestions คะแนน',
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                      color: AppColor.primarSnakeColor,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
                 // Display shuffled propositions and choices as radio buttons
                 for (var i = 0; i < _testingContent.length; i++)
                   Column(
@@ -126,13 +190,16 @@ class _Testing1ScreenState extends State<Testing1Screen> {
                             ),
                             0.5,
                           ),
-                          onChanged: (value) async {
-                            setState(() {
-                              selectedChoices[_testingContent[i].proposition] =
-                                  value;
-                            });
-                            // await saveUserChoice(_testingContent[i].proposition, value);
-                          },
+                          onChanged: _hasAlreadyTested
+                              ? null
+                              : (value) async {
+                                  setState(() {
+                                    selectedChoices[
+                                        _testingContent[i].proposition] = value;
+                                  });
+                                  await saveUserChoice(
+                                      _testingContent[i].proposition, value);
+                                },
                         ),
                       const SizedBox(height: 50),
                     ],
@@ -217,7 +284,10 @@ class _Testing1ScreenState extends State<Testing1Screen> {
 
                                           FirebaseFirestore.instance
                                               .collection('testResult')
-                                              .add(toMap());
+                                              .doc(UserData.email)
+                                              .collection('pre-test')
+                                              .doc("lessonTest 1")
+                                              .set(toMap());
 
                                           // ignore: use_build_context_synchronously
                                           Navigator.pop(context);

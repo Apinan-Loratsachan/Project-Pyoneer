@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:pyoneer/components/lesson_component.dart';
@@ -16,14 +18,40 @@ class ContentScreen extends StatefulWidget {
 class _ContentScreenState extends State<ContentScreen> {
   final ScrollController _scrollController = ScrollController();
 
+  bool _isAtBottom = false;
+  bool _showFab = true;
+  Timer? _hideFabTimer;
+
   @override
   void initState() {
     super.initState();
+    _startHideFabTimer();
+
+    _scrollController.addListener(() {
+      final atBottom = _scrollController.position.atEdge &&
+          _scrollController.position.pixels != 0;
+      if (atBottom != _isAtBottom) {
+        setState(() => _isAtBottom = atBottom);
+      }
+
+      if (!_showFab) {
+        setState(() => _showFab = true);
+      }
+      _startHideFabTimer();
+    });
+  }
+
+  void _startHideFabTimer() {
+    _hideFabTimer?.cancel();
+    _hideFabTimer = Timer(const Duration(seconds: 2), () {
+      setState(() => _showFab = false);
+    });
   }
 
   @override
   void dispose() {
     _scrollController.dispose();
+    _hideFabTimer?.cancel();
     super.dispose();
   }
 
@@ -33,6 +61,14 @@ class _ContentScreenState extends State<ContentScreen> {
       _scrollController.position.maxScrollExtent,
       duration: const Duration(milliseconds: 500),
       curve: Curves.easeIn,
+    );
+  }
+
+  void _scrollUp() {
+    _scrollController.animateTo(
+      0,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeOut,
     );
   }
 
@@ -67,12 +103,21 @@ class _ContentScreenState extends State<ContentScreen> {
         surfaceTintColor: Colors.white,
         toolbarHeight: 100,
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: AppColor.primarSnakeColor.withOpacity(0.5),
-        foregroundColor: Colors.black,
-        onPressed: _scrollDown,
-        child: const Icon(Icons.arrow_downward),
-      ),
+      floatingActionButton: _showFab
+          ? (_isAtBottom
+              ? FloatingActionButton(
+                  backgroundColor: AppColor.primarSnakeColor.withOpacity(0.5),
+                  foregroundColor: Colors.black,
+                  onPressed: _scrollUp,
+                  child: const Icon(Icons.arrow_upward),
+                )
+              : FloatingActionButton(
+                  backgroundColor: AppColor.primarSnakeColor.withOpacity(0.5),
+                  foregroundColor: Colors.black,
+                  onPressed: _scrollDown,
+                  child: const Icon(Icons.arrow_downward),
+                ))
+          : null,
       body: SingleChildScrollView(
         controller: _scrollController,
         child: Column(

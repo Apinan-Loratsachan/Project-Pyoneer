@@ -193,11 +193,11 @@ class _LearningHubScreenState extends State<LearningHubScreen>
         child: SingleChildScrollView(
           child: Column(
             children: [
-              StreamBuilder<QuerySnapshot>(
-                stream: FirebaseFirestore.instance
+              FutureBuilder<QuerySnapshot>(
+                future: FirebaseFirestore.instance
                     .collection('learning')
                     .orderBy('title', descending: false)
-                    .snapshots(),
+                    .get(),
                 builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                   if (snapshot.hasError) {
                     return Text('Error: ${snapshot.error}');

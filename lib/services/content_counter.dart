@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
+import 'package:pyoneer/services/user_data.dart';
 
 class ContentCounter {
   static int newsCounter = 0;
@@ -42,6 +43,8 @@ class ContentCounter {
     QuerySnapshot<Map<String, dynamic>> querySnapshot = await FirebaseFirestore
         .instance
         .collection('testResult')
+        .doc(UserData.email)
+        .collection("pre-test")
         .where('email', isEqualTo: email)
         .where('lessonTest', isEqualTo: lessonTest)
         .where('testType', isEqualTo: testType)
