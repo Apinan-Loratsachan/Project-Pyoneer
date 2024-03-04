@@ -37,4 +37,16 @@ class ContentCounter {
       return 0;
     }
   }
+
+  static Future<bool> checkAlreadyTesting(String email, int lessonTest, String testType) async {
+    QuerySnapshot<Map<String, dynamic>> querySnapshot = await FirebaseFirestore
+        .instance
+        .collection('testResult')
+        .where('email', isEqualTo: email)
+        .where('lessonTest', isEqualTo: lessonTest)
+        .where('testType', isEqualTo: testType)
+        .get();
+
+    return querySnapshot.docs.isNotEmpty;
+  }
 }

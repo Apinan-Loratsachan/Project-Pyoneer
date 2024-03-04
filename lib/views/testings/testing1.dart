@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:pyoneer/components/testing_component.dart';
+import 'package:pyoneer/services/content_counter.dart';
 import 'package:pyoneer/services/user_data.dart';
 import 'package:pyoneer/utils/color.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -59,22 +60,22 @@ class _Testing1ScreenState extends State<Testing1Screen> {
     return TestingComponent.testingBackAlert(context);
   }
 
-  Future<void> _submitTestResults(int correctAnswers) async {
-  final prefs = await SharedPreferences.getInstance();
+  // Future<void> _submitTestResults(int correctAnswers) async {
+  //   final prefs = await SharedPreferences.getInstance();
 
-  final testResult = {
-    'email': UserData.email,
-    'lessonTest': 1,
-    'testType': "pre-test",
-    'score': correctAnswers,
-    'totalScore': _testingContent.length,
-    'timestamp': DateTime.now().toIso8601String(),
-  };
+  //   final testResult = {
+  //     'email': UserData.email,
+  //     'lessonTest': 1,
+  //     'testType': "pre-test",
+  //     'score': correctAnswers,
+  //     'totalScore': _testingContent.length,
+  //     'timestamp': DateTime.now().toIso8601String(),
+  //   };
 
-  String testResultString = jsonEncode(testResult);
-  await prefs.setString('testResult1', testResultString);
-  await FirebaseFirestore.instance.collection("testResult").add(testResult);
-}
+  //   String testResultString = jsonEncode(testResult);
+  //   await prefs.setString('testResult1', testResultString);
+  //   await FirebaseFirestore.instance.collection("testResult").add(testResult);
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -145,36 +146,50 @@ class _Testing1ScreenState extends State<Testing1Screen> {
                     child: ElevatedButton(
                       onPressed: () async {
                         if (_allAnswersSelected()) {
-                          int correctAnswers = _countCorrectAnswers();
-                          await _submitTestResults(correctAnswers);
-                          showTopSnackBar(
+                          bool checkAlreadyTesting =
+                              await ContentCounter.checkAlreadyTesting(
+                                  UserData.email, 1, "pre-test");
+                          if (checkAlreadyTesting) {
+                            showTopSnackBar(
+                              // ignore: use_build_context_synchronously
+                              Overlay.of(context),
+                              const CustomSnackBar.info(
+                                message:
+                                    "คุณทำการทดสอบนี้ไปแล้ว",
+                              ),
+                              displayDuration: const Duration(seconds: 2),
+                            );
+                          } else {
+                            int correctAnswers = _countCorrectAnswers();
+                            // await _submitTestResults(correctAnswers);
+                            showTopSnackBar(
+                              // ignore: use_build_context_synchronously
+                              Overlay.of(context),
+                              CustomSnackBar.success(
+                                message:
+                                    "คุณตอบถูก $correctAnswers ข้อจาก ${_testingContent.length} ข้อ",
+                              ),
+                              displayDuration: const Duration(seconds: 2),
+                            );
+                            //email, lessonTest, testType, score, totalScore, timestamp
+                            Map<String, dynamic> toMap() {
+                              return {
+                                'email': UserData.email,
+                                'lessonTest': 1,
+                                'testType': "pre-test",
+                                'score': correctAnswers,
+                                'totalScore': _testingContent.length,
+                                'timestamp': FieldValue.serverTimestamp(),
+                              };
+                            }
+
+                            FirebaseFirestore.instance
+                                .collection('testResult')
+                                .add(toMap());
+
                             // ignore: use_build_context_synchronously
-                            Overlay.of(context),
-                            CustomSnackBar.success(
-                              message:
-                                  "คุณตอบถูก $correctAnswers ข้อจาก ${_testingContent.length} ข้อ",
-                            ),
-                            displayDuration: const Duration(seconds: 2),
-                          );
-                          //email, lessonTest, testType, score, totalScore, timestamp
-                          Map<String, dynamic> toMap() {
-                            return {
-                              'email': UserData.email,
-                              'lessonTest': 1,
-                              'testType': "pre-test",
-                              'score': correctAnswers,
-                              'totalScore': _testingContent.length,
-                              'timestamp': FieldValue.serverTimestamp(),
-                            };
+                            Navigator.pop(context);
                           }
-
-                          FirebaseFirestore.instance
-                              .collection('testResult')
-                              .add(toMap());
-
-      
-                          // ignore: use_build_context_synchronously
-                          Navigator.pop(context);
                         } else {
                           showTopSnackBar(
                             Overlay.of(context),
