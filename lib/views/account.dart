@@ -17,6 +17,31 @@ class AccountSettigScreen extends StatefulWidget {
 }
 
 class _AccountSettigScreenState extends State<AccountSettigScreen> {
+  
+  Future<void> deleteTestResults(String userEmail) async {
+    var testResultCollection =
+        FirebaseFirestore.instance.collection('testResult');
+    var userTestResults =
+        testResultCollection.doc(userEmail).collection('pre-test');
+
+    var querySnapshot = await userTestResults.get();
+    for (var document in querySnapshot.docs) {
+      await document.reference.delete();
+    }
+  }
+
+  Future<void> deleteUserChoices(String userEmail) async {
+    var userChoicesCollection =
+        FirebaseFirestore.instance.collection('userChoices');
+    var userChoices =
+        userChoicesCollection.doc(userEmail).collection('pre-test');
+
+    var querySnapshot = await userChoices.get();
+    for (var document in querySnapshot.docs) {
+      await document.reference.delete();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -107,9 +132,9 @@ class _AccountSettigScreenState extends State<AccountSettigScreen> {
                                       backgroundColor: Colors.white,
                                       surfaceTintColor: Colors.white,
                                       title:
-                                          const Text('ลบประวัติการอ่านบทเรียน'),
+                                          const Text('ลบประวัติการอ่านบทเรียนและบททดสอบ'),
                                       content: const Text(
-                                          'คุณต้องการลบประวัติการอ่านบทเรียนทั้งหมดใช่หรือไม่?'),
+                                          'คุณต้องการลบประวัติการอ่านบทเรียนและแบบทดสอบทั้งหมดใช่หรือไม่?'),
                                       actions: <Widget>[
                                         TextButton(
                                           onPressed: () =>
@@ -122,6 +147,10 @@ class _AccountSettigScreenState extends State<AccountSettigScreen> {
                                           onPressed: () async {
                                             // Navigate back to the previous screen
                                             Navigator.pop(context);
+                                            await deleteTestResults(
+                                                UserData.email);
+                                            await deleteUserChoices(
+                                                UserData.email);
 
                                             // Query to retrieve documents that match the user's email
                                             QuerySnapshot<Map<String, dynamic>>
@@ -141,12 +170,14 @@ class _AccountSettigScreenState extends State<AccountSettigScreen> {
                                               await document.reference.delete();
                                             }
 
+                                            //-----------------------------------------------------
+
                                             Fluttertoast.showToast(
                                                 msg:
-                                                    "ลบประวัติการอ่านบทเรียนทั้งหมดแล้ว");
+                                                    "ลบประวัติการอ่านบทเรียนและบททดสอบทั้งหมดแล้ว");
                                           },
                                           child: const Text(
-                                              'ลบประวัติการอ่านบทเรียน',
+                                              'ลบประวัติ',
                                               style:
                                                   TextStyle(color: Colors.red)),
                                         ),
@@ -163,7 +194,7 @@ class _AccountSettigScreenState extends State<AccountSettigScreen> {
                                     ),
                                     SizedBox(width: 10),
                                     Text(
-                                      "ลบประวัติการอ่านบทเรียน",
+                                      "ลบประวัติการอ่านบทเรียนและบททดสอบ",
                                       style: TextStyle(color: Colors.white),
                                     ),
                                   ],

@@ -70,6 +70,7 @@ class _TypeWriterTextState extends State<TypeWriterText> {
     return Text(
       displayedText + (showCursor ? cursor : ''),
       style: widget.textStyle,
+      overflow: TextOverflow.ellipsis,
     );
   }
 }

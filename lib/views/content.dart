@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:pyoneer/components/lesson_component.dart';
 import 'package:pyoneer/services/user_data.dart';
 import 'package:pyoneer/utils/color.dart';
-import 'package:pyoneer/views/testings/testing1.dart';
+import 'package:pyoneer/views/testings/testing2.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 
 class ContentScreen extends StatefulWidget {
@@ -126,7 +126,7 @@ class _ContentScreenState extends State<ContentScreen> {
                 onPressed: () => Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const Testing1Screen())),
+                        builder: (context) => const Testing2Screen())),
                 child: const Text('Test')),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,

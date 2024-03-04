@@ -78,7 +78,7 @@ class Testing1 {
 class Testing2 {
   static List<TestingContent> testingContent = [
     TestingContent(
-      proposition: "proposition1",
+      proposition: "จากรูปต่อไปนี้ขัอใดถูกต้อง",
       choice: [
         "proposition1 choice1",
         "proposition1 choice2",
@@ -163,7 +163,9 @@ class TestingComponent {
                 child: TypeWriterText(
                   text: title,
                   textStyle: const TextStyle(
-                      fontSize: 20, fontWeight: FontWeight.bold),
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
               Align(
@@ -199,7 +201,8 @@ class TestingComponent {
                 fontFamily: 'Noto Sans Thai'),
             children: <TextSpan>[
               TextSpan(
-                text: 'คุณสามารถออกจากหน้านี้ได้อย่างปลอดภัย คำตอบของคุณจะถูกบันทึกไว้และ',
+                text:
+                    'คุณสามารถออกจากหน้านี้ได้อย่างปลอดภัย คำตอบของคุณจะถูกบันทึกไว้และ',
                 // style: TextStyle(fontSize: 16),
               ),
               TextSpan(

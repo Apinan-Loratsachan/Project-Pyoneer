@@ -145,13 +145,30 @@ class _Testing1ScreenState extends State<Testing1Screen> {
                 Align(
                   alignment: Alignment.center,
                   child: Text(
-                    'คุณได้ $_userScore จาก $_totalQuestions คะแนน',
+                    "🎉 คุณได้ $_userScore จาก $_totalQuestions คะแนน 🎊",
                     style: const TextStyle(
+                      shadows: [
+                        BoxShadow(
+                          color: AppColor.primarSnakeColor,
+                          blurRadius: 10,
+                          spreadRadius: 20,
+                          offset: Offset(0, 5),
+                        ),
+                      ],
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
-                      color: AppColor.primarSnakeColor,
+                      color: AppColor.secondarySnakeColor,
                     ),
-                  ),
+                  ).animate(
+                        delay: 600.ms,
+                      )
+                      .fadeIn(
+                        duration: 500.ms,
+                      )
+                      .slide(
+                        begin: const Offset(0, 0.3),
+                        duration: 500.ms,
+                      ),
                 ),
                 const SizedBox(height: 20),
                 // Display shuffled propositions and choices as radio buttons
