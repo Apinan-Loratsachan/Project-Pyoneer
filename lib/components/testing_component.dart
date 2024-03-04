@@ -5,11 +5,13 @@ class TestingContent {
   String proposition;
   List<String> choice;
   String correctChoice;
+  String imagePath;
 
   TestingContent({
     required this.proposition,
     required this.choice,
     required this.correctChoice,
+    required this.imagePath,
   });
 }
 
@@ -24,6 +26,7 @@ class Testing1 {
         "proposition1 choice4"
       ],
       correctChoice: "proposition1 choice1",
+      imagePath: 'assets/icons/pyoneer_snake.png',
     ),
     TestingContent(
       proposition: "proposition2",
@@ -34,6 +37,7 @@ class Testing1 {
         "proposition2 choice4"
       ],
       correctChoice: "proposition2 choice4",
+      imagePath: '',
     ),
     TestingContent(
       proposition: "proposition3",
@@ -44,6 +48,7 @@ class Testing1 {
         "proposition3 choice4"
       ],
       correctChoice: "proposition3 choice3",
+      imagePath: '',
     ),
     TestingContent(
       proposition: "proposition4",
@@ -54,6 +59,7 @@ class Testing1 {
         "proposition4 choice4"
       ],
       correctChoice: "proposition4 choice2",
+      imagePath: '',
     ),
     TestingContent(
       proposition: "proposition5",
@@ -64,226 +70,7 @@ class Testing1 {
         "proposition5 choice4"
       ],
       correctChoice: "proposition5 choice1",
-    ),
-  ];
-}
-
-class Testing2 {
-  static List<TestingContent> testingContent = [
-    TestingContent(
-      proposition: "proposition1",
-      choice: [
-        "proposition1 choice1",
-        "proposition1 choice2",
-        "proposition1 choice3",
-        "proposition1 choice4"
-      ],
-      correctChoice: "proposition1 choice1",
-    ),
-    TestingContent(
-      proposition: "proposition2",
-      choice: [
-        "proposition2 choice1",
-        "proposition2 choice2",
-        "proposition2 choice3",
-        "proposition2 choice4"
-      ],
-      correctChoice: "proposition2 choice4",
-    ),
-    TestingContent(
-      proposition: "proposition3",
-      choice: [
-        "proposition3 choice1",
-        "proposition3 choice2",
-        "proposition3 choice3",
-        "proposition3 choice4"
-      ],
-      correctChoice: "proposition3 choice3",
-    ),
-    TestingContent(
-      proposition: "proposition4",
-      choice: [
-        "proposition4 choice1",
-        "proposition4 choice2",
-        "proposition4 choice3",
-        "proposition4 choice4"
-      ],
-      correctChoice: "proposition4 choice2",
-    ),
-    TestingContent(
-      proposition: "proposition5",
-      choice: [
-        "proposition5 choice1",
-        "proposition5 choice2",
-        "proposition5 choice3",
-        "proposition5 choice4"
-      ],
-      correctChoice: "proposition5 choice1",
-    ),
-  ];
-}
-
-class Testing3 {
-  static List<TestingContent> testingContent = [
-    TestingContent(
-      proposition: "proposition1",
-      choice: [
-        "proposition1 choice1",
-        "proposition1 choice2",
-        "proposition1 choice3",
-        "proposition1 choice4"
-      ],
-      correctChoice: "proposition1 choice1",
-    ),
-    TestingContent(
-      proposition: "proposition2",
-      choice: [
-        "proposition2 choice1",
-        "proposition2 choice2",
-        "proposition2 choice3",
-        "proposition2 choice4"
-      ],
-      correctChoice: "proposition2 choice4",
-    ),
-    TestingContent(
-      proposition: "proposition3",
-      choice: [
-        "proposition3 choice1",
-        "proposition3 choice2",
-        "proposition3 choice3",
-        "proposition3 choice4"
-      ],
-      correctChoice: "proposition3 choice3",
-    ),
-    TestingContent(
-      proposition: "proposition4",
-      choice: [
-        "proposition4 choice1",
-        "proposition4 choice2",
-        "proposition4 choice3",
-        "proposition4 choice4"
-      ],
-      correctChoice: "proposition4 choice2",
-    ),
-    TestingContent(
-      proposition: "proposition5",
-      choice: [
-        "proposition5 choice1",
-        "proposition5 choice2",
-        "proposition5 choice3",
-        "proposition5 choice4"
-      ],
-      correctChoice: "proposition5 choice1",
-    ),
-  ];
-}
-
-class Testing4 {
-  static List<TestingContent> testingContent = [
-    TestingContent(
-      proposition: "proposition1",
-      choice: [
-        "proposition1 choice1",
-        "proposition1 choice2",
-        "proposition1 choice3",
-        "proposition1 choice4"
-      ],
-      correctChoice: "proposition1 choice1",
-    ),
-    TestingContent(
-      proposition: "proposition2",
-      choice: [
-        "proposition2 choice1",
-        "proposition2 choice2",
-        "proposition2 choice3",
-        "proposition2 choice4"
-      ],
-      correctChoice: "proposition2 choice4",
-    ),
-    TestingContent(
-      proposition: "proposition3",
-      choice: [
-        "proposition3 choice1",
-        "proposition3 choice2",
-        "proposition3 choice3",
-        "proposition3 choice4"
-      ],
-      correctChoice: "proposition3 choice3",
-    ),
-    TestingContent(
-      proposition: "proposition4",
-      choice: [
-        "proposition4 choice1",
-        "proposition4 choice2",
-        "proposition4 choice3",
-        "proposition4 choice4"
-      ],
-      correctChoice: "proposition4 choice2",
-    ),
-    TestingContent(
-      proposition: "proposition5",
-      choice: [
-        "proposition5 choice1",
-        "proposition5 choice2",
-        "proposition5 choice3",
-        "proposition5 choice4"
-      ],
-      correctChoice: "proposition5 choice1",
-    ),
-  ];
-}
-
-class Testing5 {
-  static List<TestingContent> testingContent = [
-    TestingContent(
-      proposition: "proposition1",
-      choice: [
-        "proposition1 choice1",
-        "proposition1 choice2",
-        "proposition1 choice3",
-        "proposition1 choice4"
-      ],
-      correctChoice: "proposition1 choice1",
-    ),
-    TestingContent(
-      proposition: "proposition2",
-      choice: [
-        "proposition2 choice1",
-        "proposition2 choice2",
-        "proposition2 choice3",
-        "proposition2 choice4"
-      ],
-      correctChoice: "proposition2 choice4",
-    ),
-    TestingContent(
-      proposition: "proposition3",
-      choice: [
-        "proposition3 choice1",
-        "proposition3 choice2",
-        "proposition3 choice3",
-        "proposition3 choice4"
-      ],
-      correctChoice: "proposition3 choice3",
-    ),
-    TestingContent(
-      proposition: "proposition4",
-      choice: [
-        "proposition4 choice1",
-        "proposition4 choice2",
-        "proposition4 choice3",
-        "proposition4 choice4"
-      ],
-      correctChoice: "proposition4 choice2",
-    ),
-    TestingContent(
-      proposition: "proposition5",
-      choice: [
-        "proposition5 choice1",
-        "proposition5 choice2",
-        "proposition5 choice3",
-        "proposition5 choice4"
-      ],
-      correctChoice: "proposition5 choice1",
+      imagePath: '',
     ),
   ];
 }

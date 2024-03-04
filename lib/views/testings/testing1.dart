@@ -1,13 +1,12 @@
-import 'dart:convert';
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:pyoneer/components/lesson_component.dart';
 import 'package:pyoneer/components/testing_component.dart';
 import 'package:pyoneer/services/content_counter.dart';
 import 'package:pyoneer/services/user_data.dart';
 import 'package:pyoneer/utils/color.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
@@ -22,6 +21,7 @@ class _Testing1ScreenState extends State<Testing1Screen> {
   Map<String, String?> selectedChoices = {}; // Map to store selected choices
 
   final _testingContent = Testing1.testingContent;
+  late bool checkAlreadyTesting;
 
   @override
   void initState() {
@@ -102,6 +102,12 @@ class _Testing1ScreenState extends State<Testing1Screen> {
                           fontSize: 20,
                         ),
                       ),
+                      _testingContent[i].imagePath.isNotEmpty
+                          ? LessonComponent.lessonImage(
+                              context,
+                              _testingContent[i].imagePath,
+                            )
+                          : const SizedBox.shrink(),
                       // Display shuffled choices as radio buttons
                       for (var choice in _testingContent[i].choice)
                         RadioListTile<String?>(
@@ -120,11 +126,12 @@ class _Testing1ScreenState extends State<Testing1Screen> {
                             ),
                             0.5,
                           ),
-                          onChanged: (value) {
+                          onChanged: (value) async {
                             setState(() {
                               selectedChoices[_testingContent[i].proposition] =
                                   value;
                             });
+                            // await saveUserChoice(_testingContent[i].proposition, value);
                           },
                         ),
                       const SizedBox(height: 50),
@@ -140,87 +147,125 @@ class _Testing1ScreenState extends State<Testing1Screen> {
                         begin: const Offset(0, 0.2),
                         duration: 500.ms,
                       ),
-                Center(
-                  child: SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.8,
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        if (_allAnswersSelected()) {
-                          bool checkAlreadyTesting =
-                              await ContentCounter.checkAlreadyTesting(
-                                  UserData.email, 1, "pre-test");
-                          if (checkAlreadyTesting) {
-                            showTopSnackBar(
-                              // ignore: use_build_context_synchronously
-                              Overlay.of(context),
-                              const CustomSnackBar.info(
-                                message:
-                                    "คุณทำการทดสอบนี้ไปแล้ว",
-                              ),
-                              displayDuration: const Duration(seconds: 2),
-                            );
-                          } else {
-                            int correctAnswers = _countCorrectAnswers();
-                            // await _submitTestResults(correctAnswers);
-                            showTopSnackBar(
-                              // ignore: use_build_context_synchronously
-                              Overlay.of(context),
-                              CustomSnackBar.success(
-                                message:
-                                    "คุณตอบถูก $correctAnswers ข้อจาก ${_testingContent.length} ข้อ",
-                              ),
-                              displayDuration: const Duration(seconds: 2),
-                            );
-                            //email, lessonTest, testType, score, totalScore, timestamp
-                            Map<String, dynamic> toMap() {
-                              return {
-                                'email': UserData.email,
-                                'lessonTest': 1,
-                                'testType': "pre-test",
-                                'score': correctAnswers,
-                                'totalScore': _testingContent.length,
-                                'timestamp': FieldValue.serverTimestamp(),
-                              };
-                            }
+                Column(
+                  children: [
+                    Center(
+                      child: SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.8,
+                        child: FutureBuilder<bool>(
+                          future: ContentCounter.checkAlreadyTesting(
+                              UserData.email, 1, "pre-test"),
+                          builder: (BuildContext context,
+                              AsyncSnapshot<bool> snapshot) {
+                            return snapshot.data ?? false
+                                ? const ElevatedButton(
+                                    onPressed: null,
+                                    child: Text(
+                                      "คุณทำแบบทดสอบนี้ไปแล้ว",
+                                      style: TextStyle(
+                                        color: AppColor.primarSnakeColor,
+                                        fontSize: 20,
+                                      ),
+                                    ),
+                                  )
+                                : ElevatedButton(
+                                    onPressed: () async {
+                                      if (_allAnswersSelected()) {
+                                        bool checkAlreadyTesting =
+                                            await ContentCounter
+                                                .checkAlreadyTesting(
+                                                    UserData.email,
+                                                    1,
+                                                    "pre-test");
+                                        if (checkAlreadyTesting) {
+                                          showTopSnackBar(
+                                            // ignore: use_build_context_synchronously
+                                            Overlay.of(context),
+                                            const CustomSnackBar.info(
+                                              message: "คุณทำการทดสอบนี้ไปแล้ว",
+                                            ),
+                                            displayDuration:
+                                                const Duration(seconds: 2),
+                                          );
+                                        } else {
+                                          int correctAnswers =
+                                              _countCorrectAnswers();
+                                          // await _submitTestResults(correctAnswers);
+                                          showTopSnackBar(
+                                            // ignore: use_build_context_synchronously
+                                            Overlay.of(context),
+                                            CustomSnackBar.success(
+                                              message:
+                                                  "คุณตอบถูก $correctAnswers ข้อจาก ${_testingContent.length} ข้อ",
+                                            ),
+                                            displayDuration:
+                                                const Duration(seconds: 2),
+                                          );
+                                          //email, lessonTest, testType, score, totalScore, timestamp
+                                          Map<String, dynamic> toMap() {
+                                            return {
+                                              'email': UserData.email,
+                                              'lessonTest': 1,
+                                              'testType': "pre-test",
+                                              'score': correctAnswers,
+                                              'totalScore':
+                                                  _testingContent.length,
+                                              'timestamp':
+                                                  FieldValue.serverTimestamp(),
+                                            };
+                                          }
 
-                            FirebaseFirestore.instance
-                                .collection('testResult')
-                                .add(toMap());
+                                          FirebaseFirestore.instance
+                                              .collection('testResult')
+                                              .add(toMap());
 
-                            // ignore: use_build_context_synchronously
-                            Navigator.pop(context);
-                          }
-                        } else {
-                          showTopSnackBar(
-                            Overlay.of(context),
-                            const CustomSnackBar.error(
-                              message: "กรุณาตอบคำถามให้ครบทุกข้อ",
-                            ),
-                            displayDuration: const Duration(seconds: 2),
-                          );
-                        }
-                      },
-                      style: ButtonStyle(
-                        foregroundColor: MaterialStateColor.resolveWith(
-                            (states) => Colors.white),
-                        backgroundColor: MaterialStateColor.resolveWith(
-                            (states) =>
-                                AppColor.primarSnakeColor.withAlpha(200)),
-                        overlayColor: MaterialStateColor.resolveWith((states) =>
-                            AppColor.secondarySnakeColor.withAlpha(255)),
-                      ),
-                      child: const Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.done),
-                          SizedBox(width: 10),
-                          Text("ส่งคำตอบ"),
-                        ],
+                                          // ignore: use_build_context_synchronously
+                                          Navigator.pop(context);
+                                        }
+                                      } else {
+                                        showTopSnackBar(
+                                          Overlay.of(context),
+                                          const CustomSnackBar.error(
+                                            message:
+                                                "กรุณาตอบคำถามให้ครบทุกข้อ",
+                                          ),
+                                          displayDuration:
+                                              const Duration(seconds: 2),
+                                        );
+                                      }
+                                    },
+                                    style: ButtonStyle(
+                                      foregroundColor:
+                                          MaterialStateColor.resolveWith(
+                                              (states) => Colors.white),
+                                      backgroundColor:
+                                          MaterialStateColor.resolveWith(
+                                              (states) => AppColor
+                                                  .primarSnakeColor
+                                                  .withAlpha(200)),
+                                      overlayColor:
+                                          MaterialStateColor.resolveWith(
+                                              (states) => AppColor
+                                                  .secondarySnakeColor
+                                                  .withAlpha(255)),
+                                    ),
+                                    child: const Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Icon(Icons.done),
+                                        SizedBox(width: 10),
+                                        Text("ส่งคำตอบ"),
+                                      ],
+                                    ),
+                                  );
+                          },
+                        ),
                       ),
                     ),
-                  ),
+                    const SizedBox(height: 30),
+                  ],
                 ),
-                const SizedBox(height: 30),
               ],
             ),
           ),

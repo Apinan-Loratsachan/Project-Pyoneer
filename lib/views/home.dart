@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -54,14 +56,14 @@ class _HomeScreenState extends State<HomeScreen> {
         .where('showStatus', isEqualTo: "1")
         .get()
         .then((QuerySnapshot querySnapshot) {
-          final List<Map<String, dynamic>> fetchedPopups = querySnapshot.docs
-              .map((doc) => doc.data() as Map<String, dynamic>)
-              .where((data) => data['showStatus'] == "1")
-              .toList();
-          if (fetchedPopups.isNotEmpty) {
-            showPopupsSequentially(fetchedPopups, 0);
-          }
-        });
+      final List<Map<String, dynamic>> fetchedPopups = querySnapshot.docs
+          .map((doc) => doc.data() as Map<String, dynamic>)
+          .where((data) => data['showStatus'] == "1")
+          .toList();
+      if (fetchedPopups.isNotEmpty) {
+        showPopupsSequentially(fetchedPopups, 0);
+      }
+    });
   }
 
   void showPopupsSequentially(List<Map<String, dynamic>> popups, int index) {
@@ -76,29 +78,40 @@ class _HomeScreenState extends State<HomeScreen> {
     return showDialog<void>(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              if (currentPopup['imageUrl'] != null)
-                Image.network(currentPopup['imageUrl']),
-              if (currentPopup['text'] != null &&
-                  currentPopup['text'].isNotEmpty)
-                Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
-                  child: Text(currentPopup['text']),
+        return BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+          child: AlertDialog(
+            surfaceTintColor: Colors.transparent,
+            backgroundColor: Colors.white.withOpacity(0.5),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  if (currentPopup['imageUrl'] != null)
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(5),
+                      child: Image.network(currentPopup['imageUrl']),
+                    ),
+                  if (currentPopup['text'] != null &&
+                      currentPopup['text'].isNotEmpty)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8.0),
+                      child: Text(currentPopup['text']),
+                    ),
+                ],
+              ),
+              actionsAlignment: MainAxisAlignment.center,
+              actionsPadding: const EdgeInsets.only(bottom: 8.0),
+              actions: <Widget>[
+                IconButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  icon: const Icon(Icons.close),
                 ),
-            ],
-          ),
-          actionsAlignment: MainAxisAlignment.center,
-          actions: <Widget>[
-            IconButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              icon: const Icon(Icons.close),
-            ),
-          ],
+              ],
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              )),
         );
       },
     );
