@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:pyoneer/components/lesson_component.dart';
@@ -54,7 +53,6 @@ class _ContentScreenState extends State<ContentScreen> {
     _hideFabTimer?.cancel();
     super.dispose();
   }
-
 
   void _scrollDown() {
     _scrollController.animateTo(
@@ -129,61 +127,107 @@ class _ContentScreenState extends State<ContentScreen> {
                         builder: (context) => const Testing2Screen())),
                 child: const Text('Test')),
             Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: List.generate(
-                LessonComponent.lessonContent.length,
-                (index) {
-                  return FutureBuilder<bool>(
-                    future: checkLessonReadStatus(UserData.email, index),
-                    builder: (context, snapshot) {
-                      bool isRead = snapshot.data ?? false;
-                      return TimelineTile(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: List.generate(
+                  LessonComponent.lessonContent.length,
+                  (index) {
+                    List<Widget> groupWidgets = [];
+
+                    if (index != 0) {
+                      // Pre-test Tile
+                      groupWidgets.add(TimelineTile(
                         alignment: TimelineAlign.manual,
                         lineXY: 0.1,
-                        isFirst: index == 0,
-                        isLast:
-                            index == LessonComponent.lessonContent.length - 1,
-                        indicatorStyle: IndicatorStyle(
+                        isFirst: index == 1,
+                        indicatorStyle: const IndicatorStyle(
                           width: 40,
-                          height: 30,
-                          indicator: Container(
-                            decoration: BoxDecoration(
-                              color: isRead ? Colors.green : Colors.grey,
-                              shape: BoxShape.circle,
-                            ),
-                            child: Center(
-                              child: isRead
-                                  ? const Icon(
-                                      Icons.check,
-                                      color: Colors.white,
-                                    )
-                                  : const Icon(
-                                      Icons.check,
-                                      color: Colors.white,
-                                    ),
-                            ),
-                          ),
-                          padding: const EdgeInsets.all(6),
+                          color: Colors.blue,
+                          indicatorXY: 0.5,
                         ),
                         endChild: lessonTitle(
-                          LessonComponent.lessonContent[index].imageSrc,
-                          LessonComponent.lessonContent[index].heroTag,
-                          LessonComponent.lessonContent[index].title,
-                          LessonComponent.lessonContent[index].subTitle,
-                          LessonComponent.lessonContent[index].targetScreen,
+                          "assets/icons/pyoneer_snake.png",
+                          "pre_test_$index",
+                          "แบบทดสอบก่อนเรียนบทที่ $index",
+                          "ทดสอบความรู้ก่อนที่คุณจะเรียนบทเรียน",
+                          const Testing2Screen(),
                           context,
                           index,
+                          'Pre-test',
                         ),
-                        beforeLineStyle: LineStyle(
-                          color: isRead ? Colors.green : Colors.grey,
+                        beforeLineStyle: const LineStyle(
+                          color: Colors.blue,
                           thickness: 2,
                         ),
-                      );
-                    },
-                  );
-                },
-              ),
-            ),
+                      ));
+                    }
+
+                    // Main Lesson Tile
+                    groupWidgets.add(FutureBuilder<bool>(
+                      future: _ContentScreenState.checkLessonReadStatus(
+                          UserData.email, index),
+                      builder: (context, snapshot) {
+                        bool isRead = snapshot.data ?? false;
+                        return TimelineTile(
+                          alignment: TimelineAlign.manual,
+                          lineXY: 0.1,
+                          indicatorStyle: IndicatorStyle(
+                            width: 40,
+                            color: isRead ? Colors.green : Colors.grey,
+                            indicatorXY: 0.5,
+                          ),
+                          endChild: lessonTitle(
+                            LessonComponent.lessonContent[index].imageSrc,
+                            LessonComponent.lessonContent[index].heroTag,
+                            LessonComponent.lessonContent[index].title,
+                            LessonComponent.lessonContent[index].subTitle,
+                            LessonComponent.lessonContent[index].targetScreen,
+                            context,
+                            index,
+                            'Lesson',
+                          ),
+                          beforeLineStyle: LineStyle(
+                            color: isRead ? Colors.green : Colors.grey,
+                            thickness: 2,
+                          ),
+                        );
+                      },
+                    ));
+
+                    if (index != 0) {
+                      // Post-test Tile
+                      groupWidgets.add(TimelineTile(
+                        alignment: TimelineAlign.manual,
+                        lineXY: 0.1,
+                        isLast:
+                            index == LessonComponent.lessonContent.length - 1,
+                        indicatorStyle: const IndicatorStyle(
+                          width: 40,
+                          color: Colors.red,
+                          indicatorXY: 0.5,
+                        ),
+                        endChild: lessonTitle(
+                          "assets/icons/pyoneer_snake.png",
+                          "post_test_$index",
+                          "แบบทดสอบหลังเรียนบทที่ $index",
+                          "ทดสอบความรู้หลังจากที่คุณได้เรียนบทเรียน",
+                          const Testing2Screen(),
+                          context,
+                          index,
+                          'Post-test',
+                        ),
+                        beforeLineStyle: const LineStyle(
+                          color: Colors.red,
+                          thickness: 2,
+                        ),
+                      ));
+                    }
+                    if (index < LessonComponent.lessonContent.length - 1) {
+                      groupWidgets.add(const SizedBox(height: 20));
+                    }
+
+                    return Column(children: groupWidgets);
+                  },
+                )),
           ],
         ),
       ),
@@ -204,56 +248,45 @@ class _ContentScreenState extends State<ContentScreen> {
     return querySnapshot.docs.isNotEmpty;
   }
 
-  ListTile lessonTitle(String imageSrc, String heroTag, String title,
-      String subtitle, Widget targetScreen, BuildContext context, int index) {
+  Widget lessonTitle(
+      String imageSrc,
+      String heroTag,
+      String title,
+      String subtitle,
+      Widget targetScreen,
+      BuildContext context,
+      int index,
+      String type) {
     return ListTile(
-      leading: LessonComponent.lessonCover(imageSrc, heroTag, true),
-      onTap: () async {
-        if (UserData.email != 'ไม่ได้เข้าสู่ระบบ') {
-          // Navigate to the target screen
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => targetScreen),
-          ).then((value) {
-            setState(() {});
-          });
-        } else {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => targetScreen),
-          );
-        }
-      },
+      leading: Hero(
+        tag: heroTag,
+        child: Image.asset(imageSrc, width: 50, height: 50),
+      ),
+      onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => targetScreen),
+      ).then((_) => setState(() {})),
       title: Text(
         title,
         style: const TextStyle(fontWeight: FontWeight.bold),
       ),
-      subtitle: Text(
-        subtitle,
-      ),
-      // trailing: FutureBuilder<bool>(
-      //   future: checkLessonReadStatus(UserData.email, index),
-      //   builder: (context, snapshot) {
-      //     Widget child;
-      //     if (snapshot.connectionState == ConnectionState.waiting) {
-      //       child = const SizedBox();
-      //     } else if (snapshot.data! != true) {
-      //       child = const Icon(
-      //         Icons.check_circle_rounded,
-      //         color: Colors.transparent,
-      //       );
-      //     } else {
-      //       child = const Icon(
-      //         Icons.check_circle_rounded,
-      //         color: Colors.green,
-      //       );
-      //     }
-      //     return AnimatedSwitcher(
-      //       duration: const Duration(seconds: 1),
-      //       child: child,
-      //     );
-      //   },
-      // ),
+      subtitle: Text(subtitle),
+      trailing: type == 'Lesson'
+          ? FutureBuilder<bool>(
+              future: _ContentScreenState.checkLessonReadStatus(
+                  UserData.email, index),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const SizedBox(); // Or some placeholder
+                } else if (snapshot.data == true) {
+                  return const Icon(Icons.check_circle, color: Colors.green);
+                } else {
+                  return const Icon(Icons.radio_button_unchecked,
+                      color: Colors.grey);
+                }
+              },
+            )
+          : null, // Only show the check status for the main lesson
     );
   }
 }
@@ -261,10 +294,6 @@ class _ContentScreenState extends State<ContentScreen> {
 String _getGreetingWord() {
   DateTime now = DateTime.now();
   int hour = now.hour;
-  // ตั้งแต่ตี 4 ถึง 11:59 นาฬิกาเช้า
-  // ตั้งแต่ 12 ถึง 15:59 นาฬิกาเที่ยง
-  // ตั้งแต่ 16 ถึง 18:59 นาฬิกาเย็น
-  // ตั้งแต่ 19 ถึง 3:59 นาฬิกากลางคืน
   if (hour >= 4 && hour < 12) {
     return '🌤️ อรุณสวัสดิ์';
   } else if (hour >= 12 && hour < 16) {

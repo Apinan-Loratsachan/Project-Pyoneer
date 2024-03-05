@@ -268,8 +268,7 @@ class _TestingScreenModelState extends State<TestingScreenModel> {
                                   const CustomSnackBar.error(
                                     message: "กรุณาตอบคำถามให้ครบทุกข้อ",
                                   ),
-                                  displayDuration:
-                                      const Duration(seconds: 2),
+                                  displayDuration: const Duration(seconds: 2),
                                 );
                               },
                         style: ButtonStyle(

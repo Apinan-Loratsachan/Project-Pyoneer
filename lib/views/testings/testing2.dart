@@ -14,8 +14,10 @@ class _Testing2ScreenState extends State<Testing2Screen> {
   Widget build(BuildContext context) {
     return TestingScreenModel(
       testingContent: Testing2.testingContent,
-      appBarTitle: "askjdkฟหกฟหากาฟหกาวฟาหวากฟหกฟหกกฟหกฟก",
-      appBarSubTitle: "กด่เา่ดเาสกดเส่ดเ่กดเาสด่กเ่กดาสเา่กดาเ",
+      appBarTitle: "YYYPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      appBarSubTitle: "PPPYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY",
+      // appBarTitle: "PPPPPPPPP",
+      // appBarSubTitle: "YYYYYYYY",
       isPreTest: true,
       testId: 2,
     );
