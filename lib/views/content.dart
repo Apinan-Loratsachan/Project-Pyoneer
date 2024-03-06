@@ -127,9 +127,15 @@ class _ContentScreenState extends State<ContentScreen> {
                       Theme.of(context).colorScheme.background,
                       Theme.of(context).colorScheme.background,
                       Theme.of(context).colorScheme.background,
-                      Theme.of(context).colorScheme.background.withOpacity(0.75),
+                      Theme.of(context)
+                          .colorScheme
+                          .background
+                          .withOpacity(0.75),
                       Theme.of(context).colorScheme.background.withOpacity(0.5),
-                      Theme.of(context).colorScheme.background.withOpacity(0.25),
+                      Theme.of(context)
+                          .colorScheme
+                          .background
+                          .withOpacity(0.25),
                       Theme.of(context).colorScheme.background.withOpacity(0),
                     ],
                   ),
@@ -137,27 +143,28 @@ class _ContentScreenState extends State<ContentScreen> {
               )),
         ),
       ),
-      floatingActionButtonLocation: CustomFabLocation(),
-      floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
-      floatingActionButton: _showFab
-          ? (_isAtBottom
-              ? FloatingActionButton(
-                  backgroundColor: AppColor.secondarySnakeColor.withOpacity(0.5),
-                  foregroundColor: Colors.black,
-                  onPressed: _scrollUp,
-                  child: const Icon(Icons.arrow_upward),
-                )
-              : FloatingActionButton(
-                  backgroundColor: AppColor.secondarySnakeColor.withOpacity(0.5),
-                  foregroundColor: Colors.black,
-                  onPressed: _scrollDown,
-                  child: const Icon(Icons.arrow_downward),
-                ))
-          : null,
+      // floatingActionButtonLocation: CustomFabLocation(),
+      // floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
+      // floatingActionButton: _showFab
+      //     ? (_isAtBottom
+      //         ? FloatingActionButton(
+      //             backgroundColor:
+      //                 AppColor.secondarySnakeColor.withOpacity(0.5),
+      //             foregroundColor: Colors.black,
+      //             onPressed: _scrollUp,
+      //             child: const Icon(Icons.arrow_upward),
+      //           )
+      //         : FloatingActionButton(
+      //             backgroundColor:
+      //                 AppColor.secondarySnakeColor.withOpacity(0.5),
+      //             foregroundColor: Colors.black,
+      //             onPressed: _scrollDown,
+      //             child: const Icon(Icons.arrow_downward),
+      //           ))
+      //     : null,
       extendBodyBehindAppBar: true,
-      
       body: SingleChildScrollView(
-        controller: _scrollController,
+        // controller: _scrollController,
         child: Column(
           children: [
             // ElevatedButton(
@@ -230,7 +237,7 @@ class _ContentScreenState extends State<ContentScreen> {
                                   "assets/icons/pre_test.png",
                                   "pre_test_$i",
                                   "แบบทดสอบก่อนเรียนบทที่ $i",
-                                  "3/10 คะแนน | 15/3/2024 11:53น.",
+                                  "3/10 คะแนน | 15/3/2024",
                                   TestingScreen.preTest[i - 1],
                                   context,
                                   i,
@@ -314,9 +321,15 @@ class _ContentScreenState extends State<ContentScreen> {
       ).then((_) => setState(() {})),
       title: Text(
         title,
-        style: const TextStyle(fontWeight: FontWeight.bold),
+        style: const TextStyle(
+            fontWeight: FontWeight.bold, overflow: TextOverflow.ellipsis),
       ),
-      subtitle: Text(subtitle),
+      subtitle: Text(
+        subtitle,
+        style: const TextStyle(
+          overflow: TextOverflow.ellipsis,
+        ),
+      ),
       trailing: type == 'Lesson'
           ? FutureBuilder<bool>(
               future: _ContentScreenState.checkLessonReadStatus(
@@ -354,12 +367,15 @@ String _getGreetingWord() {
   }
 }
 
-
 class CustomFabLocation extends FloatingActionButtonLocation {
   @override
   Offset getOffset(ScaffoldPrelayoutGeometry scaffoldGeometry) {
-    final double fabX = scaffoldGeometry.scaffoldSize.width - scaffoldGeometry.floatingActionButtonSize.width - 16;
-    final double fabY = scaffoldGeometry.scaffoldSize.height - scaffoldGeometry.floatingActionButtonSize.height - 120;
+    final double fabX = scaffoldGeometry.scaffoldSize.width -
+        scaffoldGeometry.floatingActionButtonSize.width -
+        16;
+    final double fabY = scaffoldGeometry.scaffoldSize.height -
+        scaffoldGeometry.floatingActionButtonSize.height -
+        120;
     return Offset(fabX, fabY);
   }
 }
