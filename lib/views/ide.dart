@@ -33,7 +33,7 @@ class _IDEScreenState extends State<IDEScreen>
       },
       child: Scaffold(
         appBar: AppBar(
-          surfaceTintColor: Colors.white,
+          surfaceTintColor: Colors.transparent,
           centerTitle: true,
           title: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -99,7 +99,8 @@ class _IDEScreenState extends State<IDEScreen>
                   ),
                 ),
               ),
-            )
+            ),
+            const SizedBox(height: 150),
           ],
         ),
       ),

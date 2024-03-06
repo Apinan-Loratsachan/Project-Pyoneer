@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pyoneer/models/navigation_bar_icon_animation.dart';
@@ -81,8 +82,8 @@ class _HomeScreenState extends State<HomeScreen> {
         return BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
           child: AlertDialog(
-            surfaceTintColor: Colors.transparent,
-            backgroundColor: Colors.white.withOpacity(0.5),
+              surfaceTintColor: Colors.transparent,
+              backgroundColor: Colors.white.withOpacity(0.5),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
@@ -159,6 +160,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             "assets/icons/pyoneer_text.png",
                             fit: BoxFit.cover,
                             height: 40,
+                            
                           ),
                           "pyoneer_text-title"),
                     ],
@@ -254,6 +256,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                   toolbarHeight: 60,
                 ),
+          extendBody: true,
           body: PageView(
             controller: pageController,
             onPageChanged: (int index) {
@@ -264,37 +267,77 @@ class _HomeScreenState extends State<HomeScreen> {
             },
             children: _children,
           ),
-          bottomNavigationBar: NavigationBar(
-            surfaceTintColor: Colors.white,
-            indicatorColor: AppColor.primarSnakeColor.withOpacity(0.5),
-            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-            labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
-            onDestinationSelected: onDestinationSelected,
-            selectedIndex: currentIndex,
-            destinations: <Widget>[
-              NavigationDestination(
-                icon: AnimatedNavigationIcon(
-                  icon: FontAwesomeIcons.solidCompass,
-                  selectedIcon: FontAwesomeIcons.compass,
-                  isSelected: currentIndex == 0,
+          bottomNavigationBar: Stack(
+            children: [
+              IgnorePointer(
+                ignoring: true,
+                child: Container(
+                  height: 150,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.bottomCenter,
+                      end: Alignment.topCenter,
+                      colors: [
+                        Theme.of(context).colorScheme.background,
+                        Theme.of(context).colorScheme.background,
+                        Theme.of(context).colorScheme.background,
+                        Theme.of(context).colorScheme.background,
+                        Theme.of(context)
+                            .colorScheme
+                            .background
+                            .withOpacity(0.75),
+                        Theme.of(context).colorScheme.background.withOpacity(0.5),
+                        Theme.of(context)
+                            .colorScheme
+                            .background
+                            .withOpacity(0.25),
+                        Theme.of(context).colorScheme.background.withOpacity(0),
+                      ],
+                    ),
+                  ),
                 ),
-                label: 'สำรวจ',
               ),
-              NavigationDestination(
-                icon: AnimatedNavigationIcon(
-                  icon: FontAwesomeIcons.book,
-                  selectedIcon: FontAwesomeIcons.bookOpen,
-                  isSelected: currentIndex == 1,
+              SizedBox(
+                height: 150,
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: NavigationBar(
+                    surfaceTintColor: Colors.transparent,
+                    indicatorColor: AppColor.primarSnakeColor.withOpacity(0.5),
+                    // backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                    backgroundColor: Colors.transparent,
+                    labelBehavior:
+                        NavigationDestinationLabelBehavior.onlyShowSelected,
+                    onDestinationSelected: onDestinationSelected,
+                    selectedIndex: currentIndex,
+                    destinations: <Widget>[
+                      NavigationDestination(
+                        icon: AnimatedNavigationIcon(
+                          icon: FontAwesomeIcons.solidCompass,
+                          selectedIcon: FontAwesomeIcons.compass,
+                          isSelected: currentIndex == 0,
+                        ),
+                        label: 'สำรวจ',
+                      ),
+                      NavigationDestination(
+                        icon: AnimatedNavigationIcon(
+                          icon: FontAwesomeIcons.book,
+                          selectedIcon: FontAwesomeIcons.bookOpen,
+                          isSelected: currentIndex == 1,
+                        ),
+                        label: 'บทเรียน',
+                      ),
+                      NavigationDestination(
+                        icon: AnimatedNavigationIcon(
+                          icon: FontAwesomeIcons.code,
+                          selectedIcon: FontAwesomeIcons.laptopCode,
+                          isSelected: currentIndex == 2,
+                        ),
+                        label: 'IDE',
+                      ),
+                    ],
+                  ),
                 ),
-                label: 'บทเรียน',
-              ),
-              NavigationDestination(
-                icon: AnimatedNavigationIcon(
-                  icon: FontAwesomeIcons.code,
-                  selectedIcon: FontAwesomeIcons.laptopCode,
-                  isSelected: currentIndex == 2,
-                ),
-                label: 'IDE',
               ),
             ],
           ),

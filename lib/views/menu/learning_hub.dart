@@ -257,12 +257,13 @@ class _LearningHubScreenState extends State<LearningHubScreen>
                                           },
                                         ),
                                       ),
-                                      title: Text(learningItem[i].title),
-                                      titleTextStyle: const TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold,
-                                          fontFamily: 'Noto Sans Thai'),
+                                      title: Text(
+                                        learningItem[i].title,
+                                        style: const TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: 'Noto Sans Thai'),
+                                      ),
                                       subtitle: Text(learningItem[i].subtitle),
                                       trailing: const Icon(FontAwesomeIcons
                                           .arrowUpRightFromSquare),

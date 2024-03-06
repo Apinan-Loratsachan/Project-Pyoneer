@@ -254,11 +254,12 @@ class _NewsScreenState extends State<NewsScreen>
                                           },
                                         ),
                                       ),
-                                      title: Text(newsItems[i].topic!),
-                                      titleTextStyle: const TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 14,
-                                          fontFamily: 'Noto Sans Thai'),
+                                      title: Text(
+                                        newsItems[i].topic!,
+                                        style: const TextStyle(
+                                            fontSize: 14,
+                                            fontFamily: 'Noto Sans Thai'),
+                                      ),
                                       onTap: () {
                                         LaunchURL.launchSrtingURL(
                                             newsItems[i].newsLink);

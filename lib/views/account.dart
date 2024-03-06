@@ -6,7 +6,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pyoneer/components/user_profile.dart';
 import 'package:pyoneer/services/auth.dart';
 import 'package:pyoneer/services/user_data.dart';
-import 'package:pyoneer/utils/color.dart';
 import 'package:pyoneer/views/login.dart';
 
 class AccountSettigScreen extends StatefulWidget {
@@ -17,7 +16,6 @@ class AccountSettigScreen extends StatefulWidget {
 }
 
 class _AccountSettigScreenState extends State<AccountSettigScreen> {
-  
   Future<void> deleteTestResults(String userEmail) async {
     var testResultCollection =
         FirebaseFirestore.instance.collection('testResult');
@@ -68,14 +66,14 @@ class _AccountSettigScreenState extends State<AccountSettigScreen> {
                       ? Container()
                       : ListTile(
                           title: ElevatedButton(
-                            style: ButtonStyle(
-                              overlayColor: MaterialStateColor.resolveWith(
-                                  (states) => AppColor.primarSnakeColor),
-                              iconColor: MaterialStateColor.resolveWith(
-                                  (states) => Colors.black),
-                              foregroundColor: MaterialStateColor.resolveWith(
-                                  (states) => Colors.black),
-                            ),
+                            // style: ButtonStyle(
+                            //   overlayColor: MaterialStateColor.resolveWith(
+                            //       (states) => AppColor.primarSnakeColor),
+                            //   iconColor: MaterialStateColor.resolveWith(
+                            //       (states) => Colors.black),
+                            //   foregroundColor: MaterialStateColor.resolveWith(
+                            //       (states) => Colors.black),
+                            // ),
                             onPressed: () async {
                               await Clipboard.setData(
                                   ClipboardData(text: UserData.uid));
@@ -129,19 +127,21 @@ class _AccountSettigScreenState extends State<AccountSettigScreen> {
                                   showDialog<bool>(
                                     context: context,
                                     builder: (context) => AlertDialog(
-                                      backgroundColor: Colors.white,
-                                      surfaceTintColor: Colors.white,
-                                      title:
-                                          const Text('ลบประวัติการอ่านบทเรียนและบททดสอบ'),
+                                      // backgroundColor: Colors.white,
+                                      // surfaceTintColor: Colors.white,
+                                      title: const Text(
+                                          'ลบประวัติการอ่านบทเรียนและบททดสอบ'),
                                       content: const Text(
                                           'คุณต้องการลบประวัติการอ่านบทเรียนและแบบทดสอบทั้งหมดใช่หรือไม่?'),
                                       actions: <Widget>[
                                         TextButton(
                                           onPressed: () =>
                                               Navigator.of(context).pop(false),
-                                          child: const Text('ยกเลิก',
-                                              style: TextStyle(
-                                                  color: Colors.black)),
+                                          child: const Text(
+                                            'ยกเลิก',
+                                            // style:
+                                            //     TextStyle(color: Colors.black),
+                                          ),
                                         ),
                                         TextButton(
                                           onPressed: () async {
@@ -176,8 +176,7 @@ class _AccountSettigScreenState extends State<AccountSettigScreen> {
                                                 msg:
                                                     "ลบประวัติการอ่านบทเรียนและบททดสอบทั้งหมดแล้ว");
                                           },
-                                          child: const Text(
-                                              'ลบประวัติ',
+                                          child: const Text('ลบประวัติ',
                                               style:
                                                   TextStyle(color: Colors.red)),
                                         ),
@@ -235,8 +234,8 @@ class _AccountSettigScreenState extends State<AccountSettigScreen> {
                             showDialog<bool>(
                               context: context,
                               builder: (context) => AlertDialog(
-                                backgroundColor: Colors.white,
-                                surfaceTintColor: Colors.white,
+                                // backgroundColor: Colors.white,
+                                // surfaceTintColor: Colors.white,
                                 title: const Text('ยืนยันการออกจากระบบ'),
                                 content: const Text(
                                     'คุณต้องการออกจากระบบใช่หรือไม่?'),
@@ -244,8 +243,10 @@ class _AccountSettigScreenState extends State<AccountSettigScreen> {
                                   TextButton(
                                     onPressed: () =>
                                         Navigator.of(context).pop(false),
-                                    child: const Text('ยกเลิก',
-                                        style: TextStyle(color: Colors.black)),
+                                    child: const Text(
+                                      'ยกเลิก',
+                                      // style: TextStyle(color: Colors.black),
+                                    ),
                                   ),
                                   TextButton(
                                     onPressed: () {

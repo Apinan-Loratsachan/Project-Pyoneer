@@ -42,7 +42,7 @@ class _ContentScreenState extends State<ContentScreen> {
 
   void _startHideFabTimer() {
     _hideFabTimer?.cancel();
-    _hideFabTimer = Timer(const Duration(seconds: 2), () {
+    _hideFabTimer = Timer(const Duration(seconds: 1), () {
       setState(() => _showFab = false);
     });
   }
@@ -74,48 +74,87 @@ class _ContentScreenState extends State<ContentScreen> {
   Widget build(BuildContext context) {
     String greetingWord = _getGreetingWord();
     return Scaffold(
-      appBar: AppBar(
-        title: Column(
-          children: [
-            Text(
-              "$greetingWord ${UserData.userName}",
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                shadows: [
-                  Shadow(
-                    blurRadius: 20.0,
-                    color: AppColor.primarSnakeColor.withOpacity(0.5),
-                    offset: const Offset(0.0, 5.0),
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(150),
+        child: IgnorePointer(
+          ignoring: true,
+          child: AppBar(
+              title: Column(
+                children: [
+                  Text(
+                    "$greetingWord ${UserData.userName}",
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      shadows: [
+                        Shadow(
+                          blurRadius: 20.0,
+                          color: AppColor.primarSnakeColor.withOpacity(0.5),
+                          offset: const Offset(0.0, 5.0),
+                        ),
+                      ],
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      // color: Colors.black,
+                    ),
                   ),
+                  const SizedBox(height: 20),
+                  Text(
+                    "บทเรียน",
+                    style: TextStyle(shadows: [
+                      Shadow(
+                        blurRadius: 20.0,
+                        color: Theme.of(context).colorScheme.background,
+                        offset: const Offset(0.0, 0.0),
+                      ),
+                    ]),
+                  ),
+                  // const SizedBox(height: 50),
                 ],
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                // color: Colors.black,
               ),
-            ),
-            const SizedBox(height: 20),
-            const Text("บทเรียน")
-          ],
+              centerTitle: true,
+              surfaceTintColor: Colors.transparent,
+              backgroundColor: Colors.transparent,
+              toolbarHeight: 100,
+              elevation: 0,
+              // backgroundColor: Colors.transparent,
+              flexibleSpace: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Theme.of(context).colorScheme.background,
+                      Theme.of(context).colorScheme.background,
+                      Theme.of(context).colorScheme.background,
+                      Theme.of(context).colorScheme.background,
+                      Theme.of(context).colorScheme.background.withOpacity(0.75),
+                      Theme.of(context).colorScheme.background.withOpacity(0.5),
+                      Theme.of(context).colorScheme.background.withOpacity(0.25),
+                      Theme.of(context).colorScheme.background.withOpacity(0),
+                    ],
+                  ),
+                ),
+              )),
         ),
-        centerTitle: true,
-        surfaceTintColor: Colors.transparent,
-        toolbarHeight: 100,
       ),
+      floatingActionButtonLocation: CustomFabLocation(),
+      floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
       floatingActionButton: _showFab
           ? (_isAtBottom
               ? FloatingActionButton(
-                  backgroundColor: AppColor.primarSnakeColor.withOpacity(0.5),
+                  backgroundColor: AppColor.secondarySnakeColor.withOpacity(0.5),
                   foregroundColor: Colors.black,
                   onPressed: _scrollUp,
                   child: const Icon(Icons.arrow_upward),
                 )
               : FloatingActionButton(
-                  backgroundColor: AppColor.primarSnakeColor.withOpacity(0.5),
+                  backgroundColor: AppColor.secondarySnakeColor.withOpacity(0.5),
                   foregroundColor: Colors.black,
                   onPressed: _scrollDown,
                   child: const Icon(Icons.arrow_downward),
                 ))
           : null,
+      extendBodyBehindAppBar: true,
       
       body: SingleChildScrollView(
         controller: _scrollController,
@@ -127,6 +166,7 @@ class _ContentScreenState extends State<ContentScreen> {
             //         MaterialPageRoute(
             //             builder: (context) => const Testing2Screen())),
             //     child: const Text('Test')),
+            const SizedBox(height: 120),
             Column(
               children: [
                 TimelineTile(
@@ -179,6 +219,11 @@ class _ContentScreenState extends State<ContentScreen> {
                           padding: const EdgeInsets.all(8.0),
                           child: Column(
                             children: [
+                              // const Divider(
+                              //   indent: 20,
+                              //   endIndent: 20,
+                              // ),
+                              // const SizedBox(height: 10),
                               Card(
                                 elevation: 10,
                                 child: lessonTitle(
@@ -225,212 +270,9 @@ class _ContentScreenState extends State<ContentScreen> {
                           ),
                         ),
                       ),
+                    const SizedBox(height: 120),
                   ],
                 ),
-                // TimelineTile(
-                //   alignment: TimelineAlign.manual,
-                //   lineXY: 0.06,
-                //   // isFirst: true,
-                //   // isLast: true,
-                //   indicatorStyle: const IndicatorStyle(
-                //     width: 40,
-                //     color: Colors.blue,
-                //     indicatorXY: 0.5,
-                //   ),
-                //   endChild: Padding(
-                //     padding: const EdgeInsets.all(8.0),
-                //     child: Card(
-                //       child: Column(
-                //         children: [
-                //           lessonTitle(
-                //             "assets/icons/pre_test.png",
-                //             "pre_test_${2}",
-                //             "แบบทดสอบก่อนเรียนบทที่ ${2}",
-                //             "ทดสอบความรู้ก่อนที่คุณจะเรียนบทเรียน",
-                //             const Testing2Screen(),
-                //             context,
-                //             2,
-                //             'Pre-test',
-                //           ),
-                //           lessonTitle(
-                //             LessonComponent.lessonContent[2].imageSrc,
-                //             LessonComponent.lessonContent[2].heroTag,
-                //             LessonComponent.lessonContent[2].title,
-                //             LessonComponent.lessonContent[2].subTitle,
-                //             LessonComponent.lessonContent[2].targetScreen,
-                //             context,
-                //             2,
-                //             'Lesson',
-                //           ),
-                //           lessonTitle(
-                //             "assets/icons/post_test.png",
-                //             "post_test_${2}",
-                //             "แบบทดสอบหลังเรียนบทที่ ${2}",
-                //             "ทดสอบความรู้หลังจากที่คุณได้เรียนบทเรียน",
-                //             const Testing2Screen(),
-                //             context,
-                //             2,
-                //             'Post-test',
-                //           ),
-                //         ],
-                //       ),
-                //     ),
-                //   ),
-                // ),
-                // TimelineTile(
-                //   alignment: TimelineAlign.manual,
-                //   lineXY: 0.06,
-                //   // isFirst: true,
-                //   // isLast: true,
-                //   indicatorStyle: const IndicatorStyle(
-                //     width: 40,
-                //     color: Colors.blue,
-                //     indicatorXY: 0.5,
-                //   ),
-                //   endChild: Padding(
-                //     padding: const EdgeInsets.all(8.0),
-                //     child: Card(
-                //       child: Column(
-                //         children: [
-                //           lessonTitle(
-                //             "assets/icons/pre_test.png",
-                //             "pre_test_${3}",
-                //             "แบบทดสอบก่อนเรียนบทที่ ${3}",
-                //             "ทดสอบความรู้ก่อนที่คุณจะเรียนบทเรียน",
-                //             const Testing2Screen(),
-                //             context,
-                //             3,
-                //             'Pre-test',
-                //           ),
-                //           lessonTitle(
-                //             LessonComponent.lessonContent[3].imageSrc,
-                //             LessonComponent.lessonContent[3].heroTag,
-                //             LessonComponent.lessonContent[3].title,
-                //             LessonComponent.lessonContent[3].subTitle,
-                //             LessonComponent.lessonContent[3].targetScreen,
-                //             context,
-                //             3,
-                //             'Lesson',
-                //           ),
-                //           lessonTitle(
-                //             "assets/icons/post_test.png",
-                //             "post_test_${3}",
-                //             "แบบทดสอบหลังเรียนบทที่ ${3}",
-                //             "ทดสอบความรู้หลังจากที่คุณได้เรียนบทเรียน",
-                //             const Testing2Screen(),
-                //             context,
-                //             3,
-                //             'Post-test',
-                //           ),
-                //         ],
-                //       ),
-                //     ),
-                //   ),
-                // ),
-                // TimelineTile(
-                //   alignment: TimelineAlign.manual,
-                //   lineXY: 0.06,
-                //   // isFirst: true,
-                //   // isLast: true,
-                //   indicatorStyle: const IndicatorStyle(
-                //     width: 40,
-                //     color: Colors.blue,
-                //     indicatorXY: 0.5,
-                //   ),
-                //   endChild: Padding(
-                //     padding: const EdgeInsets.all(8.0),
-                //     child: Card(
-                //       child: Column(
-                //         children: [
-                //           lessonTitle(
-                //             "assets/icons/pre_test.png",
-                //             "pre_test_${4}",
-                //             "แบบทดสอบก่อนเรียนบทที่ ${4}",
-                //             "ทดสอบความรู้ก่อนที่คุณจะเรียนบทเรียน",
-                //             const Testing2Screen(),
-                //             context,
-                //             4,
-                //             'Pre-test',
-                //           ),
-                //           lessonTitle(
-                //             LessonComponent.lessonContent[4].imageSrc,
-                //             LessonComponent.lessonContent[4].heroTag,
-                //             LessonComponent.lessonContent[4].title,
-                //             LessonComponent.lessonContent[4].subTitle,
-                //             LessonComponent.lessonContent[4].targetScreen,
-                //             context,
-                //             4,
-                //             'Lesson',
-                //           ),
-                //           lessonTitle(
-                //             "assets/icons/post_test.png",
-                //             "post_test_${4}",
-                //             "แบบทดสอบหลังเรียนบทที่ ${4}",
-                //             "ทดสอบความรู้หลังจากที่คุณได้เรียนบทเรียน",
-                //             const Testing2Screen(),
-                //             context,
-                //             4,
-                //             'Post-test',
-                //           ),
-                //         ],
-                //       ),
-                //     ),
-                //   ),
-                // ),
-                // TimelineTile(
-                //   alignment: TimelineAlign.manual,
-                //   lineXY: 0.06,
-                //   // isFirst: true,
-                //   isLast: true,
-                //   indicatorStyle: IndicatorStyle(
-                //     width: 40,
-                //     color: Colors.blue,
-                //     indicatorXY: 0.5,
-                //     iconStyle: IconStyle(
-                //       color: Colors.white,
-                //       iconData: Icons.lock_outline,
-                //     ),
-                //   ),
-                //   endChild: Padding(
-                //     padding: const EdgeInsets.all(8.0),
-                //     child: Card(
-                //       child: Column(
-                //         children: [
-                //           lessonTitle(
-                //             "assets/icons/pre_test.png",
-                //             "pre_test_${5}",
-                //             "แบบทดสอบก่อนเรียนบทที่ ${5}",
-                //             "5/10 คะแนน",
-                //             const Testing2Screen(),
-                //             context,
-                //             5,
-                //             'Pre-test',
-                //           ),
-                //           lessonTitle(
-                //             LessonComponent.lessonContent[5].imageSrc,
-                //             LessonComponent.lessonContent[5].heroTag,
-                //             LessonComponent.lessonContent[5].title,
-                //             LessonComponent.lessonContent[5].subTitle,
-                //             LessonComponent.lessonContent[5].targetScreen,
-                //             context,
-                //             5,
-                //             'Lesson',
-                //           ),
-                //           lessonTitle(
-                //             "assets/icons/post_test.png",
-                //             "post_test_${5}",
-                //             "แบบทดสอบหลังเรียนบทที่ ${5}",
-                //             "ยังไม่ได้ทำแบบทดสอบ",
-                //             const Testing2Screen(),
-                //             context,
-                //             5,
-                //             'Post-test',
-                //           ),
-                //         ],
-                //       ),
-                //     ),
-                //   ),
-                // ),
               ],
             ),
           ],
@@ -483,11 +325,9 @@ class _ContentScreenState extends State<ContentScreen> {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const SizedBox(); // Or some placeholder
                 } else if (snapshot.data == true) {
-                  return const Icon(
-                    Icons.check,
-                    // color: Color(0xFFae2325)
-                    color: Colors.black
-                  );
+                  return const Icon(Icons.check,
+                      // color: Color(0xFFae2325)
+                      color: Colors.black);
                 } else {
                   return const SizedBox.shrink();
                   // return const Icon(Icons.radio_button_unchecked,
@@ -511,5 +351,15 @@ String _getGreetingWord() {
     return '🌥️ สายัณห์สวัสดิ์';
   } else {
     return '🌙 สวัสดียามค่ำ';
+  }
+}
+
+
+class CustomFabLocation extends FloatingActionButtonLocation {
+  @override
+  Offset getOffset(ScaffoldPrelayoutGeometry scaffoldGeometry) {
+    final double fabX = scaffoldGeometry.scaffoldSize.width - scaffoldGeometry.floatingActionButtonSize.width - 16;
+    final double fabY = scaffoldGeometry.scaffoldSize.height - scaffoldGeometry.floatingActionButtonSize.height - 120;
+    return Offset(fabX, fabY);
   }
 }
