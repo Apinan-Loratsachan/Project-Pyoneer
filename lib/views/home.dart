@@ -82,8 +82,8 @@ class _HomeScreenState extends State<HomeScreen> {
         return BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
           child: AlertDialog(
-              surfaceTintColor: Colors.transparent,
-              backgroundColor: Colors.white.withOpacity(0.5),
+              surfaceTintColor: Theme.of(context).colorScheme.background,
+              backgroundColor: Theme.of(context).colorScheme.background.withOpacity(0.5),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
