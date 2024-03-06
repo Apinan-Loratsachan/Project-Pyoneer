@@ -400,17 +400,54 @@ class TestingComponent {
                 color: Theme.of(context).colorScheme.onPrimary,
                 fontSize: 16,
                 fontFamily: 'Noto Sans Thai'),
-            children: const <TextSpan>[
+            children: <TextSpan>[
               TextSpan(
                 text:
-                    'คุณสามารถออกจากหน้านี้ได้อย่างปลอดภัย คำตอบของคุณจะถูกบันทึกไว้และ',
-                // style: TextStyle(fontSize: 16),
+                    'คุณสามารถออกจากหน้านี้ได้อย่าง',
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onBackground,
+                ),
               ),
-              TextSpan(
-                text: 'คุณสามารถกลับมาทำต่อได้ทุกเมื่อ!',
+              const TextSpan(
+                text: 'ปลอดภัย',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   color: Colors.green,
+                ),
+              ),
+              TextSpan(
+                text:
+                    ' คำตอบของคุณจะถูก',
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onBackground,
+                ),
+              ),
+              const TextSpan(
+                text: 'บันทึก',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.green,
+                ),
+              ),
+              TextSpan(
+                text:
+                    'ไว้และคุณสามารถกลับมา',
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onBackground,
+                ),
+              ),
+              const TextSpan(
+                text: 'ทำต่อได้',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.green,
+                ),
+              ),
+              TextSpan(
+                text:
+                    'ทุกเมื่อ!',
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onBackground,
                 ),
               ),
             ],
@@ -420,7 +457,7 @@ class TestingComponent {
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
             child: const Text(
-              'ยกเลิก',
+              'ทำบททดสอบต่อ',
               style: TextStyle(
                 // color: Colors.black,
               ),
