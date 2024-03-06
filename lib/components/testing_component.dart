@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:pyoneer/utils/type_writer_text.dart';
+import 'package:pyoneer/views/testings/testing1.dart';
+import 'package:pyoneer/views/testings/testing2.dart';
+import 'package:pyoneer/views/testings/testing3.dart';
+import 'package:pyoneer/views/testings/testing4.dart';
+import 'package:pyoneer/views/testings/testing5.dart';
 
 class TestingContent {
   String proposition;
@@ -13,6 +18,24 @@ class TestingContent {
     required this.correctChoice,
     required this.imagePath,
   });
+}
+
+class TestingScreen {
+  static List<Widget> preTest = [
+    const Testing1Screen(isPreTest: true),
+    const Testing2Screen(isPreTest: true),
+    const Testing3Screen(isPreTest: true),
+    const Testing4Screen(isPreTest: true),
+    const Testing5Screen(isPreTest: true),
+  ];
+
+  static List<Widget> postTest = [
+    const Testing1Screen(isPreTest: false),
+    const Testing2Screen(isPreTest: false),
+    const Testing3Screen(isPreTest: false),
+    const Testing4Screen(isPreTest: false),
+    const Testing5Screen(isPreTest: false),
+  ];
 }
 
 class Testing1 {
@@ -135,6 +158,186 @@ class Testing2 {
   ];
 }
 
+class Testing3 {
+  static List<TestingContent> testingContent = [
+    TestingContent(
+      proposition: "จากรูปต่อไปนี้ขัอใดถูกต้อง",
+      choice: [
+        "proposition1 choice1",
+        "proposition1 choice2",
+        "proposition1 choice3",
+        "proposition1 choice4"
+      ],
+      correctChoice: "proposition1 choice1",
+      imagePath: 'assets/icons/pyoneer_snake.png',
+    ),
+    TestingContent(
+      proposition: "proposition2",
+      choice: [
+        "proposition2 choice1",
+        "proposition2 choice2",
+        "proposition2 choice3",
+        "proposition2 choice4"
+      ],
+      correctChoice: "proposition2 choice4",
+      imagePath: '',
+    ),
+    TestingContent(
+      proposition: "proposition3",
+      choice: [
+        "proposition3 choice1",
+        "proposition3 choice2",
+        "proposition3 choice3",
+        "proposition3 choice4"
+      ],
+      correctChoice: "proposition3 choice3",
+      imagePath: '',
+    ),
+    TestingContent(
+      proposition: "proposition4",
+      choice: [
+        "proposition4 choice1",
+        "proposition4 choice2",
+        "proposition4 choice3",
+        "proposition4 choice4"
+      ],
+      correctChoice: "proposition4 choice2",
+      imagePath: '',
+    ),
+    TestingContent(
+      proposition: "proposition5",
+      choice: [
+        "proposition5 choice1",
+        "proposition5 choice2",
+        "proposition5 choice3",
+        "proposition5 choice4"
+      ],
+      correctChoice: "proposition5 choice1",
+      imagePath: '',
+    ),
+  ];
+}
+
+class Testing4 {
+  static List<TestingContent> testingContent = [
+    TestingContent(
+      proposition: "จากรูปต่อไปนี้ขัอใดถูกต้อง",
+      choice: [
+        "proposition1 choice1",
+        "proposition1 choice2",
+        "proposition1 choice3",
+        "proposition1 choice4"
+      ],
+      correctChoice: "proposition1 choice1",
+      imagePath: 'assets/icons/pyoneer_snake.png',
+    ),
+    TestingContent(
+      proposition: "proposition2",
+      choice: [
+        "proposition2 choice1",
+        "proposition2 choice2",
+        "proposition2 choice3",
+        "proposition2 choice4"
+      ],
+      correctChoice: "proposition2 choice4",
+      imagePath: '',
+    ),
+    TestingContent(
+      proposition: "proposition3",
+      choice: [
+        "proposition3 choice1",
+        "proposition3 choice2",
+        "proposition3 choice3",
+        "proposition3 choice4"
+      ],
+      correctChoice: "proposition3 choice3",
+      imagePath: '',
+    ),
+    TestingContent(
+      proposition: "proposition4",
+      choice: [
+        "proposition4 choice1",
+        "proposition4 choice2",
+        "proposition4 choice3",
+        "proposition4 choice4"
+      ],
+      correctChoice: "proposition4 choice2",
+      imagePath: '',
+    ),
+    TestingContent(
+      proposition: "proposition5",
+      choice: [
+        "proposition5 choice1",
+        "proposition5 choice2",
+        "proposition5 choice3",
+        "proposition5 choice4"
+      ],
+      correctChoice: "proposition5 choice1",
+      imagePath: '',
+    ),
+  ];
+}
+
+class Testing5 {
+  static List<TestingContent> testingContent = [
+    TestingContent(
+      proposition: "จากรูปต่อไปนี้ขัอใดถูกต้อง",
+      choice: [
+        "proposition1 choice1",
+        "proposition1 choice2",
+        "proposition1 choice3",
+        "proposition1 choice4"
+      ],
+      correctChoice: "proposition1 choice1",
+      imagePath: 'assets/icons/pyoneer_snake.png',
+    ),
+    TestingContent(
+      proposition: "proposition2",
+      choice: [
+        "proposition2 choice1",
+        "proposition2 choice2",
+        "proposition2 choice3",
+        "proposition2 choice4"
+      ],
+      correctChoice: "proposition2 choice4",
+      imagePath: '',
+    ),
+    TestingContent(
+      proposition: "proposition3",
+      choice: [
+        "proposition3 choice1",
+        "proposition3 choice2",
+        "proposition3 choice3",
+        "proposition3 choice4"
+      ],
+      correctChoice: "proposition3 choice3",
+      imagePath: '',
+    ),
+    TestingContent(
+      proposition: "proposition4",
+      choice: [
+        "proposition4 choice1",
+        "proposition4 choice2",
+        "proposition4 choice3",
+        "proposition4 choice4"
+      ],
+      correctChoice: "proposition4 choice2",
+      imagePath: '',
+    ),
+    TestingContent(
+      proposition: "proposition5",
+      choice: [
+        "proposition5 choice1",
+        "proposition5 choice2",
+        "proposition5 choice3",
+        "proposition5 choice4"
+      ],
+      correctChoice: "proposition5 choice1",
+      imagePath: '',
+    ),
+  ];
+}
+
 class TestingComponent {
   static AppBar testingAppbar(
       String title, String subTitleText, BuildContext context) {
@@ -188,16 +391,16 @@ class TestingComponent {
     return await showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: Colors.white,
-        surfaceTintColor: Colors.white,
+        // backgroundColor: Colors.white,
+        // surfaceTintColor: Colors.white,
         title: const Text('ยืนยันการออกจากบททดสอบ?'),
         content: RichText(
-          text: const TextSpan(
+          text: TextSpan(
             style: TextStyle(
-                color: Colors.black,
+                color: Theme.of(context).colorScheme.onPrimary,
                 fontSize: 16,
                 fontFamily: 'Noto Sans Thai'),
-            children: <TextSpan>[
+            children: const <TextSpan>[
               TextSpan(
                 text:
                     'คุณสามารถออกจากหน้านี้ได้อย่างปลอดภัย คำตอบของคุณจะถูกบันทึกไว้และ',
@@ -205,8 +408,10 @@ class TestingComponent {
               ),
               TextSpan(
                 text: 'คุณสามารถกลับมาทำต่อได้ทุกเมื่อ!',
-                style:
-                    TextStyle(fontWeight: FontWeight.bold, color: Colors.green),
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.green,
+                ),
               ),
             ],
           ),
@@ -214,7 +419,12 @@ class TestingComponent {
         actions: <Widget>[
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
-            child: const Text('ยกเลิก', style: TextStyle(color: Colors.black)),
+            child: const Text(
+              'ยกเลิก',
+              style: TextStyle(
+                // color: Colors.black,
+              ),
+            ),
           ),
           TextButton(
             onPressed: () {

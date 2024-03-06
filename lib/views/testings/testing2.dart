@@ -3,7 +3,8 @@ import 'package:pyoneer/components/testing_component.dart';
 import 'package:pyoneer/models/testing_model.dart';
 
 class Testing2Screen extends StatefulWidget {
-  const Testing2Screen({super.key});
+  final bool isPreTest;
+  const Testing2Screen({super.key, required this.isPreTest});
 
   @override
   State<Testing2Screen> createState() => _Testing2ScreenState();
@@ -14,11 +15,9 @@ class _Testing2ScreenState extends State<Testing2Screen> {
   Widget build(BuildContext context) {
     return TestingScreenModel(
       testingContent: Testing2.testingContent,
-      appBarTitle: "YYYPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
-      appBarSubTitle: "PPPYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY",
-      // appBarTitle: "PPPPPPPPP",
-      // appBarSubTitle: "YYYYYYYY",
-      isPreTest: true,
+      appBarTitle: "Test 2",
+      appBarSubTitle: "ก็บอกว่า Test 2 ไง",
+      isPreTest: widget.isPreTest,
       testId: 2,
     );
   }

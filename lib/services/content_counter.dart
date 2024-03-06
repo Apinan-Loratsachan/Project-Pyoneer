@@ -44,7 +44,7 @@ class ContentCounter {
         .instance
         .collection('testResult')
         .doc(UserData.email)
-        .collection("pre-test")
+        .collection(testType)
         .where('email', isEqualTo: email)
         .where('lessonTest', isEqualTo: lessonTest)
         .where('testType', isEqualTo: testType)

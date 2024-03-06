@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pyoneer/services/firebase_options.dart';
 import 'package:pyoneer/services/user_data.dart';
+import 'package:pyoneer/utils/color.dart';
 import 'package:pyoneer/views/home.dart';
 import 'package:pyoneer/views/login.dart';
 
@@ -26,7 +27,7 @@ void main() async {
     const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
       statusBarIconBrightness: Brightness.dark,
-      systemNavigationBarColor: Colors.white,
+      systemNavigationBarColor: Colors.transparent,
       systemNavigationBarDividerColor: Colors.transparent,
       systemNavigationBarIconBrightness: Brightness.dark,
     ),
@@ -51,7 +52,15 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       theme: ThemeData(
         fontFamily: 'Noto Sans Thai',
+        brightness: Brightness.light,
+        colorSchemeSeed: AppColor.primarSnakeColor
       ),
+      darkTheme: ThemeData(
+        fontFamily: 'Noto Sans Thai',
+        brightness: Brightness.dark,
+        colorSchemeSeed: AppColor.primarSnakeColor
+      ),
+      themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
       home: widget.initialScreen,
     );
