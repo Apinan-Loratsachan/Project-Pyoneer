@@ -59,6 +59,7 @@ dependencies:
   flutter_animate: ^4.5.0
   json_serializable: ^6.7.1
   draggable_scrollbar: ^0.1.0
+  youtube_player_flutter: ^9.0.0
   
 
 dev_dependencies:

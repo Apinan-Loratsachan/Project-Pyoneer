@@ -9,7 +9,6 @@ import 'package:pyoneer/views/home.dart';
 import 'package:pyoneer/views/login.dart';
 
 void main() async {
-  
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await UserData.loadUserData();
@@ -41,28 +40,29 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    final isDarkMode = MediaQuery.of(context).platformBrightness == Brightness.dark;
+    final isDarkMode =
+        MediaQuery.of(context).platformBrightness == Brightness.dark;
 
-        SystemChrome.setSystemUIOverlayStyle(
-   SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent,
-      statusBarIconBrightness: isDarkMode ? Brightness.light : Brightness.dark,
-      systemNavigationBarColor: Theme.of(context).colorScheme.onBackground,
-      systemNavigationBarDividerColor: Colors.transparent,
-      systemNavigationBarIconBrightness: isDarkMode ? Brightness.light : Brightness.dark,
-    ),
-  );
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness:
+            isDarkMode ? Brightness.light : Brightness.dark,
+        systemNavigationBarColor: Theme.of(context).colorScheme.onBackground,
+        systemNavigationBarDividerColor: Colors.transparent,
+        systemNavigationBarIconBrightness:
+            isDarkMode ? Brightness.light : Brightness.dark,
+      ),
+    );
     return MaterialApp(
       theme: ThemeData(
-        fontFamily: 'Noto Sans Thai',
-        brightness: Brightness.light,
-        colorSchemeSeed: AppColor.primarSnakeColor
-      ),
+          fontFamily: 'Noto Sans Thai',
+          brightness: Brightness.light,
+          colorSchemeSeed: AppColor.primarSnakeColor),
       darkTheme: ThemeData(
-        fontFamily: 'Noto Sans Thai',
-        brightness: Brightness.dark,
-        colorSchemeSeed: AppColor.primarSnakeColor
-      ),
+          fontFamily: 'Noto Sans Thai',
+          brightness: Brightness.dark,
+          colorSchemeSeed: AppColor.primarSnakeColor),
       themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
       home: widget.initialScreen,

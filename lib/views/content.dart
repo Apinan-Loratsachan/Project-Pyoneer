@@ -276,10 +276,13 @@ class _ContentScreenState extends State<ContentScreen> {
                                     Timestamp? timeStamp =
                                         snapshot.data?['timestamp'];
                                     DateTime? testDate = timeStamp?.toDate();
-                                    String subtitle = score != null &&
-                                            totalScore != null
-                                        ? "$score/$totalScore คะแนน | ${testDate?.day}/${testDate?.month}/${testDate!.year + 543} ${testDate.hour.toString().padLeft(2, '0')}:${testDate.minute.toString().padLeft(2, '0')}:${testDate.second.toString().padLeft(2, '0')}"
-                                        : "ยังไม่ได้ทำแบบทดสอบ";
+                                    String subtitle = "ยังไม่ได้ทำแบบทดสอบ";
+                                    if (score != null &&
+                                        totalScore != null &&
+                                        testDate != null) {
+                                      subtitle =
+                                          "$score/$totalScore คะแนน | ${testDate.day}/${testDate.month}/${testDate.year + 543} ${testDate.hour.toString().padLeft(2, '0')}:${testDate.minute.toString().padLeft(2, '0')}:${testDate.second.toString().padLeft(2, '0')}";
+                                    }
                                     return Card(
                                       elevation: 10,
                                       child: lessonTitle(

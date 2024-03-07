@@ -26,9 +26,11 @@ class _AccountSettigScreenState extends State<AccountSettigScreen> {
           .doc(userEmail)
           .collection(testType[i])
           .get();
+      var batch = FirebaseFirestore.instance.batch();
       for (var document in querySnapshot.docs) {
-        await document.reference.delete();
+        batch.delete(document.reference);
       }
+      await batch.commit();
     }
   }
 
@@ -42,9 +44,11 @@ class _AccountSettigScreenState extends State<AccountSettigScreen> {
           .doc(userEmail)
           .collection(testType[i])
           .get();
+      var batch = FirebaseFirestore.instance.batch();
       for (var document in querySnapshot.docs) {
-        await document.reference.delete();
+        batch.delete(document.reference);
       }
+      await batch.commit();
     }
   }
 
