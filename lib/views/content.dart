@@ -233,19 +233,6 @@ class _ContentScreenState extends State<ContentScreen> {
                               // const SizedBox(height: 10),
                               Card(
                                 elevation: 10,
-                                child: lessonTitle(
-                                  "assets/icons/pre_test.png",
-                                  "pre_test_$i",
-                                  "แบบทดสอบก่อนเรียนบทที่ $i",
-                                  "3/10 คะแนน | 15/3/2024",
-                                  TestingScreen.preTest[i - 1],
-                                  context,
-                                  i,
-                                  'Pre-test',
-                                ),
-                              ),
-                              Card(
-                                elevation: 10,
                                 shadowColor: AppColor.secondarySnakeColor,
                                 color: AppColor.primarSnakeColor.withAlpha(255),
                                 // surfaceTintColor: AppColor.secondarySnakeColor,
@@ -258,6 +245,19 @@ class _ContentScreenState extends State<ContentScreen> {
                                   context,
                                   i,
                                   'Lesson',
+                                ),
+                              ),
+                              Card(
+                                elevation: 10,
+                                child: lessonTitle(
+                                  "assets/icons/pre_test.png",
+                                  "pre_test_$i",
+                                  "แบบทดสอบก่อนเรียนบทที่ $i",
+                                  "3/10 คะแนน | 15/3/2024",
+                                  TestingScreen.preTest[i - 1],
+                                  context,
+                                  i,
+                                  'Pre-test',
                                 ),
                               ),
                               Card(

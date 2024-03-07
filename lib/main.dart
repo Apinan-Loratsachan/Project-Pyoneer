@@ -9,6 +9,7 @@ import 'package:pyoneer/views/home.dart';
 import 'package:pyoneer/views/login.dart';
 
 void main() async {
+  
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await UserData.loadUserData();
@@ -23,15 +24,6 @@ void main() async {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
-  SystemChrome.setSystemUIOverlayStyle(
-    const SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent,
-      statusBarIconBrightness: Brightness.dark,
-      systemNavigationBarColor: Colors.transparent,
-      systemNavigationBarDividerColor: Colors.transparent,
-      systemNavigationBarIconBrightness: Brightness.dark,
-    ),
-  );
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge,
       overlays: [SystemUiOverlay.top]);
   runApp(MyApp(initialScreen: initialScreen));
@@ -49,6 +41,17 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = MediaQuery.of(context).platformBrightness == Brightness.dark;
+
+        SystemChrome.setSystemUIOverlayStyle(
+   SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: isDarkMode ? Brightness.light : Brightness.dark,
+      systemNavigationBarColor: isDarkMode ? Colors.black : Colors.white,
+      systemNavigationBarDividerColor: Colors.transparent,
+      systemNavigationBarIconBrightness: isDarkMode ? Brightness.light : Brightness.dark,
+    ),
+  );
     return MaterialApp(
       theme: ThemeData(
         fontFamily: 'Noto Sans Thai',

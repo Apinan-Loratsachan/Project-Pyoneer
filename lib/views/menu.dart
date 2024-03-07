@@ -40,7 +40,7 @@ class _PrimaryScreenState extends State<MenuScreen> {
         title: const Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(FontAwesomeIcons.magnifyingGlass),
+            Icon(FontAwesomeIcons.compass),
             SizedBox(width: 15),
             Text(
               "สำรวจ",

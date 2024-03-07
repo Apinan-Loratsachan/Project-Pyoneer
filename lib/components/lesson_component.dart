@@ -36,7 +36,7 @@ class LessonComponent {
     LessonContent(
         imageSrc: "assets/images/lesson1/cover.png",
         title: "บทเรียนที่ 1",
-        subTitle: "คุณลักษณะของภาษา Python",
+        subTitle: "คุณลักษณะของภาษา Python 5555555555555555555555555555555",
         heroTag: "lesson-1-cover",
         targetScreen: const Lesson1Screen()),
     LessonContent(
@@ -82,28 +82,30 @@ class LessonComponent {
             ),
           ),
           const SizedBox(width: 10),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Align(
-                alignment: Alignment.centerLeft,
-                child: TypeWriterText(
-                  text: title,
-                  textStyle: const TextStyle(
-                      fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-              ),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: TypeWriterText(
-                  text: subTitleText,
-                  cursorSpeed: 700,
-                  textStyle: const TextStyle(
-                    fontSize: 16,
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: TypeWriterText(
+                    text: title,
+                    textStyle: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                 ),
-              ),
-            ],
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: TypeWriterText(
+                    text: subTitleText,
+                    cursorSpeed: 700,
+                    textStyle: const TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),
