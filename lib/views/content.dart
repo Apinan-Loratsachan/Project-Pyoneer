@@ -70,7 +70,8 @@ class _ContentScreenState extends State<ContentScreen> {
     );
   }
 
-  Future <Map<String, dynamic>> fetchTestScore(String email, String testType, int lessonIndex) async {
+  Future<Map<String, dynamic>> fetchTestScore(
+      String email, String testType, int lessonIndex) async {
     var doc = await FirebaseFirestore.instance
         .collection('testResult')
         .doc(email)
@@ -258,58 +259,78 @@ class _ContentScreenState extends State<ContentScreen> {
                                 ),
                               ),
                               FutureBuilder<Map<String, dynamic>>(
-                                future: fetchTestScore(UserData.email, 'pre-test', i),
-                                builder: (BuildContext context, AsyncSnapshot<Map<String, dynamic>> snapshot) {
-                                  if (snapshot.connectionState == ConnectionState.waiting) {
+                                future: fetchTestScore(
+                                    UserData.email, 'pre-test', i),
+                                builder: (BuildContext context,
+                                    AsyncSnapshot<Map<String, dynamic>>
+                                        snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
                                     return const CircularProgressIndicator();
-                                  } else if (snapshot.hasError){
+                                  } else if (snapshot.hasError) {
                                     return const Text("???");
                                   } else {
                                     int? score = snapshot.data?['score'];
-                                    int? totalScore = snapshot.data?['totalScore'];
-                                    Timestamp? timeStamp = snapshot.data?['timestamp'];
+                                    int? totalScore =
+                                        snapshot.data?['totalScore'];
+                                    Timestamp? timeStamp =
+                                        snapshot.data?['timestamp'];
                                     DateTime? testDate = timeStamp?.toDate();
-                                    String subtitle = score != null && totalScore != null ? "$score/$totalScore คะแนน | ${testDate?.day}/${testDate?.month}/${testDate!.year + 543} ${testDate.hour}:${testDate.minute}:${testDate.second}" : "ยังไม่ได้ทำแบบทดสอบ";
+                                    String subtitle = score != null &&
+                                            totalScore != null
+                                        ? "$score/$totalScore คะแนน | ${testDate?.day}/${testDate?.month}/${testDate!.year + 543} ${testDate.hour.toString().padLeft(2, '0')}:${testDate.minute.toString().padLeft(2, '0')}:${testDate.second.toString().padLeft(2, '0')}"
+                                        : "ยังไม่ได้ทำแบบทดสอบ";
                                     return Card(
-                                  elevation: 10,
-                                  child: lessonTitle(
-                                    "assets/icons/pre_test.png",
-                                    "pre_test_$i",
-                                    "แบบทดสอบก่อนเรียนบทที่ $i",
-                                    subtitle,
-                                    TestingScreen.preTest[i - 1],
-                                    context,
-                                    i,
-                                    'Pre-test',
-                                  ),
-                                );
+                                      elevation: 10,
+                                      child: lessonTitle(
+                                        "assets/icons/pre_test.png",
+                                        "pre_test_$i",
+                                        "แบบทดสอบก่อนเรียนบทที่ $i",
+                                        subtitle,
+                                        TestingScreen.preTest[i - 1],
+                                        context,
+                                        i,
+                                        'Pre-test',
+                                      ),
+                                    );
                                   }
                                 },
                               ),
                               FutureBuilder<Map<String, dynamic>>(
-                                future: fetchTestScore(UserData.email, 'post-test', i),
-                                builder: (BuildContext context, AsyncSnapshot<Map<String, dynamic>> snapshot) {
-                                  if (snapshot.connectionState == ConnectionState.waiting) {
-                                    return CircularProgressIndicator();
-                                  } else if (snapshot.hasError){
-                                    return Text("???");
+                                future: fetchTestScore(
+                                    UserData.email, 'post-test', i),
+                                builder: (BuildContext context,
+                                    AsyncSnapshot<Map<String, dynamic>>
+                                        snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return const CircularProgressIndicator();
+                                  } else if (snapshot.hasError) {
+                                    return const Text("???");
                                   } else {
                                     int? score = snapshot.data?['score'];
-                                    int? totalScore = snapshot.data?['totalScore'];
-                                    String subtitle = score != null && totalScore != null ? "$score/$totalScore คะแนน" : "ยังไม่ได้ทำแบบทดสอบ";
+                                    int? totalScore =
+                                        snapshot.data?['totalScore'];
+                                    Timestamp? timeStamp =
+                                        snapshot.data?['timestamp'];
+                                    DateTime? testDate = timeStamp?.toDate();
+                                    String subtitle = score != null &&
+                                            totalScore != null
+                                        ? "$score/$totalScore คะแนน | ${testDate?.day}/${testDate?.month}/${testDate!.year + 543} ${testDate.hour.toString().padLeft(2, '0')}:${testDate.minute.toString().padLeft(2, '0')}:${testDate.second.toString().padLeft(2, '0')}"
+                                        : "ยังไม่ได้ทำแบบทดสอบ";
                                     return Card(
-                                elevation: 10,
-                                child: lessonTitle(
-                                  "assets/icons/post_test.png",
-                                  "post_test_$i",
-                                  "แบบทดสอบหลังเรียนบทที่ $i",
-                                  subtitle,
-                                  TestingScreen.postTest[i - 1],
-                                  context,
-                                  i,
-                                  'Post-test',
-                                ),
-                              );
+                                      elevation: 10,
+                                      child: lessonTitle(
+                                        "assets/icons/post_test.png",
+                                        "post_test_$i",
+                                        "แบบทดสอบหลังเรียนบทที่ $i",
+                                        subtitle,
+                                        TestingScreen.postTest[i - 1],
+                                        context,
+                                        i,
+                                        'Post-test',
+                                      ),
+                                    );
                                   }
                                 },
                               ),

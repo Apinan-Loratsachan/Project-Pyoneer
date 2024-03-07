@@ -47,7 +47,7 @@ class _MyAppState extends State<MyApp> {
    SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
       statusBarIconBrightness: isDarkMode ? Brightness.light : Brightness.dark,
-      systemNavigationBarColor: isDarkMode ? Colors.black : Colors.white,
+      systemNavigationBarColor: Theme.of(context).colorScheme.onBackground,
       systemNavigationBarDividerColor: Colors.transparent,
       systemNavigationBarIconBrightness: isDarkMode ? Brightness.light : Brightness.dark,
     ),

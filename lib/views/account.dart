@@ -17,26 +17,34 @@ class AccountSettigScreen extends StatefulWidget {
 
 class _AccountSettigScreenState extends State<AccountSettigScreen> {
   Future<void> deleteTestResults(String userEmail) async {
+    List<String> testType = ["pre-test", "post-test"];
     var testResultCollection =
         FirebaseFirestore.instance.collection('testResult');
-    var userTestResults =
-        testResultCollection.doc(userEmail).collection('pre-test');
 
-    var querySnapshot = await userTestResults.get();
-    for (var document in querySnapshot.docs) {
-      await document.reference.delete();
+    for (int i = 0; i < testType.length; i++) {
+      var querySnapshot = await testResultCollection
+          .doc(userEmail)
+          .collection(testType[i])
+          .get();
+      for (var document in querySnapshot.docs) {
+        await document.reference.delete();
+      }
     }
   }
 
   Future<void> deleteUserChoices(String userEmail) async {
+    List<String> testType = ["pre-test", "post-test"];
     var userChoicesCollection =
         FirebaseFirestore.instance.collection('userChoices');
-    var userChoices =
-        userChoicesCollection.doc(userEmail).collection('pre-test');
 
-    var querySnapshot = await userChoices.get();
-    for (var document in querySnapshot.docs) {
-      await document.reference.delete();
+    for (int i = 0; i < testType.length; i++) {
+      var querySnapshot = await userChoicesCollection
+          .doc(userEmail)
+          .collection(testType[i])
+          .get();
+      for (var document in querySnapshot.docs) {
+        await document.reference.delete();
+      }
     }
   }
 
