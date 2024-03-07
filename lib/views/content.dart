@@ -70,6 +70,21 @@ class _ContentScreenState extends State<ContentScreen> {
     );
   }
 
+  Future <Map<String, dynamic>> fetchTestScore(String email, String testType, int lessonIndex) async {
+    var doc = await FirebaseFirestore.instance
+        .collection('testResult')
+        .doc(email)
+        .collection(testType)
+        .doc('lessonTest $lessonIndex')
+        .get();
+
+    if (doc.exists) {
+      return doc.data()!;
+    } else {
+      return {'score': null, 'totalScore': null, 'testDate': null};
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     String greetingWord = _getGreetingWord();
@@ -226,11 +241,6 @@ class _ContentScreenState extends State<ContentScreen> {
                           padding: const EdgeInsets.all(8.0),
                           child: Column(
                             children: [
-                              // const Divider(
-                              //   indent: 20,
-                              //   endIndent: 20,
-                              // ),
-                              // const SizedBox(height: 10),
                               Card(
                                 elevation: 10,
                                 shadowColor: AppColor.secondarySnakeColor,
@@ -247,31 +257,61 @@ class _ContentScreenState extends State<ContentScreen> {
                                   'Lesson',
                                 ),
                               ),
-                              Card(
-                                elevation: 10,
-                                child: lessonTitle(
-                                  "assets/icons/pre_test.png",
-                                  "pre_test_$i",
-                                  "แบบทดสอบก่อนเรียนบทที่ $i",
-                                  "3/10 คะแนน | 15/3/2024",
-                                  TestingScreen.preTest[i - 1],
-                                  context,
-                                  i,
-                                  'Pre-test',
-                                ),
+                              FutureBuilder<Map<String, dynamic>>(
+                                future: fetchTestScore(UserData.email, 'pre-test', i),
+                                builder: (BuildContext context, AsyncSnapshot<Map<String, dynamic>> snapshot) {
+                                  if (snapshot.connectionState == ConnectionState.waiting) {
+                                    return const CircularProgressIndicator();
+                                  } else if (snapshot.hasError){
+                                    return const Text("???");
+                                  } else {
+                                    int? score = snapshot.data?['score'];
+                                    int? totalScore = snapshot.data?['totalScore'];
+                                    Timestamp? timeStamp = snapshot.data?['timestamp'];
+                                    DateTime? testDate = timeStamp?.toDate();
+                                    String subtitle = score != null && totalScore != null ? "$score/$totalScore คะแนน | ${testDate?.day}/${testDate?.month}/${testDate!.year + 543} ${testDate.hour}:${testDate.minute}:${testDate.second}" : "ยังไม่ได้ทำแบบทดสอบ";
+                                    return Card(
+                                  elevation: 10,
+                                  child: lessonTitle(
+                                    "assets/icons/pre_test.png",
+                                    "pre_test_$i",
+                                    "แบบทดสอบก่อนเรียนบทที่ $i",
+                                    subtitle,
+                                    TestingScreen.preTest[i - 1],
+                                    context,
+                                    i,
+                                    'Pre-test',
+                                  ),
+                                );
+                                  }
+                                },
                               ),
-                              Card(
+                              FutureBuilder<Map<String, dynamic>>(
+                                future: fetchTestScore(UserData.email, 'post-test', i),
+                                builder: (BuildContext context, AsyncSnapshot<Map<String, dynamic>> snapshot) {
+                                  if (snapshot.connectionState == ConnectionState.waiting) {
+                                    return CircularProgressIndicator();
+                                  } else if (snapshot.hasError){
+                                    return Text("???");
+                                  } else {
+                                    int? score = snapshot.data?['score'];
+                                    int? totalScore = snapshot.data?['totalScore'];
+                                    String subtitle = score != null && totalScore != null ? "$score/$totalScore คะแนน" : "ยังไม่ได้ทำแบบทดสอบ";
+                                    return Card(
                                 elevation: 10,
                                 child: lessonTitle(
                                   "assets/icons/post_test.png",
                                   "post_test_$i",
                                   "แบบทดสอบหลังเรียนบทที่ $i",
-                                  "ยังไม่ได้ทำบททดสอบ",
+                                  subtitle,
                                   TestingScreen.postTest[i - 1],
                                   context,
                                   i,
                                   'Post-test',
                                 ),
+                              );
+                                  }
+                                },
                               ),
                             ],
                           ),
@@ -343,8 +383,6 @@ class _ContentScreenState extends State<ContentScreen> {
                       color: Colors.black);
                 } else {
                   return const SizedBox.shrink();
-                  // return const Icon(Icons.radio_button_unchecked,
-                  //     color: Colors.grey);
                 }
               },
             )
