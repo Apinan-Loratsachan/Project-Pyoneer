@@ -83,7 +83,8 @@ class _HomeScreenState extends State<HomeScreen> {
           filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
           child: AlertDialog(
               surfaceTintColor: Theme.of(context).colorScheme.background,
-              backgroundColor: Theme.of(context).colorScheme.background.withOpacity(0.5),
+              backgroundColor:
+                  Theme.of(context).colorScheme.background.withOpacity(0.5),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
@@ -160,7 +161,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             "assets/icons/pyoneer_text.png",
                             fit: BoxFit.cover,
                             height: 40,
-                            
                           ),
                           "pyoneer_text-title"),
                     ],
@@ -286,7 +286,10 @@ class _HomeScreenState extends State<HomeScreen> {
                             .colorScheme
                             .background
                             .withOpacity(0.75),
-                        Theme.of(context).colorScheme.background.withOpacity(0.5),
+                        Theme.of(context)
+                            .colorScheme
+                            .background
+                            .withOpacity(0.5),
                         Theme.of(context)
                             .colorScheme
                             .background
