@@ -36,6 +36,7 @@ class _TestingScreenModelState extends State<TestingScreenModel> {
   int _userScore = 0;
   int _totalQuestions = 0;
   String testType = '';
+  bool _isTestSubmitted = false;
 
   @override
   void initState() {
@@ -76,11 +77,7 @@ class _TestingScreenModelState extends State<TestingScreenModel> {
 
   void _shufflePropositionsAndChoices() {
     final random = Random();
-
-    // Shuffle propositions
     widget.testingContent.shuffle(random);
-
-    // Shuffle choices for each proposition
     for (var testingContent in widget.testingContent) {
       testingContent.choice.shuffle(random);
     }
@@ -150,6 +147,10 @@ class _TestingScreenModelState extends State<TestingScreenModel> {
     String userEmail = UserData.email;
     int totalQuestions = widget.testingContent.length;
 
+    setState(() {
+      _isTestSubmitted = true;
+    });
+
     Map<String, dynamic> testData = {
       'email': userEmail,
       'lessonTest': widget.testId,
@@ -167,15 +168,12 @@ class _TestingScreenModelState extends State<TestingScreenModel> {
         .set(testData);
 
     showTopSnackBar(
-      // ignore: use_build_context_synchronously
       Overlay.of(context),
       CustomSnackBar.success(
         message: "คุณตอบถูก $correctAnswers จาก $totalQuestions คะแนน",
       ),
       displayDuration: const Duration(seconds: 3),
     );
-
-    // ignore: use_build_context_synchronously
     Navigator.pop(context);
   }
 
@@ -226,11 +224,40 @@ class _TestingScreenModelState extends State<TestingScreenModel> {
                           : const SizedBox.shrink(),
                       for (var choice in content.choice)
                         RadioListTile<String?>(
-                          title: Text(choice),
+                          title: Text(
+                            choice,
+                            style: TextStyle(
+                                color: !_hasAlreadyTested && !_isTestSubmitted
+                                    ? Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium!
+                                        .color
+                                    : selectedChoices[content.proposition] ==
+                                            choice
+                                        ? (choice == content.correctChoice
+                                            ? Colors.green
+                                            : Colors.red)
+                                        : Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium!
+                                            .color),
+                          ),
                           value: choice,
                           groupValue: selectedChoices[content.proposition],
                           activeColor: AppColor.secondarySnakeColor,
-                          onChanged: _hasAlreadyTested
+                          secondary: (!_hasAlreadyTested &&
+                                      !_isTestSubmitted) ||
+                                  selectedChoices[content.proposition] != choice
+                              ? null
+                              : Icon(
+                                  choice == content.correctChoice
+                                      ? Icons.check
+                                      : Icons.close,
+                                  color: choice == content.correctChoice
+                                      ? Colors.green
+                                      : Colors.red,
+                                ),
+                          onChanged: _hasAlreadyTested || _isTestSubmitted
                               ? null
                               : (value) async {
                                   setState(() {

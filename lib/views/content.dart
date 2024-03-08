@@ -21,6 +21,21 @@ class _ContentScreenState extends State<ContentScreen> {
   bool _showFab = true;
   Timer? _hideFabTimer;
 
+  static const Map<int, String> thaiMonths = {
+    1: 'ม.ค.',
+    2: 'ก.พ.',
+    3: 'มี.ค.',
+    4: 'เม.ย.',
+    5: 'พ.ค.',
+    6: 'มิ.ย.',
+    7: 'ก.ค.',
+    8: 'ส.ค.',
+    9: 'ก.ย.',
+    10: 'ต.ค.',
+    11: 'พ.ย.',
+    12: 'ธ.ค.'
+  };
+
   @override
   void initState() {
     super.initState();
@@ -280,8 +295,11 @@ class _ContentScreenState extends State<ContentScreen> {
                                     if (score != null &&
                                         totalScore != null &&
                                         testDate != null) {
+                                      String thaiMonth =
+                                          thaiMonths[testDate.month] ?? '';
+                                      int thaiYear = testDate.year + 543;
                                       subtitle =
-                                          "$score/$totalScore คะแนน | ${testDate.day}/${testDate.month}/${testDate.year + 543} ${testDate.hour.toString().padLeft(2, '0')}:${testDate.minute.toString().padLeft(2, '0')}:${testDate.second.toString().padLeft(2, '0')}";
+                                          "$score/$totalScore คะแนน | ${testDate.day} $thaiMonth $thaiYear ${testDate.hour.toString().padLeft(2, '0')}.${testDate.minute.toString().padLeft(2, '0')} น.";
                                     }
                                     return Card(
                                       elevation: 10,
@@ -317,10 +335,16 @@ class _ContentScreenState extends State<ContentScreen> {
                                     Timestamp? timeStamp =
                                         snapshot.data?['timestamp'];
                                     DateTime? testDate = timeStamp?.toDate();
-                                    String subtitle = score != null &&
-                                            totalScore != null
-                                        ? "$score/$totalScore คะแนน | ${testDate?.day}/${testDate?.month}/${testDate!.year + 543} ${testDate.hour.toString().padLeft(2, '0')}:${testDate.minute.toString().padLeft(2, '0')}:${testDate.second.toString().padLeft(2, '0')}"
-                                        : "ยังไม่ได้ทำแบบทดสอบ";
+                                    String subtitle = "ยังไม่ได้ทำแบบทดสอบ";
+                                    if (score != null &&
+                                        totalScore != null &&
+                                        testDate != null) {
+                                      String thaiMonth =
+                                          thaiMonths[testDate.month] ?? '';
+                                      int thaiYear = testDate.year + 543;
+                                      subtitle =
+                                          "$score/$totalScore คะแนน | ${testDate.day} $thaiMonth $thaiYear ${testDate.hour.toString().padLeft(2, '0')}.${testDate.minute.toString().padLeft(2, '0')} น.";
+                                    }
                                     return Card(
                                       elevation: 10,
                                       child: lessonTitle(
