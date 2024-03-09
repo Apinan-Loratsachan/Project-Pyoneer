@@ -132,18 +132,10 @@ class _LessonScreenModelState extends State<LessonScreenModel>
     }
   }
 
-  Future<bool> checkLessonReadStatus(String email, int lessonIndex) async {
-    QuerySnapshot<Map<String, dynamic>> querySnapshot = await FirebaseFirestore
-        .instance
-        .collection('lessons')
-        .where('email', isEqualTo: email)
-        .where('lessonRead', isEqualTo: lessonIndex)
-        .get();
-
-    return querySnapshot.docs.isNotEmpty;
-  }
-
   Future insertLessonReadStatus() async {
+    if (UserData.email == 'ไม่ได้เข้าสู่ระบบ') {
+      return;
+    }
     if (UserData.email != 'ไม่ได้เข้าสู่ระบบ') {
       Map<String, dynamic> lessonData = {
         'email': UserData.email,

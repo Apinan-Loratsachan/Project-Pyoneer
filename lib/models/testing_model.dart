@@ -59,6 +59,10 @@ class _TestingScreenModelState extends State<TestingScreenModel> {
   void _fetchUserChoices() async {
     String userEmail = UserData.email;
 
+    if (userEmail == 'ไม่ได้เข้าสู่ระบบ') {
+      return;
+    }
+
     var doc = await FirebaseFirestore.instance
         .collection('userChoices')
         .doc(userEmail)
@@ -101,6 +105,10 @@ class _TestingScreenModelState extends State<TestingScreenModel> {
   Future<void> _fetchTestResults() async {
     String userEmail = UserData.email;
 
+    if (userEmail == 'ไม่ได้เข้าสู่ระบบ') {
+      return;
+    }
+
     var doc = await FirebaseFirestore.instance
         .collection('testResult')
         .doc(userEmail)
@@ -118,6 +126,10 @@ class _TestingScreenModelState extends State<TestingScreenModel> {
 
   Future<void> saveUserChoice(String proposition, String? choice) async {
     String userEmail = UserData.email;
+
+    if (userEmail == 'ไม่ได้เข้าสู่ระบบ') {
+      return;
+    }
 
     await FirebaseFirestore.instance
         .collection('userChoices')
@@ -143,8 +155,10 @@ class _TestingScreenModelState extends State<TestingScreenModel> {
   }
 
   Future<bool> _onWillPop() async {
-    if (_hasAlreadyTested) {
-      return Future(() => true);
+    if (UserData.email == 'ไม่ได้เข้าสู่ระบบ' || !widget.isPreTest) {
+      return Future.value(true);
+    } else if (_hasAlreadyTested) {
+      return Future.value(true);
     } else {
       return await TestingComponent.testingBackAlert(context);
     }
@@ -153,6 +167,17 @@ class _TestingScreenModelState extends State<TestingScreenModel> {
   Future<void> _submitTestResults(int correctAnswers) async {
     String userEmail = UserData.email;
     int totalQuestions = widget.testingContent.length;
+
+    if (userEmail == 'ไม่ได้เข้าสู่ระบบ') {
+      showTopSnackBar(
+        Overlay.of(context),
+        const CustomSnackBar.error(
+          message: "กรุณาเข้าสู่ระบบก่อนทำแบบทดสอบ",
+        ),
+        displayDuration: const Duration(seconds: 3),
+      );
+      return;
+    }
 
     setState(() {
       _isTestSubmitted = true;
@@ -286,7 +311,27 @@ class _TestingScreenModelState extends State<TestingScreenModel> {
                           ),
                           value: choice,
                           groupValue: selectedChoices[content.proposition],
-                          activeColor: AppColor.secondarySnakeColor,
+                          activeColor:
+                              selectedChoices[content.proposition] == choice &&
+                                      !_hasAlreadyTested &&
+                                      !_isTestSubmitted
+                                  ? AppColor.secondarySnakeColor
+                                  : null,
+                          fillColor: MaterialStateProperty.resolveWith<Color>(
+                              (states) {
+                            if (!_hasAlreadyTested && !_isTestSubmitted) {
+                              return AppColor.secondarySnakeColor;
+                            } else if (states
+                                .contains(MaterialState.selected)) {
+                              return selectedChoices[content.proposition] ==
+                                      choice
+                                  ? (choice == content.correctChoice
+                                      ? Colors.green
+                                      : Colors.red)
+                                  : AppColor.secondarySnakeColor;
+                            }
+                            return AppColor.secondarySnakeColor;
+                          }),
                           secondary: (!_hasAlreadyTested &&
                                       !_isTestSubmitted) ||
                                   selectedChoices[content.proposition] != choice

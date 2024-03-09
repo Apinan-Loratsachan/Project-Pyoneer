@@ -87,6 +87,9 @@ class _ContentScreenState extends State<ContentScreen> {
 
   Future<Map<String, dynamic>> fetchTestScore(
       String email, String testType, int lessonIndex) async {
+    if (email == 'ไม่ได้เข้าสู่ระบบ') {
+      return {'score': null, 'totalScore': null, 'testDate': null};
+    }
     var doc = await FirebaseFirestore.instance
         .collection('testResult')
         .doc(email)
@@ -299,7 +302,7 @@ class _ContentScreenState extends State<ContentScreen> {
                                           thaiMonths[testDate.month] ?? '';
                                       int thaiYear = testDate.year + 543;
                                       subtitle =
-                                          "$score/$totalScore คะแนน | ${testDate.day} $thaiMonth $thaiYear ${testDate.hour.toString().padLeft(2, '0')}.${testDate.minute.toString().padLeft(2, '0')} น.";
+                                          "$score/$totalScore คะแนน | ${testDate.day} $thaiMonth $thaiYear ${testDate.hour.toString().padLeft(2, '0')}:${testDate.minute.toString().padLeft(2, '0')} น.";
                                     }
                                     return Card(
                                       elevation: 10,
@@ -343,7 +346,7 @@ class _ContentScreenState extends State<ContentScreen> {
                                           thaiMonths[testDate.month] ?? '';
                                       int thaiYear = testDate.year + 543;
                                       subtitle =
-                                          "$score/$totalScore คะแนน | ${testDate.day} $thaiMonth $thaiYear ${testDate.hour.toString().padLeft(2, '0')}.${testDate.minute.toString().padLeft(2, '0')} น.";
+                                          "$score/$totalScore คะแนน | ${testDate.day} $thaiMonth $thaiYear ${testDate.hour.toString().padLeft(2, '0')}:${testDate.minute.toString().padLeft(2, '0')} น.";
                                     }
                                     return Card(
                                       elevation: 10,
@@ -379,6 +382,9 @@ class _ContentScreenState extends State<ContentScreen> {
 
   static Future<bool> checkLessonReadStatus(
       String email, int lessonIndex) async {
+    if (email == 'ไม่ได้เข้าสู่ระบบ') {
+      return false;
+    }
     QuerySnapshot<Map<String, dynamic>> querySnapshot = await FirebaseFirestore
         .instance
         .collection('lessons')
