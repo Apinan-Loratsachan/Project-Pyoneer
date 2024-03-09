@@ -36,7 +36,7 @@ class LessonComponent {
     LessonContent(
         imageSrc: "assets/images/lesson1/cover.png",
         title: "บทเรียนที่ 1",
-        subTitle: "คุณลักษณะของภาษา Python 5555555555555555555555555555555",
+        subTitle: "คุณลักษณะของภาษา Python",
         heroTag: "lesson-1-cover",
         targetScreen: const Lesson1Screen()),
     LessonContent(
@@ -67,9 +67,11 @@ class LessonComponent {
 
   static AppBar lessonsAppbar(String title, String subTitleText, context) {
     return AppBar(
-      leading: IconButton(onPressed: () {
-        Navigator.pop(context, true);
-      }, icon: const Icon(Icons.arrow_back)),
+      leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context, true);
+          },
+          icon: const Icon(Icons.arrow_back)),
       title: Row(
         children: [
           const SizedBox(width: 0),

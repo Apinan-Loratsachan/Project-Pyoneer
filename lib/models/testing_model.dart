@@ -83,7 +83,14 @@ class _TestingScreenModelState extends State<TestingScreenModel> {
     }
   }
 
-  void _checkUserTestStatus() async {
+  Future<void> _checkUserTestStatus() async {
+    if (!widget.isPreTest) {
+      setState(() {
+        _hasAlreadyTested = false;
+      });
+      return;
+    }
+
     bool alreadyTested = await ContentCounter.checkAlreadyTesting(
         UserData.email, int.parse(widget.testId.toString()), testType);
     setState(() {
@@ -179,6 +186,41 @@ class _TestingScreenModelState extends State<TestingScreenModel> {
 
   @override
   Widget build(BuildContext context) {
+    ElevatedButton submitButton = ElevatedButton(
+      onPressed:
+          (!widget.isPreTest || (widget.isPreTest && !_hasAlreadyTested)) &&
+                  _allAnswersSelected()
+              ? () async {
+                  int correctAnswers = _countCorrectAnswers();
+                  await _submitTestResults(correctAnswers);
+                }
+              : (!widget.isPreTest || (widget.isPreTest && !_hasAlreadyTested))
+                  ? () {
+                      showTopSnackBar(
+                        Overlay.of(context),
+                        const CustomSnackBar.error(
+                          message: "กรุณาตอบคำถามให้ครบทุกข้อ",
+                        ),
+                        displayDuration: const Duration(seconds: 2),
+                      );
+                    }
+                  : null,
+      style: ButtonStyle(
+        foregroundColor:
+            MaterialStateColor.resolveWith((states) => Colors.white),
+        backgroundColor: MaterialStateColor.resolveWith(
+            (states) => AppColor.primarSnakeColor.withAlpha(200)),
+        overlayColor: MaterialStateColor.resolveWith(
+            (states) => AppColor.secondarySnakeColor.withAlpha(255)),
+      ),
+      child: const Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text("ส่งคำตอบ"),
+        ],
+      ),
+    );
+
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
@@ -282,39 +324,8 @@ class _TestingScreenModelState extends State<TestingScreenModel> {
                         duration: 300.ms,
                       );
                 }),
-                !_hasAlreadyTested
-                    ? ElevatedButton(
-                        onPressed: _allAnswersSelected()
-                            ? () async {
-                                int correctAnswers = _countCorrectAnswers();
-                                await _submitTestResults(correctAnswers);
-                              }
-                            : () {
-                                showTopSnackBar(
-                                  Overlay.of(context),
-                                  const CustomSnackBar.error(
-                                    message: "กรุณาตอบคำถามให้ครบทุกข้อ",
-                                  ),
-                                  displayDuration: const Duration(seconds: 2),
-                                );
-                              },
-                        style: ButtonStyle(
-                          foregroundColor: MaterialStateColor.resolveWith(
-                              (states) => Colors.white),
-                          backgroundColor: MaterialStateColor.resolveWith(
-                              (states) =>
-                                  AppColor.primarSnakeColor.withAlpha(200)),
-                          overlayColor: MaterialStateColor.resolveWith(
-                              (states) =>
-                                  AppColor.secondarySnakeColor.withAlpha(255)),
-                        ),
-                        child: const Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text("ส่งคำตอบ"),
-                          ],
-                        ),
-                      )
+                !_hasAlreadyTested || !widget.isPreTest
+                    ? submitButton
                     : const ElevatedButton(
                         onPressed: null,
                         child: Row(

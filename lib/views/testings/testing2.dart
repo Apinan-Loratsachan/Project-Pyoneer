@@ -16,7 +16,9 @@ class _Testing2ScreenState extends State<Testing2Screen> {
     return TestingScreenModel(
       testingContent: Testing2.testingContent,
       appBarTitle: "Test 2",
-      appBarSubTitle: "ก็บอกว่า Test 2 ไง",
+      appBarSubTitle: widget.isPreTest
+          ? "แบบทดสอบก่อนเรียนบทที่ 2"
+          : "แบบทดสอบหลังเรียนบทที่ 2",
       isPreTest: widget.isPreTest,
       testId: 2,
     );
