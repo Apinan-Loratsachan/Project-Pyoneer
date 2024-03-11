@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:pyoneer/components/lesson_component.dart';
 import 'package:pyoneer/services/user_data.dart';
+import 'package:pyoneer/utils/color.dart';
 import 'package:pyoneer/utils/text.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
@@ -45,9 +46,9 @@ class _LessonScreenModelState extends State<LessonScreenModel>
       _youtubePlayerController = YoutubePlayerController(
         initialVideoId: widget.youtubeVideoID!,
         flags: const YoutubePlayerFlags(
-          autoPlay: true,
-          mute: false,
-          hideControls: true,
+          autoPlay: false,
+          mute: true,
+          hideControls: false,
           forceHD: false,
           controlsVisibleAtStart: true,
           showLiveFullscreenButton: false,
@@ -215,15 +216,16 @@ class _LessonScreenModelState extends State<LessonScreenModel>
               child: YoutubePlayer(
                 controller: _youtubePlayerController!,
                 showVideoProgressIndicator: true,
-                progressIndicatorColor: Colors.amber,
+                progressIndicatorColor: AppColor.tertiarySnakeColor,
                 progressColors: const ProgressBarColors(
-                  playedColor: Colors.amber,
-                  handleColor: Colors.amberAccent,
+                  playedColor: AppColor.primarSnakeColor,
+                  handleColor: AppColor.secondarySnakeColor,
                 ),
                 bottomActions: [
                   CurrentPosition(),
+                  ProgressBar(isExpanded: true),
                   RemainingDuration(),
-                  FullScreenButton(),
+                  // FullScreenButton(),
                 ],
               ),
             ),
