@@ -16,6 +16,7 @@ class _Lesson1ScreenState extends State<Lesson1Screen> {
     return LessonScreenModel(
       index: 1,
       lessonTitle: "คุณลักษณะ\nของภาษาไพทอน",
+      youtubeVideoID: "JUg0QOFdrm8",
       contentWidgets: [
         PyoneerText.contentText("คุณลักษณะของภาษาไพทอน",fontWeight: FontWeight.bold, fontSize: 20),
         PyoneerText.contentText("${PyoneerText.startParagraph}ภาษาไพทอนเป็นภาษาที่นำลักษณะที่ดีของภาษาที่มีอยู่ก่อนแล้ว คือ ABC, Modula-3, C, C++, Algol-68, SmallTalk and Unix shell and other scripting languages และเพิ่มคุณลักษณะที่ดี เช่น คลาสและอื่นๆ รวมถึงมี interface ที่เข้าใจได้ง่ายทำให้การเขียนโปรแกรมสะดวกมากขึ้น"),

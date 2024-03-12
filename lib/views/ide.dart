@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_code_editor/flutter_code_editor.dart';
 import 'package:flutter_highlight/themes/monokai-sublime.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:highlight/languages/python.dart';
 import 'package:pyoneer/utils/color.dart';
 
@@ -100,7 +101,9 @@ class _IDEScreenState extends State<IDEScreen>
                 ),
               ),
             ),
-            const SizedBox(height: 150),
+            KeyboardVisibilityBuilder(builder: (context, isKeyboardVisible) {
+              return  SizedBox(height: isKeyboardVisible ? 0 : 140);
+            }),
           ],
         ),
       ),
