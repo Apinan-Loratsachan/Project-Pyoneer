@@ -119,15 +119,17 @@ class _LessonScreenModelState extends State<LessonScreenModel>
     double currentScrollPercentage = (currentScroll / maxScroll) * 100;
 
     if (currentScrollPercentage > threshold) {
-        // PyoneerLog.printGreen('User has scrolled more than $threshold%');
-        PyoneerLog.printWhite('currentScroll: \x1B[32m${currentScrollPercentage.toStringAsFixed(2)}%\x1B[0m');
+      // PyoneerLog.printGreen('User has scrolled more than $threshold%');
+      PyoneerLog.printWhite(
+          'currentScroll: \x1B[32m${currentScrollPercentage.toStringAsFixed(2)}%\x1B[0m');
 
       if (!lessonReadStatusChecked) {
         insertLessonReadStatus();
         lessonReadStatusChecked = true;
       }
     } else {
-      PyoneerLog.printWhite('currentScroll: \x1B[33m${currentScrollPercentage.toStringAsFixed(2)}%\x1B[0m');
+      PyoneerLog.printWhite(
+          'currentScroll: \x1B[33m${currentScrollPercentage.toStringAsFixed(2)}%\x1B[0m');
     }
   }
 
@@ -279,7 +281,29 @@ class _LessonScreenModelState extends State<LessonScreenModel>
                                       borderRadius: BorderRadius.circular(10),
                                       child: player,
                                     ),
-                                    const SizedBox(height: 100),
+                                    const SizedBox(height: 40),
+                                    const Text(
+                                      "VIDEO by",
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 20),
+                                    Image.asset(
+                                      "assets/icons/pyoneer_long.png",
+                                      width: MediaQuery.of(context).size.width *
+                                          0.5,
+                                    ),
+                                    const Text(
+                                      "Copyright © 2024 PY৹NEER,\nAll right reserved",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 50),
                                   ],
                                 ),
                               ),
