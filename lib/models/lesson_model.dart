@@ -120,7 +120,7 @@ class _LessonScreenModelState extends State<LessonScreenModel>
 
     if (currentScrollPercentage > threshold) {
       // PyoneerLog.printGreen('User has scrolled more than $threshold%');
-      PyoneerLog.printWhite(
+      PyoneerLog.white(
           'currentScroll: \x1B[32m${currentScrollPercentage.toStringAsFixed(2)}%\x1B[0m');
 
       if (!lessonReadStatusChecked) {
@@ -128,7 +128,7 @@ class _LessonScreenModelState extends State<LessonScreenModel>
         lessonReadStatusChecked = true;
       }
     } else {
-      PyoneerLog.printWhite(
+      PyoneerLog.white(
           'currentScroll: \x1B[33m${currentScrollPercentage.toStringAsFixed(2)}%\x1B[0m');
     }
   }
