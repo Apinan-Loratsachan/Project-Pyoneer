@@ -47,7 +47,7 @@ class _LessonScreenModelState extends State<LessonScreenModel>
         initialVideoId: widget.youtubeVideoID!,
         flags: const YoutubePlayerFlags(
           autoPlay: false,
-          mute: true,
+          mute: false,
           hideControls: false,
           forceHD: false,
           controlsVisibleAtStart: true,
@@ -205,50 +205,63 @@ class _LessonScreenModelState extends State<LessonScreenModel>
           ),
         ),
       ),
-      if (widget.youtubeVideoID != null) const SizedBox(height: 20),
-      if (widget.youtubeVideoID != null)
-        SlideTransition(
-          position: _contentSlideAnimation,
-          child: FadeTransition(
-            opacity: _contentFadeAnimation,
-            child: SizedBox(
-              width: MediaQuery.of(context).size.width * 0.95,
-              child: YoutubePlayer(
-                controller: _youtubePlayerController!,
-                showVideoProgressIndicator: true,
-                progressIndicatorColor: AppColor.tertiarySnakeColor,
-                progressColors: const ProgressBarColors(
-                  playedColor: AppColor.primarSnakeColor,
-                  handleColor: AppColor.secondarySnakeColor,
-                ),
-                bottomActions: [
-                  CurrentPosition(),
-                  ProgressBar(isExpanded: true),
-                  RemainingDuration(),
-                  // FullScreenButton(),
-                ],
-              ),
-            ),
-          ),
-        ),
-      if (widget.youtubeVideoID != null) const SizedBox(height: 100),
     ];
 
-    return Scaffold(
-      appBar: LessonComponent.lessonsAppbar(
-          LessonComponent.lessonContent[widget.index].title,
-          LessonComponent.lessonContent[widget.index].subTitle,
-          context),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: _scrollDown,
-      //   child: const Icon(Icons.arrow_downward),
-      // ),
-      body: Scrollbar(
-        child: SingleChildScrollView(
-          controller: _scrollController,
-          child: Center(
-            child: Column(
-              children: allWidgets,
+    return YoutubePlayerBuilder(
+      player: YoutubePlayer(
+        controller: _youtubePlayerController!,
+        showVideoProgressIndicator: true,
+        progressIndicatorColor: AppColor.tertiarySnakeColor,
+        progressColors: const ProgressBarColors(
+          playedColor: AppColor.primarSnakeColor,
+          handleColor: AppColor.secondarySnakeColor,
+        ),
+        bottomActions: [
+          CurrentPosition(),
+          ProgressBar(isExpanded: true),
+          RemainingDuration(),
+          FullScreenButton(
+            controller: _youtubePlayerController!,
+          ),
+        ],
+      ),
+      builder: (context, player) => Scaffold(
+        appBar: LessonComponent.lessonsAppbar(
+            LessonComponent.lessonContent[widget.index].title,
+            LessonComponent.lessonContent[widget.index].subTitle,
+            context),
+        // floatingActionButton: FloatingActionButton(
+        //   onPressed: _scrollDown,
+        //   child: const Icon(Icons.arrow_downward),
+        // ),
+        body: Scrollbar(
+          child: SingleChildScrollView(
+            controller: _scrollController,
+            child: Center(
+              child: Column(
+                children: [
+                  Column(
+                    children: allWidgets,
+                  ),
+                  if (widget.youtubeVideoID != null) const SizedBox(height: 20),
+                  if (widget.youtubeVideoID != null)
+                    SlideTransition(
+                      position: _contentSlideAnimation,
+                      child: FadeTransition(
+                        opacity: _contentFadeAnimation,
+                        child: SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.95,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: player,
+                          ),
+                        ),
+                      ),
+                    ),
+                  if (widget.youtubeVideoID != null)
+                    const SizedBox(height: 100),
+                ],
+              ),
             ),
           ),
         ),

@@ -55,7 +55,6 @@ class _MyAppState extends State<MyApp> {
         builder: (context) {
           final isDarkMode =
               MediaQuery.of(context).platformBrightness == Brightness.dark;
-
           SystemChrome.setSystemUIOverlayStyle(
             SystemUiOverlayStyle(
               statusBarColor: Colors.transparent,
