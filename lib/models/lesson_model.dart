@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pyoneer/components/lesson_component.dart';
 import 'package:pyoneer/services/user_data.dart';
 import 'package:pyoneer/utils/color.dart';
+import 'package:pyoneer/utils/log.dart';
 import 'package:pyoneer/utils/text.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
@@ -118,19 +118,16 @@ class _LessonScreenModelState extends State<LessonScreenModel>
 
     double currentScrollPercentage = (currentScroll / maxScroll) * 100;
 
-    if (kDebugMode) {
-      print('currentScroll: ${currentScrollPercentage.toStringAsFixed(2)}%');
-    }
-
     if (currentScrollPercentage > threshold) {
-      if (kDebugMode) {
-        print('User has scrolled more than $threshold%');
-      }
+        // PyoneerLog.printGreen('User has scrolled more than $threshold%');
+        PyoneerLog.printWhite('currentScroll: \x1B[32m${currentScrollPercentage.toStringAsFixed(2)}%\x1B[0m');
 
       if (!lessonReadStatusChecked) {
         insertLessonReadStatus();
         lessonReadStatusChecked = true;
       }
+    } else {
+      PyoneerLog.printWhite('currentScroll: \x1B[33m${currentScrollPercentage.toStringAsFixed(2)}%\x1B[0m');
     }
   }
 
@@ -171,7 +168,7 @@ class _LessonScreenModelState extends State<LessonScreenModel>
   Widget build(BuildContext context) {
     List<Widget> allWidgets = [
       Padding(
-        padding: const EdgeInsets.all(15.0),
+        padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.05),
         child: LessonComponent.lessonCover(
             LessonComponent.lessonContent[widget.index].imageSrc,
             LessonComponent.lessonContent[widget.index].heroTag),
@@ -207,69 +204,113 @@ class _LessonScreenModelState extends State<LessonScreenModel>
         ),
       ),
     ];
-
-    return YoutubePlayerBuilder(
-      onExitFullScreen: () {
-        SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: [SystemUiOverlay.top, SystemUiOverlay.bottom]);
-      },
-      player: YoutubePlayer(
-        controller: _youtubePlayerController!,
-        showVideoProgressIndicator: true,
-        progressIndicatorColor: AppColor.tertiarySnakeColor,
-        progressColors: const ProgressBarColors(
-          playedColor: AppColor.primarSnakeColor,
-          handleColor: AppColor.secondarySnakeColor,
-        ),
-        bottomActions: [
-          CurrentPosition(),
-          ProgressBar(isExpanded: true),
-          RemainingDuration(),
-          FullScreenButton(
-            controller: _youtubePlayerController!,
-          ),
-        ],
-      ),
-      builder: (context, player) => Scaffold(
-        appBar: LessonComponent.lessonsAppbar(
-            LessonComponent.lessonContent[widget.index].title,
-            LessonComponent.lessonContent[widget.index].subTitle,
-            context),
-        // floatingActionButton: FloatingActionButton(
-        //   onPressed: _scrollDown,
-        //   child: const Icon(Icons.arrow_downward),
-        // ),
-        body: Scrollbar(
-          child: SingleChildScrollView(
-            controller: _scrollController,
-            child: Center(
-              child: Column(
-                children: [
-                  Column(
-                    children: allWidgets,
-                  ),
-                  if (widget.youtubeVideoID != null) const SizedBox(height: 20),
-                  if (widget.youtubeVideoID != null)
-                    SlideTransition(
-                      position: _contentSlideAnimation,
-                      child: FadeTransition(
-                        opacity: _contentFadeAnimation,
-                        child: SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.95,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: player,
-                          ),
+    return widget.youtubeVideoID != null
+        ? YoutubePlayerBuilder(
+            onExitFullScreen: () {
+              SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+                  overlays: [SystemUiOverlay.top, SystemUiOverlay.bottom]);
+            },
+            player: YoutubePlayer(
+              controller: _youtubePlayerController!,
+              showVideoProgressIndicator: true,
+              progressIndicatorColor: AppColor.tertiarySnakeColor,
+              progressColors: const ProgressBarColors(
+                playedColor: AppColor.primarSnakeColor,
+                handleColor: AppColor.secondarySnakeColor,
+              ),
+              bottomActions: [
+                CurrentPosition(),
+                ProgressBar(isExpanded: true),
+                RemainingDuration(),
+                FullScreenButton(
+                  controller: _youtubePlayerController!,
+                ),
+              ],
+            ),
+            builder: (context, player) => Scaffold(
+              appBar: LessonComponent.lessonsAppbar(
+                  LessonComponent.lessonContent[widget.index].title,
+                  LessonComponent.lessonContent[widget.index].subTitle,
+                  context),
+              // floatingActionButton: FloatingActionButton(
+              //   onPressed: _scrollDown,
+              //   child: const Icon(Icons.arrow_downward),
+              // ),
+              body: Scrollbar(
+                child: SingleChildScrollView(
+                  controller: _scrollController,
+                  child: Center(
+                    child: Column(
+                      children: [
+                        Column(
+                          children: allWidgets,
                         ),
-                      ),
+                        if (widget.youtubeVideoID != null)
+                          SlideTransition(
+                            position: _contentSlideAnimation,
+                            child: FadeTransition(
+                              opacity: _contentFadeAnimation,
+                              child: Padding(
+                                padding: EdgeInsets.only(
+                                  left:
+                                      MediaQuery.of(context).size.width * 0.05,
+                                  right:
+                                      MediaQuery.of(context).size.width * 0.05,
+                                ),
+                                child: Column(
+                                  children: [
+                                    PyoneerText.divider(0),
+                                    const SizedBox(height: 40),
+                                    Text(
+                                      "วิดีโอประกอบการเรียน ${LessonComponent.lessonContent[widget.index].title}",
+                                      style: const TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    Text(
+                                      LessonComponent
+                                          .lessonContent[widget.index].subTitle,
+                                      style: const TextStyle(
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 40),
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(10),
+                                      child: player,
+                                    ),
+                                    const SizedBox(height: 100),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                      ],
                     ),
-                  if (widget.youtubeVideoID != null)
-                    const SizedBox(height: 100),
-                ],
+                  ),
+                ),
               ),
             ),
-          ),
-        ),
-      ),
-    );
+          )
+        : Scaffold(
+            appBar: LessonComponent.lessonsAppbar(
+                LessonComponent.lessonContent[widget.index].title,
+                LessonComponent.lessonContent[widget.index].subTitle,
+                context),
+            // floatingActionButton: FloatingActionButton(
+            //   onPressed: _scrollDown,
+            //   child: const Icon(Icons.arrow_downward),
+            // ),
+            body: Scrollbar(
+              child: SingleChildScrollView(
+                controller: _scrollController,
+                child: Center(
+                  child: Column(
+                    children: allWidgets,
+                  ),
+                ),
+              ),
+            ),
+          );
   }
 }
