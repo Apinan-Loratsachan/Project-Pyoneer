@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:pyoneer/components/lesson_component.dart';
 import 'package:pyoneer/services/user_data.dart';
 import 'package:pyoneer/utils/color.dart';
@@ -208,6 +209,9 @@ class _LessonScreenModelState extends State<LessonScreenModel>
     ];
 
     return YoutubePlayerBuilder(
+      onExitFullScreen: () {
+        SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: [SystemUiOverlay.top, SystemUiOverlay.bottom]);
+      },
       player: YoutubePlayer(
         controller: _youtubePlayerController!,
         showVideoProgressIndicator: true,
