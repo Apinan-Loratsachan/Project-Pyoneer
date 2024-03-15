@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:pyoneer/components/lesson_component.dart';
 import 'package:pyoneer/components/testing_component.dart';
 import 'package:pyoneer/services/user_data.dart';
@@ -242,6 +240,7 @@ class _ContentScreenState extends State<ContentScreen> {
                         context,
                         0,
                         'Lesson',
+                        Stream.value(true),
                       ),
                     ),
                   ),
@@ -264,22 +263,6 @@ class _ContentScreenState extends State<ContentScreen> {
                           padding: const EdgeInsets.all(8.0),
                           child: Column(
                             children: [
-                              Card(
-                                elevation: 10,
-                                shadowColor: AppColor.secondarySnakeColor,
-                                color: AppColor.primarSnakeColor.withAlpha(255),
-                                // surfaceTintColor: AppColor.secondarySnakeColor,
-                                child: lessonTitle(
-                                  LessonComponent.lessonContent[i].imageSrc,
-                                  LessonComponent.lessonContent[i].heroTag,
-                                  LessonComponent.lessonContent[i].title,
-                                  LessonComponent.lessonContent[i].subTitle,
-                                  LessonComponent.lessonContent[i].targetScreen,
-                                  context,
-                                  i,
-                                  'Lesson',
-                                ),
-                              ),
                               StreamBuilder<Map<String, dynamic>>(
                                 stream: fetchTestScore(
                                     UserData.email, 'pre-test', i),
@@ -298,7 +281,8 @@ class _ContentScreenState extends State<ContentScreen> {
                                     Timestamp? timeStamp =
                                         snapshot.data?['timestamp'];
                                     DateTime? testDate = timeStamp?.toDate();
-                                    String subtitle = "ยังไม่ได้ทำแบบทดสอบ";
+                                    String subtitle =
+                                        "โปรดทำแบบทดสอบก่อนที่จะเริ่มเรียนบทนี้";
                                     if (score != null &&
                                         totalScore != null &&
                                         testDate != null) {
@@ -319,10 +303,29 @@ class _ContentScreenState extends State<ContentScreen> {
                                         context,
                                         i,
                                         'Pre-test',
+                                        Stream.value(true),
                                       ),
                                     );
                                   }
                                 },
+                              ),
+                              Card(
+                                elevation: 10,
+                                shadowColor: AppColor.secondarySnakeColor,
+                                color: AppColor.primarSnakeColor.withAlpha(255),
+                                // surfaceTintColor: AppColor.secondarySnakeColor,
+                                child: lessonTitle(
+                                  LessonComponent.lessonContent[i].imageSrc,
+                                  LessonComponent.lessonContent[i].heroTag,
+                                  LessonComponent.lessonContent[i].title,
+                                  LessonComponent.lessonContent[i].subTitle,
+                                  LessonComponent.lessonContent[i].targetScreen,
+                                  context,
+                                  i,
+                                  'Lesson',
+                                  fetchTestScore(UserData.email, 'pre-test', i)
+                                      .map((data) => data['score'] != null),
+                                ),
                               ),
                               StreamBuilder<Map<String, dynamic>>(
                                 stream: fetchTestScore(
@@ -363,6 +366,10 @@ class _ContentScreenState extends State<ContentScreen> {
                                         context,
                                         i,
                                         'Post-test',
+                                        fetchTestScore(
+                                                UserData.email, 'pre-test', i)
+                                            .map((data) =>
+                                                data['score'] != null),
                                       ),
                                     );
                                   }
@@ -384,67 +391,75 @@ class _ContentScreenState extends State<ContentScreen> {
   }
   //-----------------------------------------------------------------------------------
 
-  static Future<bool> checkLessonReadStatus(
-      String email, int lessonIndex) async {
+  static Stream<bool> checkLessonReadStatus(String email, int lessonIndex) {
     if (email == 'ไม่ได้เข้าสู่ระบบ') {
-      return false;
+      return Stream.value(false);
     }
-    QuerySnapshot<Map<String, dynamic>> querySnapshot = await FirebaseFirestore
-        .instance
+    return FirebaseFirestore.instance
         .collection('lessons')
         .where('email', isEqualTo: email)
         .where('lessonRead', isEqualTo: lessonIndex)
-        .get();
-
-    return querySnapshot.docs.isNotEmpty;
+        .snapshots()
+        .map((querySnapshot) => querySnapshot.docs.isNotEmpty);
   }
 
   Widget lessonTitle(
-      String imageSrc,
-      String heroTag,
-      String title,
-      String subtitle,
-      Widget targetScreen,
-      BuildContext context,
-      int index,
-      String type) {
-    return ListTile(
-      leading: Hero(
-        tag: heroTag,
-        child: Image.asset(imageSrc, width: 50, height: 50),
-      ),
-      onTap: () => Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => targetScreen),
-      ).then((_) => setState(() {})),
-      title: Text(
-        title,
-        style: const TextStyle(
-            fontWeight: FontWeight.bold, overflow: TextOverflow.ellipsis),
-      ),
-      subtitle: Text(
-        subtitle,
-        style: const TextStyle(
-          overflow: TextOverflow.ellipsis,
-        ),
-      ),
-      trailing: type == 'Lesson'
-          ? FutureBuilder<bool>(
-              future: _ContentScreenState.checkLessonReadStatus(
-                  UserData.email, index),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const SizedBox(); // Or some placeholder
-                } else if (snapshot.data == true) {
-                  return const Icon(Icons.check,
-                      // color: Color(0xFFae2325)
-                      color: Colors.black);
-                } else {
-                  return const SizedBox.shrink();
-                }
-              },
-            )
-          : null, // Only show the check status for the main lesson
+    String imageSrc,
+    String heroTag,
+    String title,
+    String subtitle,
+    Widget targetScreen,
+    BuildContext context,
+    int index,
+    String type,
+    Stream<bool> isUnlocked,
+  ) {
+    return StreamBuilder<bool>(
+      stream: isUnlocked,
+      builder: (context, snapshot) {
+        bool unlocked = snapshot.data ?? false;
+        return ListTile(
+          leading: Hero(
+            tag: heroTag,
+            child: Image.asset(imageSrc, width: 50, height: 50),
+          ),
+          onTap: unlocked
+              ? () => Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => targetScreen),
+                  )
+              : null,
+          title: Text(
+            title,
+            style: const TextStyle(
+                fontWeight: FontWeight.bold, overflow: TextOverflow.ellipsis),
+          ),
+          subtitle: Text(
+            subtitle,
+            style: const TextStyle(
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+          trailing: type == 'Lesson'
+              ? StreamBuilder<bool>(
+                  stream: _ContentScreenState.checkLessonReadStatus(
+                      UserData.email, index),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const SizedBox();
+                    } else if (snapshot.data == true) {
+                      return const Icon(Icons.check, color: Colors.black);
+                    } else {
+                      return const SizedBox.shrink();
+                    }
+                  },
+                )
+              : null, // Only show the check status for the main lesson
+          tileColor:
+              !unlocked ? Theme.of(context).colorScheme.background : null,
+          enabled: unlocked,
+        );
+      },
     );
   }
 }
