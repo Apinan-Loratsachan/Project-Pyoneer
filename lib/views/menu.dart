@@ -4,8 +4,8 @@ import 'package:pyoneer/services/content_counter.dart';
 import 'package:pyoneer/services/launch_url.dart';
 import 'package:pyoneer/utils/animation.dart';
 import 'package:pyoneer/utils/hero.dart';
-import 'package:pyoneer/views/menu/news.dart';
 import 'package:pyoneer/views/menu/learning_hub.dart';
+import 'package:pyoneer/views/menu/news.dart';
 
 class MenuScreen extends StatefulWidget {
   const MenuScreen({super.key});
@@ -61,47 +61,49 @@ class _PrimaryScreenState extends State<MenuScreen> {
                     leading: PyoneerHero.hero(
                         Image.asset("assets/icons/news.png"), "news-icon"),
                     title: const Text(
-                      "ข่าวที่น่าสนใจ",
+                      "Python news",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     trailing: const Icon(Icons.arrow_forward_ios),
-                    subtitle: FutureBuilder<int>(
-                      future: newsItemCountFuture,
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.done) {
-                          if (snapshot.hasError) {
-                            // Handle error case
-                            return const Text('0 รายการ');
-                          }
-            
-                          // Display the news count as a string in the trailing
-                          return PyoneerHero.hero(
-                            Text(
-                              '${snapshot.data} รายการ',
-                              style: const TextStyle(fontSize: 12),
-                            ),
-                            "news-counter",
-                          );
-                        } else {
-                          // Display a loading indicator while waiting for the data
-                          return const Align(
-                            alignment: Alignment.centerLeft,
-                            child: SizedBox(
-                              height: 14,
-                              width: 14,
-                              child: Padding(
-                                padding: EdgeInsets.all(3.0),
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                ),
-                              ),
-                            ),
-                          );
-                        }
-                      },
-                    ),
+                    subtitle: const Text("ข่าวสารไพทอน",
+                        style: TextStyle(fontSize: 12)),
+                    // FutureBuilder<int>(
+                    //   future: newsItemCountFuture,
+                    //   builder: (context, snapshot) {
+                    //     if (snapshot.connectionState == ConnectionState.done) {
+                    //       if (snapshot.hasError) {
+                    //         // Handle error case
+                    //         return const Text('0 รายการ');
+                    //       }
+
+                    //       // Display the news count as a string in the trailing
+                    //       return PyoneerHero.hero(
+                    //         Text(
+                    //           '${snapshot.data} รายการ',
+                    //           style: const TextStyle(fontSize: 12),
+                    //         ),
+                    //         "news-counter",
+                    //       );
+                    //     } else {
+                    //       // Display a loading indicator while waiting for the data
+                    //       return const Align(
+                    //         alignment: Alignment.centerLeft,
+                    //         child: SizedBox(
+                    //           height: 14,
+                    //           width: 14,
+                    //           child: Padding(
+                    //             padding: EdgeInsets.all(3.0),
+                    //             child: CircularProgressIndicator(
+                    //               strokeWidth: 2,
+                    //             ),
+                    //           ),
+                    //         ),
+                    //       );
+                    //     }
+                    //   },
+                    // ),
                     onTap: () {
                       PyoneerAnimation.changeScreen(context, const NewsScreen())
                           .then((value) => refreshNewsItemCount());
@@ -111,13 +113,15 @@ class _PrimaryScreenState extends State<MenuScreen> {
                   ListTile(
                     leading: Image.asset("assets/images/lesson0/cover.png"),
                     title: const Text(
-                      "Python",
+                      "Python update",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    subtitle: const Text("ข่าวล่าสุด"),
-                    trailing: const Icon(FontAwesomeIcons.arrowUpRightFromSquare),
+                    subtitle: const Text("ไพทอนอัพเดท",
+                        style: TextStyle(fontSize: 12)),
+                    trailing:
+                        const Icon(FontAwesomeIcons.arrowUpRightFromSquare),
                     onTap: () {
                       LaunchURL.launchSrtingURL("https://blog.python.org/");
                     },
@@ -125,51 +129,55 @@ class _PrimaryScreenState extends State<MenuScreen> {
                   SizedBox(height: listTileSpace),
                   ListTile(
                     leading: PyoneerHero.hero(
-                        Image.asset("assets/icons/library.png"), "library-icon"),
+                        Image.asset("assets/icons/library.png"),
+                        "library-icon"),
                     title: const Text(
-                      "ศูนย์การเรียนรู้",
+                      "Python E-Learning",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     trailing: const Icon(Icons.arrow_forward_ios),
-                    subtitle: FutureBuilder<int>(
-                      future: learningItemCountFuture,
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.done) {
-                          if (snapshot.hasError) {
-                            // Handle error case
-                            return const Text('0 รายการ');
-                          }
-            
-                          // Display the news count as a string in the trailing
-                          return PyoneerHero.hero(
-                            Text(
-                              '${snapshot.data} รายการ',
-                              style: const TextStyle(fontSize: 12),
-                            ),
-                            "library-counter",
-                          );
-                        } else {
-                          // Display a loading indicator while waiting for the data
-                          return const Align(
-                            alignment: Alignment.centerLeft,
-                            child: SizedBox(
-                              height: 14,
-                              width: 14,
-                              child: Padding(
-                                padding: EdgeInsets.all(3.0),
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                ),
-                              ),
-                            ),
-                          );
-                        }
-                      },
-                    ),
+                    subtitle: const Text("ศูนย์การเรียนรู้ไพทอน",
+                        style: TextStyle(fontSize: 12)),
+                    // FutureBuilder<int>(
+                    //   future: learningItemCountFuture,
+                    //   builder: (context, snapshot) {
+                    //     if (snapshot.connectionState == ConnectionState.done) {
+                    //       if (snapshot.hasError) {
+                    //         // Handle error case
+                    //         return const Text('0 รายการ');
+                    //       }
+
+                    //       // Display the news count as a string in the trailing
+                    //       return PyoneerHero.hero(
+                    //         Text(
+                    //           '${snapshot.data} รายการ',
+                    //           style: const TextStyle(fontSize: 12),
+                    //         ),
+                    //         "library-counter",
+                    //       );
+                    //     } else {
+                    //       // Display a loading indicator while waiting for the data
+                    //       return const Align(
+                    //         alignment: Alignment.centerLeft,
+                    //         child: SizedBox(
+                    //           height: 14,
+                    //           width: 14,
+                    //           child: Padding(
+                    //             padding: EdgeInsets.all(3.0),
+                    //             child: CircularProgressIndicator(
+                    //               strokeWidth: 2,
+                    //             ),
+                    //           ),
+                    //         ),
+                    //       );
+                    //     }
+                    //   },
+                    // ),
                     onTap: () {
-                      PyoneerAnimation.changeScreen(context, const LearningHubScreen())
+                      PyoneerAnimation.changeScreen(
+                              context, const LearningHubScreen())
                           .then((value) => refreshNewsItemCount());
                     },
                   ),

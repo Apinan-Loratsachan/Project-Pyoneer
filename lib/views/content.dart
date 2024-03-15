@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:pyoneer/components/lesson_component.dart';
 import 'package:pyoneer/components/testing_component.dart';
 import 'package:pyoneer/services/user_data.dart';
@@ -85,23 +87,25 @@ class _ContentScreenState extends State<ContentScreen> {
     );
   }
 
-  Future<Map<String, dynamic>> fetchTestScore(
-      String email, String testType, int lessonIndex) async {
+  Stream<Map<String, dynamic>> fetchTestScore(
+      String email, String testType, int lessonIndex) {
     if (email == 'ไม่ได้เข้าสู่ระบบ') {
-      return {'score': null, 'totalScore': null, 'testDate': null};
+      return Stream.value(
+          {'score': null, 'totalScore': null, 'testDate': null});
     }
-    var doc = await FirebaseFirestore.instance
+    return FirebaseFirestore.instance
         .collection('testResult')
         .doc(email)
         .collection(testType)
         .doc('lessonTest $lessonIndex')
-        .get();
-
-    if (doc.exists) {
-      return doc.data()!;
-    } else {
-      return {'score': null, 'totalScore': null, 'testDate': null};
-    }
+        .snapshots()
+        .map((snapshot) {
+      if (snapshot.exists) {
+        return snapshot.data()!;
+      } else {
+        return {'score': null, 'totalScore': null, 'testDate': null};
+      }
+    });
   }
 
   @override
@@ -254,7 +258,7 @@ class _ContentScreenState extends State<ContentScreen> {
                         indicatorStyle: const IndicatorStyle(
                           width: 40,
                           color: AppColor.primarSnakeColor,
-                          indicatorXY: 0.5,
+                          indicatorXY: 0.18,
                         ),
                         endChild: Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -276,8 +280,8 @@ class _ContentScreenState extends State<ContentScreen> {
                                   'Lesson',
                                 ),
                               ),
-                              FutureBuilder<Map<String, dynamic>>(
-                                future: fetchTestScore(
+                              StreamBuilder<Map<String, dynamic>>(
+                                stream: fetchTestScore(
                                     UserData.email, 'pre-test', i),
                                 builder: (BuildContext context,
                                     AsyncSnapshot<Map<String, dynamic>>
@@ -320,8 +324,8 @@ class _ContentScreenState extends State<ContentScreen> {
                                   }
                                 },
                               ),
-                              FutureBuilder<Map<String, dynamic>>(
-                                future: fetchTestScore(
+                              StreamBuilder<Map<String, dynamic>>(
+                                stream: fetchTestScore(
                                     UserData.email, 'post-test', i),
                                 builder: (BuildContext context,
                                     AsyncSnapshot<Map<String, dynamic>>
