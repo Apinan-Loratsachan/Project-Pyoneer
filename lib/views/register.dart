@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pyoneer/utils/animate_fade_slide.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -9,14 +10,6 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen>
     with TickerProviderStateMixin {
-  late AnimationController _fadeController;
-  late AnimationController _slideController;
-  late Animation<double> _iconFadeAnimation;
-  late Animation<Offset> _iconSlideAnimation;
-  late Animation<double> _formFadeAnimation;
-  late Animation<Offset> _formSlideAnimation;
-  late Animation<double> _threePartyFadeAnimation;
-  late Animation<Offset> _threePartySlideAnimation;
   bool _obscureText = true;
   bool _obscureText2 = true;
   bool _isFieldEmpty = true;
@@ -29,54 +22,7 @@ class _RegisterScreenState extends State<RegisterScreen>
   @override
   void initState() {
     super.initState();
-    _fadeController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 2000),
-    );
-    _slideController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 2000),
-    );
-    _iconFadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(
-        parent: _fadeController,
-        curve: const Interval(0.0, 0.5, curve: Curves.easeIn),
-      ),
-    );
-    _iconSlideAnimation =
-        Tween<Offset>(begin: const Offset(0.0, 1.0), end: Offset.zero).animate(
-      CurvedAnimation(
-        parent: _slideController,
-        curve: const Interval(0.0, 0.5, curve: Curves.easeIn),
-      ),
-    );
-    _formFadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(
-        parent: _fadeController,
-        curve: const Interval(0.25, 0.75, curve: Curves.easeIn),
-      ),
-    );
-    _formSlideAnimation =
-        Tween<Offset>(begin: const Offset(0.0, 0.2), end: Offset.zero).animate(
-      CurvedAnimation(
-        parent: _slideController,
-        curve: const Interval(0.25, 0.75, curve: Curves.easeIn),
-      ),
-    );
 
-    _threePartyFadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(
-        parent: _fadeController,
-        curve: const Interval(0.5, 1.0, curve: Curves.easeIn),
-      ),
-    );
-    _threePartySlideAnimation =
-        Tween<Offset>(begin: const Offset(0.0, 1.0), end: Offset.zero).animate(
-      CurvedAnimation(
-        parent: _slideController,
-        curve: const Interval(0.5, 1.0, curve: Curves.easeIn),
-      ),
-    );
     _controller1.addListener(() {
       if (_controller1.text.isEmpty && !_isFieldEmpty) {
         setState(() {
@@ -101,8 +47,6 @@ class _RegisterScreenState extends State<RegisterScreen>
       _hasInteractedWithField2 = true;
       _checkPasswordMatch();
     });
-    _fadeController.forward();
-    _slideController.forward();
   }
 
   void _checkPasswordMatch() {
@@ -121,8 +65,6 @@ class _RegisterScreenState extends State<RegisterScreen>
 
   @override
   void dispose() {
-    _fadeController.dispose();
-    _slideController.dispose();
     _controller1.dispose();
     _controller2.dispose();
     super.dispose();
@@ -140,161 +82,146 @@ class _RegisterScreenState extends State<RegisterScreen>
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  SlideTransition(
-                    position: _iconSlideAnimation,
-                    child: FadeTransition(
-                      opacity: _iconFadeAnimation,
-                      child: Image.asset(
-                        'assets/icons/pyoneer_bg_less.png',
-                        height: MediaQuery.of(context).size.height * 0.25,
-                      ),
-                    ),
-                  ),
+                  Image.asset(
+                    'assets/icons/pyoneer_bg_less.png',
+                    height: MediaQuery.of(context).size.height * 0.25,
+                  ).animateFadeSlide(),
                   const SizedBox(height: 0),
-                  SlideTransition(
-                    position: _formSlideAnimation,
-                    child: FadeTransition(
-                      opacity: _formFadeAnimation,
-                      child: const Text(
-                        'Created By DTI',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 24,
+                  const Text(
+                    'สมัครสมาชิก',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 28,
+                    ),
+                  ).animateFadeSlide(),
+                  const SizedBox(height: 0),
+                  const Text(
+                    'Created By DTI',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 24,
+                    ),
+                  ).animateFadeSlide(),
+                  const SizedBox(height: 28),
+                  Column(
+                    children: [
+                      TextFormField(
+                        keyboardType: TextInputType.emailAddress,
+                        decoration: InputDecoration(
+                          labelText: 'อีเมล',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                        ),
+                        autofillHints: const [AutofillHints.email],
+                      ),
+                      const SizedBox(height: 16),
+                      TextFormField(
+                        keyboardType: TextInputType.emailAddress,
+                        decoration: InputDecoration(
+                          labelText: 'ชื่อผู้ใช้',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                        ),
+                        autofillHints: const [AutofillHints.username],
+                      ),
+                      const SizedBox(height: 16),
+                      TextFormField(
+                        controller: _controller1,
+                        obscureText: _obscureText,
+                        decoration: InputDecoration(
+                          labelText: 'รหัสผ่าน',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          suffixIcon: _isFieldEmpty
+                              ? null
+                              : IconButton(
+                                  icon: Icon(
+                                    _obscureText
+                                        ? Icons.visibility
+                                        : Icons.visibility_off,
+                                  ),
+                                  onPressed: () {
+                                    setState(() {
+                                      _obscureText = !_obscureText;
+                                    });
+                                  },
+                                ),
+                        ),
+                        autofillHints: const [AutofillHints.password],
+                      ),
+                      const SizedBox(height: 16),
+                      TextFormField(
+                        controller: _controller2,
+                        obscureText: _obscureText2,
+                        decoration: InputDecoration(
+                          labelText: 'ยืนยันรหัสผ่าน',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          suffixIcon: _isFieldEmpty2
+                              ? null
+                              : IconButton(
+                                  icon: Icon(
+                                    _obscureText2
+                                        ? Icons.visibility
+                                        : Icons.visibility_off,
+                                  ),
+                                  onPressed: () {
+                                    setState(() {
+                                      _obscureText2 = !_obscureText2;
+                                    });
+                                  },
+                                ),
+                          errorText: (_controller1.text.isNotEmpty &&
+                                  _controller2.text.isNotEmpty &&
+                                  !_passwordsMatch)
+                              ? 'รหัสผ่านไม่ตรงกัน'
+                              : null,
+                        ),
+                        autofillHints: const [AutofillHints.password],
+                      ),
+                      const SizedBox(height: 24),
+                      ElevatedButton(
+                        onPressed: () {
+                          // Handle sign up logic
+                        },
+                        style: ElevatedButton.styleFrom(
+                          foregroundColor: Colors.white,
+                          backgroundColor:
+                              const Color(0xFF1ABDAD), // Text color
+                        ),
+                        child: const Text('สมัครสมาชิก'),
+                      ),
+                    ],
+                  ).animateFadeSlide(),
+                  const SizedBox(height: 24),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text("มีบัญชีอยู่แล้ว?"),
+                      const SizedBox(width: 5),
+                      GestureDetector(
+                        onTap: () {
+                          // Navigate to login page
+                          Navigator.pop(
+                            context,
+                          );
+                        },
+                        child: const Text(
+                          "เข้าสู่ระบบ",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.blue,
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                  const SizedBox(height: 28),
-                  SlideTransition(
-                    position: _formSlideAnimation,
-                    child: FadeTransition(
-                      opacity: _formFadeAnimation,
-                      child: Column(
-                        children: [
-                          TextFormField(
-                            keyboardType: TextInputType.emailAddress,
-                            decoration: InputDecoration(
-                              labelText: 'อีเมล',
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10.0),
-                              ),
-                            ),
-                            autofillHints: const [AutofillHints.email],
-                          ),
-                          const SizedBox(height: 16),
-                          TextFormField(
-                            keyboardType: TextInputType.emailAddress,
-                            decoration: InputDecoration(
-                              labelText: 'ชื่อผู้ใช้',
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10.0),
-                              ),
-                            ),
-                            autofillHints: const [AutofillHints.username],
-                          ),
-                          const SizedBox(height: 16),
-                          TextFormField(
-                            controller: _controller1,
-                            obscureText: _obscureText,
-                            decoration: InputDecoration(
-                              labelText: 'รหัสผ่าน',
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10.0),
-                              ),
-                              suffixIcon: _isFieldEmpty
-                                  ? null
-                                  : IconButton(
-                                      icon: Icon(
-                                        _obscureText
-                                            ? Icons.visibility
-                                            : Icons.visibility_off,
-                                      ),
-                                      onPressed: () {
-                                        setState(() {
-                                          _obscureText = !_obscureText;
-                                        });
-                                      },
-                                    ),
-                            ),
-                            autofillHints: const [AutofillHints.password],
-                          ),
-                          const SizedBox(height: 16),
-                          TextFormField(
-                            controller: _controller2,
-                            obscureText: _obscureText2,
-                            decoration: InputDecoration(
-                              labelText: 'ยืนยันรหัสผ่าน',
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10.0),
-                              ),
-                              suffixIcon: _isFieldEmpty2
-                                  ? null
-                                  : IconButton(
-                                      icon: Icon(
-                                        _obscureText2
-                                            ? Icons.visibility
-                                            : Icons.visibility_off,
-                                      ),
-                                      onPressed: () {
-                                        setState(() {
-                                          _obscureText2 = !_obscureText2;
-                                        });
-                                      },
-                                    ),
-                              errorText: (_controller1.text.isNotEmpty &&
-                                      _controller2.text.isNotEmpty &&
-                                      !_passwordsMatch)
-                                  ? 'รหัสผ่านไม่ตรงกัน'
-                                  : null,
-                            ),
-                            autofillHints: const [AutofillHints.password],
-                          ),
-                          const SizedBox(height: 24),
-                          ElevatedButton(
-                            onPressed: () {
-                              // Handle sign up logic
-                            },
-                            style: ElevatedButton.styleFrom(
-                              foregroundColor: Colors.white,
-                              backgroundColor:
-                                  const Color(0xFF1ABDAD), // Text color
-                            ),
-                            child: const Text('สมัครสมาชิก'),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 24),
-                  SlideTransition(
-                    position: _threePartySlideAnimation,
-                    child: FadeTransition(
-                      opacity: _threePartyFadeAnimation,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text("มีบัญชีอยู่แล้ว?"),
-                          const SizedBox(width: 5),
-                          GestureDetector(
-                            onTap: () {
-                              // Navigate to login page
-                              Navigator.pop(
-                                context,
-                              );
-                            },
-                            child: const Text(
-                              "เข้าสู่ระบบ",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.blue,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+                    ],
+                  ).animateFadeSlide(),
                   const SizedBox(height: 24),
                 ],
               ),

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:pyoneer/components/lesson_component.dart';
 import 'package:pyoneer/services/user_data.dart';
 import 'package:pyoneer/utils/color.dart';
@@ -29,12 +30,6 @@ class LessonScreenModel extends StatefulWidget {
 
 class _LessonScreenModelState extends State<LessonScreenModel>
     with TickerProviderStateMixin {
-  late AnimationController _fadeController;
-  late AnimationController _slideController;
-  late Animation<double> _titleFadeAnimation;
-  late Animation<Offset> _titleSlideAnimation;
-  late Animation<double> _contentFadeAnimation;
-  late Animation<Offset> _contentSlideAnimation;
   final ScrollController _scrollController = ScrollController();
   YoutubePlayerController? _youtubePlayerController;
   bool _isPlayerReady = false;
@@ -61,46 +56,6 @@ class _LessonScreenModelState extends State<LessonScreenModel>
         });
     }
     _scrollController.addListener(_scrollListener);
-    _fadeController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 2000),
-    );
-    _slideController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 2000),
-    );
-
-    _titleFadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(
-        parent: _fadeController,
-        curve: const Interval(0.0, 0.5, curve: Curves.easeIn),
-      ),
-    );
-
-    _titleSlideAnimation =
-        Tween<Offset>(begin: const Offset(0.1, 0.0), end: Offset.zero).animate(
-      CurvedAnimation(
-        parent: _slideController,
-        curve: const Interval(0.0, 0.5, curve: Curves.easeIn),
-      ),
-    );
-
-    _contentFadeAnimation = Tween<double>(begin: 0.0, end: 1).animate(
-      CurvedAnimation(
-        parent: _fadeController,
-        curve: const Interval(0.25, 0.75, curve: Curves.easeOut),
-      ),
-    );
-    _contentSlideAnimation =
-        Tween<Offset>(begin: const Offset(0.1, 0.0), end: Offset.zero).animate(
-      CurvedAnimation(
-        parent: _slideController,
-        curve: const Interval(0.25, 0.75, curve: Curves.easeIn),
-      ),
-    );
-
-    _fadeController.forward();
-    _slideController.forward();
   }
 
   @override
@@ -109,8 +64,6 @@ class _LessonScreenModelState extends State<LessonScreenModel>
       _youtubePlayerController!.removeListener(() {});
       _youtubePlayerController!.dispose();
     }
-    _fadeController.dispose();
-    _slideController.dispose();
     _scrollController.removeListener(_scrollListener);
     _scrollController.dispose();
     super.dispose();
@@ -182,35 +135,35 @@ class _LessonScreenModelState extends State<LessonScreenModel>
             LessonComponent.lessonContent[widget.index].heroTag),
       ),
       const SizedBox(height: 25),
-      SlideTransition(
-        position: _titleSlideAnimation,
-        child: FadeTransition(
-          opacity: _titleFadeAnimation,
-          child: Text(
-            widget.lessonTitle,
-            style: const TextStyle(
-              fontSize: PyoneerText.titleTextSize,
-            ),
-            textAlign: TextAlign.center,
-          ),
+      Text(
+        widget.lessonTitle,
+        style: const TextStyle(
+          fontSize: PyoneerText.titleTextSize,
         ),
-      ),
+        textAlign: TextAlign.center,
+      )
+          .animate()
+          .slide(
+              begin: const Offset(0.1, 0),
+              duration: 1500.ms,
+              curve: Curves.easeInOutCubic)
+          .fade(duration: 1500.ms, curve: Curves.easeInOutCubic),
       const SizedBox(height: 25),
-      SlideTransition(
-        position: _contentSlideAnimation,
-        child: FadeTransition(
-          opacity: _contentFadeAnimation,
-          child: SizedBox(
-            width: MediaQuery.of(context).size.width * 0.9,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                ...widget.contentWidgets,
-              ],
-            ),
-          ),
+      SizedBox(
+        width: MediaQuery.of(context).size.width * 0.9,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            ...widget.contentWidgets,
+          ],
         ),
-      ),
+      )
+          .animate()
+          .slide(
+              begin: const Offset(0.1, 0),
+              duration: 1600.ms,
+              curve: Curves.easeInOutCubic)
+          .fade(duration: 1600.ms, curve: Curves.easeInOutCubic),
     ];
 
     return widget.youtubeVideoID != null
@@ -312,70 +265,70 @@ class _LessonScreenModelState extends State<LessonScreenModel>
                           children: allWidgets,
                         ),
                         if (widget.youtubeVideoID != null)
-                          SlideTransition(
-                            position: _contentSlideAnimation,
-                            child: FadeTransition(
-                              opacity: _contentFadeAnimation,
-                              child: Padding(
-                                padding: EdgeInsets.only(
-                                  left:
-                                      MediaQuery.of(context).size.width * 0.05,
-                                  right:
-                                      MediaQuery.of(context).size.width * 0.05,
-                                ),
-                                child: Column(
-                                  children: [
-                                    PyoneerText.divider(0),
-                                    const SizedBox(height: 40),
-                                    Text(
-                                      "วิดีโอประกอบการเรียน ${LessonComponent.lessonContent[widget.index].title}",
-                                      style: const TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    Text(
-                                      LessonComponent
-                                          .lessonContent[widget.index].subTitle,
-                                      style: const TextStyle(
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 40),
-                                    AspectRatio(
-                                      aspectRatio: 16 / 9,
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(10),
-                                        child: player,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 40),
-                                    const Text(
-                                      "VIDEO by",
-                                      style: TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 20),
-                                    Image.asset(
-                                      "assets/icons/pyoneer_long.png",
-                                      width: MediaQuery.of(context).size.width *
-                                          0.5,
-                                    ),
-                                    const Text(
-                                      "Copyright © 2024 PY৹NEER,\nAll right reserved",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 50),
-                                  ],
-                                ),
-                              ),
+                          Padding(
+                            padding: EdgeInsets.only(
+                              left: MediaQuery.of(context).size.width * 0.05,
+                              right: MediaQuery.of(context).size.width * 0.05,
                             ),
-                          ),
+                            child: Column(
+                              children: [
+                                PyoneerText.divider(0),
+                                const SizedBox(height: 40),
+                                Text(
+                                  "วิดีโอประกอบการเรียน ${LessonComponent.lessonContent[widget.index].title}",
+                                  style: const TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  LessonComponent
+                                      .lessonContent[widget.index].subTitle,
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                  ),
+                                ),
+                                const SizedBox(height: 40),
+                                AspectRatio(
+                                  aspectRatio: 16 / 9,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: player,
+                                  ),
+                                ),
+                                const SizedBox(height: 40),
+                                const Text(
+                                  "VIDEO by",
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const SizedBox(height: 20),
+                                Image.asset(
+                                  "assets/icons/pyoneer_long.png",
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.5,
+                                ),
+                                const Text(
+                                  "Copyright © 2024 PY৹NEER,\nAll right reserved",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const SizedBox(height: 50),
+                              ],
+                            ),
+                          )
+                              .animate()
+                              .slide(
+                                begin: const Offset(0.1, 0),
+                                duration: 1500.ms,
+                              )
+                              .fade(
+                                duration: 1500.ms,
+                              ),
                       ],
                     ),
                   ),
