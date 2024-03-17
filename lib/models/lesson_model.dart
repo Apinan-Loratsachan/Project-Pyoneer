@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:pyoneer/components/lesson_component.dart';
 import 'package:pyoneer/services/user_data.dart';
 import 'package:pyoneer/utils/color.dart';
@@ -39,8 +38,7 @@ class _LessonScreenModelState extends State<LessonScreenModel>
   final ScrollController _scrollController = ScrollController();
   YoutubePlayerController? _youtubePlayerController;
   bool _isPlayerReady = false;
-  bool _isExitFullScreen = false;
-
+  double? _lastScrollPosition;
   bool lessonReadStatusChecked = false;
 
   @override
@@ -58,7 +56,9 @@ class _LessonScreenModelState extends State<LessonScreenModel>
           showLiveFullscreenButton: false,
           disableDragSeek: false,
         ),
-      );
+      )..addListener(() {
+          setState(() {});
+        });
     }
     _scrollController.addListener(_scrollListener);
     _fadeController = AnimationController(
@@ -105,7 +105,10 @@ class _LessonScreenModelState extends State<LessonScreenModel>
 
   @override
   void dispose() {
-    _youtubePlayerController?.dispose();
+    if (_youtubePlayerController != null) {
+      _youtubePlayerController!.removeListener(() {});
+      _youtubePlayerController!.dispose();
+    }
     _fadeController.dispose();
     _slideController.dispose();
     _scrollController.removeListener(_scrollListener);
@@ -212,10 +215,22 @@ class _LessonScreenModelState extends State<LessonScreenModel>
 
     return widget.youtubeVideoID != null
         ? YoutubePlayerBuilder(
+            onEnterFullScreen: () {
+              if (_scrollController.hasClients) {
+                _lastScrollPosition = _scrollController.offset;
+              }
+              SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive,
+                  overlays: [SystemUiOverlay.top, SystemUiOverlay.bottom]);
+            },
             onExitFullScreen: () {
               SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
                   overlays: [SystemUiOverlay.top, SystemUiOverlay.bottom]);
-              _isExitFullScreen = true;
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                if (_scrollController.hasClients &&
+                    _lastScrollPosition != null) {
+                  _scrollController.jumpTo(_lastScrollPosition!);
+                }
+              });
             },
             player: YoutubePlayer(
               controller: _youtubePlayerController!,
@@ -290,7 +305,6 @@ class _LessonScreenModelState extends State<LessonScreenModel>
               body: Scrollbar(
                 child: SingleChildScrollView(
                   controller: _scrollController,
-                  reverse: _isExitFullScreen,
                   child: Center(
                     child: Column(
                       children: [
