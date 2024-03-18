@@ -14,12 +14,17 @@ class ContentScreen extends StatefulWidget {
   State<ContentScreen> createState() => _ContentScreenState();
 }
 
-class _ContentScreenState extends State<ContentScreen> {
+class _ContentScreenState extends State<ContentScreen>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
   final ScrollController _scrollController = ScrollController();
 
   bool _isAtBottom = false;
   bool _showFab = true;
   Timer? _hideFabTimer;
+  double spaceSize = 25;
 
   static const Map<int, String> thaiMonths = {
     1: 'ม.ค.',
@@ -108,6 +113,7 @@ class _ContentScreenState extends State<ContentScreen> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     String greetingWord = _getGreetingWord();
     return Scaffold(
       appBar: PreferredSize(
@@ -223,25 +229,30 @@ class _ContentScreenState extends State<ContentScreen> {
                   indicatorStyle: const IndicatorStyle(
                     width: 40,
                     color: AppColor.primarSnakeColor,
-                    indicatorXY: 0.5,
+                    indicatorXY: 0.42,
                   ),
                   endChild: Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Card(
-                      elevation: 10,
-                      shadowColor: AppColor.secondarySnakeColor,
-                      color: AppColor.primarSnakeColor.withAlpha(255),
-                      child: lessonTitle(
-                        LessonComponent.lessonContent[0].imageSrc,
-                        LessonComponent.lessonContent[0].heroTag,
-                        LessonComponent.lessonContent[0].title,
-                        LessonComponent.lessonContent[0].subTitle,
-                        LessonComponent.lessonContent[0].targetScreen,
-                        context,
-                        0,
-                        'Lesson',
-                        Stream.value(true),
-                      ),
+                    child: Column(
+                      children: [
+                        Card(
+                          elevation: 10,
+                          shadowColor: AppColor.secondarySnakeColor,
+                          color: AppColor.primarSnakeColor.withAlpha(255),
+                          child: lessonTitle(
+                            LessonComponent.lessonContent[0].imageSrc,
+                            LessonComponent.lessonContent[0].heroTag,
+                            LessonComponent.lessonContent[0].title,
+                            LessonComponent.lessonContent[0].subTitle,
+                            LessonComponent.lessonContent[0].targetScreen,
+                            context,
+                            0,
+                            'Lesson',
+                            Stream.value(true),
+                          ),
+                        ),
+                        SizedBox(height: spaceSize),
+                      ],
                     ),
                   ),
                 ),
@@ -253,16 +264,31 @@ class _ContentScreenState extends State<ContentScreen> {
                       TimelineTile(
                         alignment: TimelineAlign.manual,
                         lineXY: 0.07,
-                        isLast: i == 5 ? true : false,
+                        isLast: i == LessonComponent.lessonContent.length - 1
+                            ? true
+                            : false,
                         indicatorStyle: const IndicatorStyle(
                           width: 40,
                           color: AppColor.primarSnakeColor,
-                          indicatorXY: 0.18,
+                          indicatorXY: 0.24,
                         ),
                         endChild: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Column(
                             children: [
+                              SizedBox(
+                                height: spaceSize,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 8),
+                                  child: Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                      "บทที่ $i",
+                                      style: const TextStyle(fontSize: 18),
+                                    ),
+                                  ),
+                                ),
+                              ),
                               StreamBuilder<Map<String, dynamic>>(
                                 stream: fetchTestScore(
                                     UserData.email, 'pre-test', i),
@@ -283,6 +309,8 @@ class _ContentScreenState extends State<ContentScreen> {
                                     DateTime? testDate = timeStamp?.toDate();
                                     String subtitle =
                                         "โปรดทำแบบทดสอบก่อนที่จะเริ่มเรียนบทนี้";
+                                    Color lessonColor = Colors.grey;
+                                    Color postTestColor = Colors.grey;
                                     if (score != null &&
                                         totalScore != null &&
                                         testDate != null) {
@@ -291,90 +319,113 @@ class _ContentScreenState extends State<ContentScreen> {
                                       int thaiYear = testDate.year + 543;
                                       subtitle =
                                           "$score/$totalScore คะแนน | ${testDate.day} $thaiMonth $thaiYear ${testDate.hour.toString().padLeft(2, '0')}:${testDate.minute.toString().padLeft(2, '0')} น.";
+                                      lessonColor = AppColor.primarSnakeColor;
+                                      postTestColor = Colors.white;
                                     }
-                                    return Card(
-                                      elevation: 10,
-                                      child: lessonTitle(
-                                        "assets/icons/pre_test.png",
-                                        "pre_test_$i",
-                                        "แบบทดสอบก่อนเรียนบทที่ $i",
-                                        subtitle,
-                                        TestingScreen.preTest[i - 1],
-                                        context,
-                                        i,
-                                        'Pre-test',
-                                        Stream.value(true),
-                                      ),
+                                    return Column(
+                                      children: [
+                                        Card(
+                                          elevation: 10,
+                                          child: lessonTitle(
+                                            "assets/icons/pre_test.png",
+                                            "pre_test_$i",
+                                            "แบบทดสอบก่อนเรียนบทที่ $i",
+                                            subtitle,
+                                            TestingScreen.preTest[i - 1],
+                                            context,
+                                            i,
+                                            'Pre-test',
+                                            Stream.value(true),
+                                          ),
+                                        ),
+                                        Card(
+                                          elevation: 10,
+                                          shadowColor:
+                                              AppColor.secondarySnakeColor,
+                                          color: lessonColor,
+                                          // surfaceTintColor: AppColor.secondarySnakeColor,
+                                          child: lessonTitle(
+                                            LessonComponent
+                                                .lessonContent[i].imageSrc,
+                                            LessonComponent
+                                                .lessonContent[i].heroTag,
+                                            LessonComponent
+                                                .lessonContent[i].title,
+                                            LessonComponent
+                                                .lessonContent[i].subTitle,
+                                            LessonComponent
+                                                .lessonContent[i].targetScreen,
+                                            context,
+                                            i,
+                                            'Lesson',
+                                            fetchTestScore(UserData.email,
+                                                    'pre-test', i)
+                                                .map((data) =>
+                                                    data['score'] != null),
+                                          ),
+                                        ),
+                                        StreamBuilder<Map<String, dynamic>>(
+                                          stream: fetchTestScore(
+                                              UserData.email, 'post-test', i),
+                                          builder: (BuildContext context,
+                                              AsyncSnapshot<
+                                                      Map<String, dynamic>>
+                                                  snapshot) {
+                                            if (snapshot.connectionState ==
+                                                ConnectionState.waiting) {
+                                              return const CircularProgressIndicator();
+                                            } else if (snapshot.hasError) {
+                                              return const Text("???");
+                                            } else {
+                                              int? score =
+                                                  snapshot.data?['score'];
+                                              int? totalScore =
+                                                  snapshot.data?['totalScore'];
+                                              Timestamp? timeStamp =
+                                                  snapshot.data?['timestamp'];
+                                              DateTime? testDate =
+                                                  timeStamp?.toDate();
+                                              String subtitle =
+                                                  "ยังไม่ได้ทำแบบทดสอบ";
+                                              if (score != null &&
+                                                  totalScore != null &&
+                                                  testDate != null) {
+                                                String thaiMonth = thaiMonths[
+                                                        testDate.month] ??
+                                                    '';
+                                                int thaiYear =
+                                                    testDate.year + 543;
+                                                subtitle =
+                                                    "$score/$totalScore คะแนน | ${testDate.day} $thaiMonth $thaiYear ${testDate.hour.toString().padLeft(2, '0')}:${testDate.minute.toString().padLeft(2, '0')} น.";
+                                              }
+                                              return Card(
+                                                color: postTestColor,
+                                                elevation: 10,
+                                                child: lessonTitle(
+                                                  "assets/icons/post_test.png",
+                                                  "post_test_$i",
+                                                  "แบบทดสอบหลังเรียนบทที่ $i",
+                                                  subtitle,
+                                                  TestingScreen.postTest[i - 1],
+                                                  context,
+                                                  i,
+                                                  'Post-test',
+                                                  fetchTestScore(UserData.email,
+                                                          'pre-test', i)
+                                                      .map((data) =>
+                                                          data['score'] !=
+                                                          null),
+                                                ),
+                                              );
+                                            }
+                                          },
+                                        ),
+                                      ],
                                     );
                                   }
                                 },
                               ),
-                              Card(
-                                elevation: 10,
-                                shadowColor: AppColor.secondarySnakeColor,
-                                color: AppColor.primarSnakeColor.withAlpha(255),
-                                // surfaceTintColor: AppColor.secondarySnakeColor,
-                                child: lessonTitle(
-                                  LessonComponent.lessonContent[i].imageSrc,
-                                  LessonComponent.lessonContent[i].heroTag,
-                                  LessonComponent.lessonContent[i].title,
-                                  LessonComponent.lessonContent[i].subTitle,
-                                  LessonComponent.lessonContent[i].targetScreen,
-                                  context,
-                                  i,
-                                  'Lesson',
-                                  fetchTestScore(UserData.email, 'pre-test', i)
-                                      .map((data) => data['score'] != null),
-                                ),
-                              ),
-                              StreamBuilder<Map<String, dynamic>>(
-                                stream: fetchTestScore(
-                                    UserData.email, 'post-test', i),
-                                builder: (BuildContext context,
-                                    AsyncSnapshot<Map<String, dynamic>>
-                                        snapshot) {
-                                  if (snapshot.connectionState ==
-                                      ConnectionState.waiting) {
-                                    return const CircularProgressIndicator();
-                                  } else if (snapshot.hasError) {
-                                    return const Text("???");
-                                  } else {
-                                    int? score = snapshot.data?['score'];
-                                    int? totalScore =
-                                        snapshot.data?['totalScore'];
-                                    Timestamp? timeStamp =
-                                        snapshot.data?['timestamp'];
-                                    DateTime? testDate = timeStamp?.toDate();
-                                    String subtitle = "ยังไม่ได้ทำแบบทดสอบ";
-                                    if (score != null &&
-                                        totalScore != null &&
-                                        testDate != null) {
-                                      String thaiMonth =
-                                          thaiMonths[testDate.month] ?? '';
-                                      int thaiYear = testDate.year + 543;
-                                      subtitle =
-                                          "$score/$totalScore คะแนน | ${testDate.day} $thaiMonth $thaiYear ${testDate.hour.toString().padLeft(2, '0')}:${testDate.minute.toString().padLeft(2, '0')} น.";
-                                    }
-                                    return Card(
-                                      elevation: 10,
-                                      child: lessonTitle(
-                                        "assets/icons/post_test.png",
-                                        "post_test_$i",
-                                        "แบบทดสอบหลังเรียนบทที่ $i",
-                                        subtitle,
-                                        TestingScreen.postTest[i - 1],
-                                        context,
-                                        i,
-                                        'Post-test',
-                                        fetchTestScore(
-                                                UserData.email, 'pre-test', i)
-                                            .map((data) =>
-                                                data['score'] != null),
-                                      ),
-                                    );
-                                  }
-                                },
-                              ),
+                              SizedBox(height: spaceSize),
                             ],
                           ),
                         ),
@@ -455,8 +506,8 @@ class _ContentScreenState extends State<ContentScreen> {
                   },
                 )
               : null, // Only show the check status for the main lesson
-          tileColor:
-              !unlocked ? Theme.of(context).colorScheme.background : null,
+          // tileColor:
+          //     !unlocked ? Theme.of(context).colorScheme.background : null,
           enabled: unlocked,
         );
       },
