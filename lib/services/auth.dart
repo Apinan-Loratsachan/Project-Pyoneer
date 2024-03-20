@@ -6,10 +6,11 @@ import 'package:pyoneer/services/user_data.dart';
 
 class Auth {
   static const List<String> adminUIDs = [
-    '3XlCZTQFqTScyYE0YBz94MJlORs1',
     'A0ILxjzDZeQk2okmGUcs85kMCSh2',
     'wA2YJSiuLAQXMZH77esSNHmSVYI2',
-    'fLzQpFJOKVYLrRfcNLKoFqBLOZp1'
+    'Trs9a3qQ4CZChaoFRTjmBa9imlC2',
+    'AZaNHee0oRPWy2EoJgHWgSwFcqE3',
+    'qlpWQQ2WWgUlaiplNDfUQmFlQFj2'
   ];
 
   static Future<UserCredential?> signInWithGoogle() async {
@@ -116,6 +117,22 @@ class Auth {
       }
       return null;
     }
+  }
+
+  static Future<UserCredential?> checkExistingUser(String email) async {
+    try {
+      List<String> signInMethods =
+          await FirebaseAuth.instance.fetchSignInMethodsForEmail(email);
+      if (signInMethods.isNotEmpty) {
+        return await FirebaseAuth.instance.signInWithEmailAndPassword(
+            email: email, password: 'dummy-password');
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error checking existing user: $e');
+      }
+    }
+    return null;
   }
 
   static Future<void> signOut() async {

@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:pyoneer/services/auth.dart';
 import 'package:pyoneer/utils/animate_fade_slide.dart';
@@ -26,6 +27,7 @@ class _RegisterScreenState extends State<RegisterScreen>
   String _email = '';
   String _username = '';
   String _password = '';
+  String? _emailError;
 
   @override
   void initState() {
@@ -122,11 +124,29 @@ class _RegisterScreenState extends State<RegisterScreen>
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10.0),
                           ),
+                          errorText: _emailError,
                         ),
                         autofillHints: const [AutofillHints.email],
                         onChanged: (value) {
-                          _email = value;
+                          setState(() {
+                            _email = value;
+                            _emailError = null;
+                          });
                         },
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'โปรดระบุอีเมล';
+                          }
+                          if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
+                              .hasMatch(value)) {
+                            return 'รูปแบบอีเมลไม่ถูกต้อง';
+                          }
+                          return null;
+                        },
+                        inputFormatters: [
+                          FilteringTextInputFormatter.allow(
+                              RegExp('[a-zA-Z0-9@._-]')),
+                        ],
                       ),
                       const SizedBox(height: 16),
                       TextFormField(
@@ -169,6 +189,10 @@ class _RegisterScreenState extends State<RegisterScreen>
                         onChanged: (value) {
                           _password = value;
                         },
+                        inputFormatters: [
+                          FilteringTextInputFormatter.allow(
+                              RegExp('[a-zA-Z0-9]')),
+                        ],
                       ),
                       const SizedBox(height: 16),
                       TextFormField(
@@ -245,24 +269,57 @@ class _RegisterScreenState extends State<RegisterScreen>
                                 ),
                               );
                             } else {
-                              showDialog(
-                                context: context,
-                                builder: (context) => AlertDialog(
-                                  title: const Text('สมัครสมาชิกไม่สำเร็จ'),
-                                  content: const Text(
-                                      'อีเมลนี้มีบัญชีผู้ใช้แล้ว หรือรหัสผ่านไม่ถูกต้อง'),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () {
-                                        if (mounted) {
-                                          Navigator.pop(context);
-                                        }
-                                      },
-                                      child: const Text('ปิด'),
-                                    ),
-                                  ],
-                                ),
-                              );
+                              User? existingUser =
+                                  (await Auth.checkExistingUser(_email))
+                                      as User?;
+                              if (existingUser != null &&
+                                  existingUser.providerData.any((provider) =>
+                                      provider.providerId == 'google.com')) {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => AlertDialog(
+                                    title:
+                                        const Text('อีเมลนี้มีบัญชีอยู่แล้ว'),
+                                    content: const Text(
+                                        'อีเมลนี้เชื่อมโยงกับบัญชี Google ของคุณอยู่แล้ว โปรดลงชื่อเข้าใช้ด้วยบัญชี Google แทน'),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          if (mounted) {
+                                            Navigator.pop(context);
+                                            Navigator.pushReplacement(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      const LoginScreen()),
+                                            );
+                                          }
+                                        },
+                                        child: const Text('ตกลง'),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              } else {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => AlertDialog(
+                                    title: const Text('สมัครสมาชิกไม่สำเร็จ'),
+                                    content: const Text(
+                                        'อีเมลนี้มีบัญชีอยู่แล้ว โปรดลงชื่อเข้าใช้ด้วยวิธีเดิม หรือใช้อีเมลอื่นเพื่อสมัครสมาชิกใหม่'),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          if (mounted) {
+                                            Navigator.pop(context);
+                                          }
+                                        },
+                                        child: const Text('ปิด'),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }
                             }
                           }
                         },
