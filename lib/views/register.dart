@@ -1,5 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
+import 'package:pyoneer/services/auth.dart';
 import 'package:pyoneer/utils/animate_fade_slide.dart';
+import 'package:pyoneer/views/login.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -18,6 +22,10 @@ class _RegisterScreenState extends State<RegisterScreen>
   final TextEditingController _controller2 = TextEditingController();
   bool _passwordsMatch = false;
   bool _hasInteractedWithField2 = false;
+
+  String _email = '';
+  String _username = '';
+  String _password = '';
 
   @override
   void initState() {
@@ -116,10 +124,12 @@ class _RegisterScreenState extends State<RegisterScreen>
                           ),
                         ),
                         autofillHints: const [AutofillHints.email],
+                        onChanged: (value) {
+                          _email = value;
+                        },
                       ),
                       const SizedBox(height: 16),
                       TextFormField(
-                        keyboardType: TextInputType.emailAddress,
                         decoration: InputDecoration(
                           labelText: 'ชื่อผู้ใช้',
                           border: OutlineInputBorder(
@@ -127,6 +137,9 @@ class _RegisterScreenState extends State<RegisterScreen>
                           ),
                         ),
                         autofillHints: const [AutofillHints.username],
+                        onChanged: (value) {
+                          _username = value;
+                        },
                       ),
                       const SizedBox(height: 16),
                       TextFormField(
@@ -153,6 +166,9 @@ class _RegisterScreenState extends State<RegisterScreen>
                                 ),
                         ),
                         autofillHints: const [AutofillHints.password],
+                        onChanged: (value) {
+                          _password = value;
+                        },
                       ),
                       const SizedBox(height: 16),
                       TextFormField(
@@ -187,8 +203,68 @@ class _RegisterScreenState extends State<RegisterScreen>
                       ),
                       const SizedBox(height: 24),
                       ElevatedButton(
-                        onPressed: () {
-                          // Handle sign up logic
+                        onPressed: () async {
+                          if (_passwordsMatch) {
+                            UserCredential? userCredential =
+                                await Auth.signUpWithEmailAndPassword(
+                                    _email, _password);
+                            if (userCredential != null) {
+                              await userCredential.user
+                                  ?.updateDisplayName(_username);
+
+                              showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  title: const Text('สมัครสมาชิกสำเร็จ'),
+                                  content: const Text(
+                                      'การสมัครสมาชิกเสร็จสมบูรณ์แล้ว'),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                        if (mounted) {
+                                          Navigator.pushReplacement(
+                                            context,
+                                            PageRouteBuilder(
+                                              pageBuilder: (context, animation,
+                                                      secondaryAnimation) =>
+                                                  const LoginScreen()
+                                                      .animate()
+                                                      .fade()
+                                                      .slide(),
+                                              transitionDuration:
+                                                  const Duration(
+                                                      milliseconds: 500),
+                                            ),
+                                          );
+                                        }
+                                      },
+                                      child: const Text('ปิด'),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            } else {
+                              showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  title: const Text('สมัครสมาชิกไม่สำเร็จ'),
+                                  content: const Text(
+                                      'อีเมลนี้มีบัญชีผู้ใช้แล้ว หรือรหัสผ่านไม่ถูกต้อง'),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        if (mounted) {
+                                          Navigator.pop(context);
+                                        }
+                                      },
+                                      child: const Text('ปิด'),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }
+                          }
                         },
                         style: ElevatedButton.styleFrom(
                           foregroundColor: Colors.white,

@@ -183,21 +183,57 @@ class _TestingScreenModelState extends State<TestingScreenModel> {
       _isTestSubmitted = true;
     });
 
-    Map<String, dynamic> testData = {
-      'email': userEmail,
-      'lessonTest': widget.testId,
-      'testType': testType,
-      'score': correctAnswers,
-      'totalScore': totalQuestions,
-      'timestamp': FieldValue.serverTimestamp(),
-    };
+    if (!widget.isPreTest) {
+      DocumentSnapshot doc = await FirebaseFirestore.instance
+          .collection('testResult')
+          .doc(userEmail)
+          .collection(testType)
+          .doc('lessonTest ${widget.testId}')
+          .get();
 
-    await FirebaseFirestore.instance
-        .collection('testResult')
-        .doc(userEmail)
-        .collection(testType)
-        .doc('lessonTest ${widget.testId}')
-        .set(testData);
+      int attemptCount = 1;
+      Map<String, dynamic> existingData = {};
+
+      if (doc.exists) {
+        existingData = doc.data() as Map<String, dynamic>;
+        attemptCount = existingData['attemptCount'] ?? 0;
+        attemptCount++;
+      }
+
+      Map<String, dynamic> testData = {
+        'email': userEmail,
+        'lessonTest': widget.testId,
+        'testType': testType,
+        'score': correctAnswers,
+        'totalScore': totalQuestions,
+        'attemptCount': attemptCount,
+        'chapter': 'lessonTest ${widget.testId}',
+        'timestamp': FieldValue.serverTimestamp(),
+      };
+
+      await FirebaseFirestore.instance
+          .collection('testResult')
+          .doc(userEmail)
+          .collection(testType)
+          .doc('lessonTest ${widget.testId}')
+          .set(testData, SetOptions(merge: true));
+    } else {
+      Map<String, dynamic> testData = {
+        'email': userEmail,
+        'lessonTest': widget.testId,
+        'testType': testType,
+        'score': correctAnswers,
+        'totalScore': totalQuestions,
+        'timestamp': FieldValue.serverTimestamp(),
+      };
+
+      await FirebaseFirestore.instance
+          .collection('testResult')
+          .doc(userEmail)
+          .collection(testType)
+          .doc('lessonTest ${widget.testId}')
+          .set(testData);
+    }
 
     showTopSnackBar(
       Overlay.of(context),
@@ -206,7 +242,9 @@ class _TestingScreenModelState extends State<TestingScreenModel> {
       ),
       displayDuration: const Duration(seconds: 3),
     );
-    Navigator.pop(context);
+    if (mounted) {
+      Navigator.pop(context);
+    }
   }
 
   @override
@@ -294,6 +332,7 @@ class _TestingScreenModelState extends State<TestingScreenModel> {
                           title: Text(
                             choice,
                             style: TextStyle(
+                                // Adjust color to stay neutral after submission
                                 color: (!_hasAlreadyTested && !_isTestSubmitted)
                                     ? Theme.of(context)
                                         .textTheme
@@ -313,7 +352,8 @@ class _TestingScreenModelState extends State<TestingScreenModel> {
                                         : Theme.of(context)
                                             .textTheme
                                             .bodyMedium!
-                                            .color),
+                                            .color // Keep text color neutral after submission
+                                ),
                           ),
                           value: choice,
                           groupValue: selectedChoices[content.proposition],
@@ -322,6 +362,7 @@ class _TestingScreenModelState extends State<TestingScreenModel> {
                               : null,
                           fillColor: MaterialStateProperty.resolveWith<Color>(
                               (states) {
+                            // Adjust fillColor to stay neutral after submission
                             if (!_hasAlreadyTested && !_isTestSubmitted) {
                               return AppColor.secondarySnakeColor;
                             } else if (!_isTestSubmitted &&
@@ -333,24 +374,27 @@ class _TestingScreenModelState extends State<TestingScreenModel> {
                                       : Colors.red)
                                   : AppColor.secondarySnakeColor;
                             }
-                            return Theme.of(context).disabledColor;
+                            // Return a default color that does not indicate correctness/incorrectness
+                            return Theme.of(context)
+                                .disabledColor; // Use the theme's disabled color or any other neutral color
                           }),
-                          secondary:
-                              (!_hasAlreadyTested && !_isTestSubmitted) ||
-                                      selectedChoices[content.proposition] !=
-                                          choice ||
-                                      _isTestSubmitted
-                                  ? null
-                                  : Icon(
-                                      choice == content.correctChoice
-                                          ? Icons.check
-                                          : Icons.close,
-                                      color: (!_isTestSubmitted)
-                                          ? choice == content.correctChoice
-                                              ? Colors.green
-                                              : Colors.red
-                                          : Theme.of(context).disabledColor,
-                                    ),
+                          secondary: (!_hasAlreadyTested &&
+                                      !_isTestSubmitted) ||
+                                  selectedChoices[content.proposition] !=
+                                      choice ||
+                                  _isTestSubmitted // This line ensures the icon is not shown after submission
+                              ? null
+                              : Icon(
+                                  choice == content.correctChoice
+                                      ? Icons.check
+                                      : Icons.close,
+                                  color: (!_isTestSubmitted)
+                                      ? choice == content.correctChoice
+                                          ? Colors.green
+                                          : Colors.red
+                                      : Theme.of(context)
+                                          .disabledColor, // Make icon neutral after submission
+                                ),
                           onChanged: _hasAlreadyTested || _isTestSubmitted
                               ? null
                               : (value) async {

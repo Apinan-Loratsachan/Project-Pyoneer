@@ -58,6 +58,66 @@ class Auth {
     return FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
   }
 
+  static Future<UserCredential?> signUpWithEmailAndPassword(
+      String email, String password) async {
+    try {
+      UserCredential userCredential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      return userCredential;
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        if (kDebugMode) {
+          print('The password provided is too weak.');
+        }
+      } else if (e.code == 'email-already-in-use') {
+        if (kDebugMode) {
+          print('The account already exists for that email.');
+        }
+      }
+      return null;
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+      return null;
+    }
+  }
+
+  static Future<UserCredential?> signInWithEmailAndPassword(
+      String email, String password) async {
+    try {
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      UserData.uid = userCredential.user?.uid ?? "";
+      UserData.userName = userCredential.user?.displayName ?? "";
+      UserData.email = userCredential.user?.email ?? "";
+      UserData.image = userCredential.user?.photoURL ?? "";
+      UserData.tel = userCredential.user?.phoneNumber ?? "";
+      UserData.accountType = 'Email';
+      UserData.saveUserData(userCredential, 'Email');
+
+      return userCredential;
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        if (kDebugMode) {
+          print('No user found for that email.');
+        }
+      } else if (e.code == 'wrong-password') {
+        if (kDebugMode) {
+          print('Wrong password provided for that user.');
+        }
+      }
+      return null;
+    }
+  }
+
   static Future<void> signOut() async {
     await FirebaseAuth.instance.signOut();
     await GoogleSignIn().signOut();

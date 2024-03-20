@@ -24,6 +24,8 @@ class _LoginScreenState extends State<LoginScreen>
   final TextEditingController _controller = TextEditingController();
 
   String _appVersion = '';
+  String _email = '';
+  String _password = '';
 
   @override
   void initState() {
@@ -91,6 +93,9 @@ class _LoginScreenState extends State<LoginScreen>
                       ),
                     ),
                     autofillHints: const [AutofillHints.email],
+                    onChanged: (value) {
+                      _email = value;
+                    },
                   ).animateFadeSlide(),
                   const SizedBox(height: 16),
                   TextFormField(
@@ -117,12 +122,49 @@ class _LoginScreenState extends State<LoginScreen>
                             ),
                     ),
                     autofillHints: const [AutofillHints.password],
+                    onChanged: (value) {
+                      _password = value;
+                    },
                   ).animateFadeSlide(),
                   const SizedBox(height: 24),
                   ElevatedButton(
-                    onPressed: () {
-                      // ignore: avoid_print
-                      print('Login button pressed');
+                    onPressed: () async {
+                      UserCredential? userCredential =
+                          await Auth.signInWithEmailAndPassword(
+                              _email, _password);
+                      if (userCredential != null) {
+                        if (mounted) {
+                          Navigator.pushReplacement(
+                            context,
+                            PageRouteBuilder(
+                              pageBuilder: (context, animation,
+                                      secondaryAnimation) =>
+                                  const HomeScreen().animate().fade().slide(),
+                              transitionDuration:
+                                  const Duration(milliseconds: 500),
+                            ),
+                          );
+                        }
+                      } else {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: const Text('ล็อกอินไม่สำเร็จ'),
+                            content:
+                                const Text('กรุณาตรวจสอบอีเมลหรือรหัสผ่าน'),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  if (mounted) {
+                                    Navigator.of(context).pop();
+                                  }
+                                },
+                                child: const Text('ตกลง'),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
                     },
                     style: ElevatedButton.styleFrom(
                       foregroundColor: Colors.white,
@@ -215,7 +257,6 @@ class _LoginScreenState extends State<LoginScreen>
                       const SizedBox(width: 5),
                       GestureDetector(
                         onTap: () {
-                          // Navigate to login page
                           Navigator.push(
                               context,
                               PageRouteBuilder(
