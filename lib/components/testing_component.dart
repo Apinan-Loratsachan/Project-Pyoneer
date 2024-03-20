@@ -59,7 +59,7 @@ class Testing1 {
         "proposition2 choice3",
         "proposition2 choice4"
       ],
-      correctChoice: "proposition2 choice4",
+      correctChoice: "proposition2 choice2",
       imagePath: '',
     ),
     TestingContent(
@@ -81,7 +81,7 @@ class Testing1 {
         "proposition4 choice3",
         "proposition4 choice4"
       ],
-      correctChoice: "proposition4 choice2",
+      correctChoice: "proposition4 choice4",
       imagePath: '',
     ),
     TestingContent(
@@ -402,8 +402,7 @@ class TestingComponent {
                 fontFamily: 'Noto Sans Thai'),
             children: <TextSpan>[
               TextSpan(
-                text:
-                    'คุณสามารถออกจากหน้านี้ได้อย่าง',
+                text: 'คุณสามารถออกจากหน้านี้ได้อย่าง',
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.onBackground,
                 ),
@@ -416,8 +415,7 @@ class TestingComponent {
                 ),
               ),
               TextSpan(
-                text:
-                    ' คำตอบของคุณจะถูก',
+                text: ' คำตอบของคุณจะถูก',
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.onBackground,
                 ),
@@ -430,8 +428,7 @@ class TestingComponent {
                 ),
               ),
               TextSpan(
-                text:
-                    'ไว้และคุณสามารถกลับมา',
+                text: 'ไว้และคุณสามารถกลับมา',
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.onBackground,
                 ),
@@ -444,8 +441,7 @@ class TestingComponent {
                 ),
               ),
               TextSpan(
-                text:
-                    'ทุกเมื่อ!',
+                text: 'ทุกเมื่อ!',
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.onBackground,
                 ),
@@ -459,8 +455,8 @@ class TestingComponent {
             child: const Text(
               'ทำบททดสอบต่อ',
               style: TextStyle(
-                // color: Colors.black,
-              ),
+                  // color: Colors.black,
+                  ),
             ),
           ),
           TextButton(

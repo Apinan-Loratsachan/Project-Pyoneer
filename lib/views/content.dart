@@ -320,7 +320,10 @@ class _ContentScreenState extends State<ContentScreen>
                                       subtitle =
                                           "$score/$totalScore คะแนน | ${testDate.day} $thaiMonth $thaiYear ${testDate.hour.toString().padLeft(2, '0')}:${testDate.minute.toString().padLeft(2, '0')} น.";
                                       lessonColor = AppColor.primarSnakeColor;
-                                      postTestColor = Colors.white;
+                                      postTestColor = Theme.of(context)
+                                          .colorScheme
+                                          .background
+                                          .withOpacity(0.5);
                                     }
                                     return Column(
                                       children: [
@@ -506,8 +509,7 @@ class _ContentScreenState extends State<ContentScreen>
                   },
                 )
               : null, // Only show the check status for the main lesson
-          // tileColor:
-          //     !unlocked ? Theme.of(context).colorScheme.background : null,
+          // tileColor: !unlocked ? Colors.grey : null,
           enabled: unlocked,
         );
       },

@@ -294,16 +294,22 @@ class _TestingScreenModelState extends State<TestingScreenModel> {
                           title: Text(
                             choice,
                             style: TextStyle(
-                                color: !_hasAlreadyTested && !_isTestSubmitted
+                                color: (!_hasAlreadyTested && !_isTestSubmitted)
                                     ? Theme.of(context)
                                         .textTheme
                                         .bodyMedium!
                                         .color
-                                    : selectedChoices[content.proposition] ==
-                                            choice
-                                        ? (choice == content.correctChoice
-                                            ? Colors.green
-                                            : Colors.red)
+                                    : (!_isTestSubmitted)
+                                        ? selectedChoices[
+                                                    content.proposition] ==
+                                                choice
+                                            ? (choice == content.correctChoice
+                                                ? Colors.green
+                                                : Colors.red)
+                                            : Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium!
+                                                .color
                                         : Theme.of(context)
                                             .textTheme
                                             .bodyMedium!
@@ -311,18 +317,15 @@ class _TestingScreenModelState extends State<TestingScreenModel> {
                           ),
                           value: choice,
                           groupValue: selectedChoices[content.proposition],
-                          activeColor:
-                              selectedChoices[content.proposition] == choice &&
-                                      !_hasAlreadyTested &&
-                                      !_isTestSubmitted
-                                  ? AppColor.secondarySnakeColor
-                                  : null,
+                          activeColor: (!_hasAlreadyTested && !_isTestSubmitted)
+                              ? AppColor.secondarySnakeColor
+                              : null,
                           fillColor: MaterialStateProperty.resolveWith<Color>(
                               (states) {
                             if (!_hasAlreadyTested && !_isTestSubmitted) {
                               return AppColor.secondarySnakeColor;
-                            } else if (states
-                                .contains(MaterialState.selected)) {
+                            } else if (!_isTestSubmitted &&
+                                states.contains(MaterialState.selected)) {
                               return selectedChoices[content.proposition] ==
                                       choice
                                   ? (choice == content.correctChoice
@@ -330,20 +333,24 @@ class _TestingScreenModelState extends State<TestingScreenModel> {
                                       : Colors.red)
                                   : AppColor.secondarySnakeColor;
                             }
-                            return AppColor.secondarySnakeColor;
+                            return Theme.of(context).disabledColor;
                           }),
-                          secondary: (!_hasAlreadyTested &&
-                                      !_isTestSubmitted) ||
-                                  selectedChoices[content.proposition] != choice
-                              ? null
-                              : Icon(
-                                  choice == content.correctChoice
-                                      ? Icons.check
-                                      : Icons.close,
-                                  color: choice == content.correctChoice
-                                      ? Colors.green
-                                      : Colors.red,
-                                ),
+                          secondary:
+                              (!_hasAlreadyTested && !_isTestSubmitted) ||
+                                      selectedChoices[content.proposition] !=
+                                          choice ||
+                                      _isTestSubmitted
+                                  ? null
+                                  : Icon(
+                                      choice == content.correctChoice
+                                          ? Icons.check
+                                          : Icons.close,
+                                      color: (!_isTestSubmitted)
+                                          ? choice == content.correctChoice
+                                              ? Colors.green
+                                              : Colors.red
+                                          : Theme.of(context).disabledColor,
+                                    ),
                           onChanged: _hasAlreadyTested || _isTestSubmitted
                               ? null
                               : (value) async {

@@ -192,8 +192,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                         },
                         style: ElevatedButton.styleFrom(
                           foregroundColor: Colors.white,
-                          backgroundColor:
-                              const Color(0xFF1ABDAD), // Text color
+                          backgroundColor: const Color(0xFF1ABDAD),
                         ),
                         child: const Text('สมัครสมาชิก'),
                       ),
@@ -207,7 +206,6 @@ class _RegisterScreenState extends State<RegisterScreen>
                       const SizedBox(width: 5),
                       GestureDetector(
                         onTap: () {
-                          // Navigate to login page
                           Navigator.pop(
                             context,
                           );
