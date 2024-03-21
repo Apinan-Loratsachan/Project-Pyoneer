@@ -65,21 +65,29 @@ class _UserProfileState extends State<UserProfile> {
               borderRadius: BorderRadius.circular(8.0),
               child: Stack(
                 children: [
-                  UserData.image.isEmpty
-                      ? Container()
-                      : Hero(
-                          tag: "profileImage",
-                          child: Image.network(
-                            UserData.image,
-                          ),
-                        ),
+                  ValueListenableBuilder<String>(
+                    valueListenable: UserData.imageNotifier,
+                    builder: (context, imageUrl, _) {
+                      return imageUrl.isEmpty
+                          ? Container()
+                          : Hero(
+                              tag: "profileImage",
+                              child: Image.network(
+                                imageUrl,
+                                width: 100,
+                                height: 100,
+                                fit: BoxFit.cover,
+                              ),
+                            );
+                    },
+                  ),
                   Positioned(
                     top: 8,
                     right: 8,
                     child: GestureDetector(
                       onTap: () {
                         if (mounted) {
-                          Navigator.push(
+                          Navigator.pushReplacement(
                             context,
                             PageRouteBuilder(
                               pageBuilder:

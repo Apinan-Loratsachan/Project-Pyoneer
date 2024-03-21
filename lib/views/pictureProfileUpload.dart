@@ -61,7 +61,7 @@ class _ProfilePictureUploadScreenState
         setState(() {
           _currentProfilePictureUrl = downloadURL;
         });
-        UserData.image = downloadURL;
+        await UserData.updateUserImage(downloadURL);
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(

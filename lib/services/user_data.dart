@@ -13,6 +13,15 @@ class UserData {
   static bool showProfile = true;
   static int loginType = 0;
 
+  static ValueNotifier<String> imageNotifier = ValueNotifier<String>("");
+
+  static Future<void> updateUserImage(String imageUrl) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('image', imageUrl);
+    image = imageUrl;
+    imageNotifier.value = imageUrl;
+  }
+
   static Future<void> saveUserData(
       UserCredential userCredential, String accountType) async {
     final prefs = await SharedPreferences.getInstance();
@@ -44,6 +53,10 @@ class UserData {
     image = prefs.getString('image') ?? "";
     tel = prefs.getString('tel') ?? "";
     accountType = prefs.getString('accountType') ?? "";
+
+    if (image.isNotEmpty) {
+      imageNotifier.value = image;
+    }
   }
 
   static Widget loginProvider(String imagePath) {
