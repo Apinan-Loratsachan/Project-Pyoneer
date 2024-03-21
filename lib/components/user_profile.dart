@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:palette_generator/palette_generator.dart';
 import 'package:pyoneer/services/user_data.dart';
 import 'package:pyoneer/utils/color.dart';
+import 'package:pyoneer/views/pictureProfileUpload.dart';
 
 class UserProfile extends StatefulWidget {
   const UserProfile({super.key});
@@ -61,13 +63,46 @@ class _UserProfileState extends State<UserProfile> {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(8.0),
-              child: UserData.image.isEmpty
-                  ? Container()
-                  : Hero(
-                      tag: "profileImage",
-                      child: Image.network(
-                        UserData.image,
-                      )),
+              child: Stack(
+                children: [
+                  UserData.image.isEmpty
+                      ? Container()
+                      : Hero(
+                          tag: "profileImage",
+                          child: Image.network(
+                            UserData.image,
+                          ),
+                        ),
+                  Positioned(
+                    top: 8,
+                    right: 8,
+                    child: GestureDetector(
+                      onTap: () {
+                        if (mounted) {
+                          Navigator.push(
+                            context,
+                            PageRouteBuilder(
+                              pageBuilder:
+                                  (context, animation, secondaryAnimation) =>
+                                      ProfilePictureUploadScreen()
+                                          .animate()
+                                          .fade()
+                                          .slide(),
+                              transitionDuration:
+                                  const Duration(milliseconds: 500),
+                            ),
+                          );
+                        }
+                      },
+                      child: const Icon(
+                        Icons.edit,
+                        color: Colors.white,
+                        size: 20,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
             Expanded(
               child: Padding(
