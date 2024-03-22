@@ -46,7 +46,7 @@ class _ProfilePictureUploadScreenState
   Future<void> _uploadProfilePicture() async {
     if (_selectedImage != null) {
       try {
-        final resizedImage = await _resizeImage(_selectedImage!, 96, 96);
+        final resizedImage = await _resizeImage(_selectedImage!, 1024, 1024);
         String userId = FirebaseAuth.instance.currentUser!.uid;
         FirebaseStorage.instance
             .setMaxUploadRetryTime(const Duration(seconds: 3));

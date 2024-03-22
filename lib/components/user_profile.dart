@@ -84,30 +84,32 @@ class _UserProfileState extends State<UserProfile> {
                   Positioned(
                     top: 8,
                     right: 8,
-                    child: GestureDetector(
-                      onTap: () {
-                        if (mounted) {
-                          Navigator.pushReplacement(
-                            context,
-                            PageRouteBuilder(
-                              pageBuilder:
-                                  (context, animation, secondaryAnimation) =>
-                                      ProfilePictureUploadScreen()
-                                          .animate()
-                                          .fade()
-                                          .slide(),
-                              transitionDuration:
-                                  const Duration(milliseconds: 500),
+                    child: UserData.accountType != 'Google'
+                        ? GestureDetector(
+                            onTap: () {
+                              if (mounted) {
+                                Navigator.pushReplacement(
+                                  context,
+                                  PageRouteBuilder(
+                                    pageBuilder: (context, animation,
+                                            secondaryAnimation) =>
+                                        ProfilePictureUploadScreen()
+                                            .animate()
+                                            .fade()
+                                            .slide(),
+                                    transitionDuration:
+                                        const Duration(milliseconds: 500),
+                                  ),
+                                );
+                              }
+                            },
+                            child: const Icon(
+                              Icons.edit,
+                              color: Colors.white,
+                              size: 20,
                             ),
-                          );
-                        }
-                      },
-                      child: const Icon(
-                        Icons.edit,
-                        color: Colors.white,
-                        size: 20,
-                      ),
-                    ),
+                          )
+                        : Container(),
                   ),
                 ],
               ),
