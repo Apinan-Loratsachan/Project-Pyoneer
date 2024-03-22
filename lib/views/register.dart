@@ -235,7 +235,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                             if (userCredential != null) {
                               await userCredential.user
                                   ?.updateDisplayName(_username);
-
+                              // ignore: use_build_context_synchronously
                               showDialog(
                                 context: context,
                                 builder: (context) => AlertDialog(

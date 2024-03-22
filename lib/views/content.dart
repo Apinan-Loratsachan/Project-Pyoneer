@@ -309,8 +309,8 @@ class _ContentScreenState extends State<ContentScreen>
                                     DateTime? testDate = timeStamp?.toDate();
                                     String subtitle =
                                         "โปรดทำแบบทดสอบก่อนที่จะเริ่มเรียนบทนี้";
-                                    Color lessonColor = Colors.grey;
-                                    Color postTestColor = Colors.grey;
+                                    Color lessonColor = Colors.grey.shade100;
+                                    Color postTestColor = Colors.grey.shade200;
                                     if (score != null &&
                                         totalScore != null &&
                                         testDate != null) {
@@ -320,15 +320,16 @@ class _ContentScreenState extends State<ContentScreen>
                                       subtitle =
                                           "$score/$totalScore คะแนน | ${testDate.day} $thaiMonth $thaiYear ${testDate.hour.toString().padLeft(2, '0')}:${testDate.minute.toString().padLeft(2, '0')} น.";
                                       lessonColor = AppColor.primarSnakeColor;
-                                      postTestColor = Theme.of(context)
-                                          .colorScheme
-                                          .background
-                                          .withOpacity(0.5);
+                                      // postTestColor = Theme.of(context)
+                                      //     .colorScheme
+                                      //     .background
+                                      postTestColor = AppColor.primarSnakeColorAccent;
                                     }
                                     return Column(
                                       children: [
                                         Card(
                                           elevation: 10,
+                                          color: AppColor.primarSnakeColorAccent,
                                           child: lessonTitle(
                                             "assets/icons/pre_test.png",
                                             "pre_test_$i",
