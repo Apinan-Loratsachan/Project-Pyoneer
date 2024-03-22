@@ -32,14 +32,13 @@ class Auth {
       UserCredential userCredential =
           await FirebaseAuth.instance.signInWithCredential(credential);
 
-      UserData.uid = userCredential.user?.uid ?? "";
-      UserData.userName = userCredential.user?.displayName ?? "";
-      UserData.email = userCredential.user?.email ?? "";
-      UserData.image = userCredential.user?.photoURL ?? "";
-      UserData.tel = userCredential.user?.phoneNumber ?? "";
-      UserData.accountType = 'Google';
-
-      UserData.saveUserData(userCredential, 'Google');
+      // UserData.uid = userCredential.user?.uid ?? "";
+      // UserData.userName = userCredential.user?.displayName ?? "";
+      // UserData.email = userCredential.user?.email ?? "";
+      // UserData.image = userCredential.user?.photoURL ?? "";
+      // UserData.tel = userCredential.user?.phoneNumber ?? "";
+      // UserData.accountType = 'Google';
+      // UserData.saveUserData(userCredential, 'Google');
 
       return userCredential;
     } catch (e) {
@@ -95,14 +94,6 @@ class Auth {
         email: email,
         password: password,
       );
-
-      UserData.uid = userCredential.user?.uid ?? "";
-      UserData.userName = userCredential.user?.displayName ?? "";
-      UserData.email = userCredential.user?.email ?? "";
-      UserData.image = userCredential.user?.photoURL ?? "";
-      UserData.tel = userCredential.user?.phoneNumber ?? "";
-      UserData.accountType = 'Email';
-      UserData.saveUserData(userCredential, 'Email');
 
       return userCredential;
     } on FirebaseAuthException catch (e) {

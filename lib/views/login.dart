@@ -133,6 +133,8 @@ class _LoginScreenState extends State<LoginScreen>
                           await Auth.signInWithEmailAndPassword(
                               _email, _password);
                       if (userCredential != null) {
+                        await UserData.saveUserData(userCredential, 'Email');
+                        await UserData.loadUserData();
                         if (mounted) {
                           Navigator.pushReplacement(
                             context,
@@ -195,6 +197,9 @@ class _LoginScreenState extends State<LoginScreen>
                           UserCredential? userCredential =
                               await Auth.signInWithGoogle();
                           if (userCredential != null) {
+                            await UserData.saveUserData(
+                                userCredential, 'Google');
+                            await UserData.loadUserData();
                             if (mounted) {
                               Navigator.pushReplacement(
                                   // ignore: use_build_context_synchronously
