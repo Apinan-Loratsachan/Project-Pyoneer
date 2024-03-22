@@ -5,7 +5,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:pyoneer/services/auth.dart';
 import 'package:pyoneer/utils/animate_fade_slide.dart';
 import 'package:pyoneer/views/login.dart';
-import 'package:pyoneer/views/pictureProfileUpload.dart';
+import 'package:pyoneer/views/account/profile_picture_upload.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});

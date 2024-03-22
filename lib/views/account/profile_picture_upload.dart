@@ -4,11 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-// import 'package:path_provider/path_provider.dart' as path_provider;
 import 'package:image/image.dart' as img;
 import 'package:pyoneer/services/user_data.dart';
 
 class ProfilePictureUploadScreen extends StatefulWidget {
+  const ProfilePictureUploadScreen({super.key});
+
   @override
   _ProfilePictureUploadScreenState createState() =>
       _ProfilePictureUploadScreenState();

@@ -3,7 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:palette_generator/palette_generator.dart';
 import 'package:pyoneer/services/user_data.dart';
 import 'package:pyoneer/utils/color.dart';
-import 'package:pyoneer/views/pictureProfileUpload.dart';
+import 'package:pyoneer/views/account/profile_picture_upload.dart';
 
 class UserProfile extends StatefulWidget {
   const UserProfile({super.key});
