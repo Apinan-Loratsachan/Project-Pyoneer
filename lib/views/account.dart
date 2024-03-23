@@ -211,29 +211,7 @@ class _AccountSettigScreenState extends State<AccountSettigScreen> {
                                   ],
                                 ),
                               )
-                            : ElevatedButton(
-                                style: ButtonStyle(
-                                  overlayColor:
-                                      MaterialStateProperty.all(Colors.grey),
-                                  backgroundColor:
-                                      MaterialStateProperty.all(Colors.grey),
-                                ),
-                                onPressed: () {},
-                                child: const Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      Icons.clear,
-                                      color: Colors.white,
-                                    ),
-                                    SizedBox(width: 10),
-                                    Text(
-                                      "ลบประวัติการอ่านบทเรียน",
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                  ],
-                                ),
-                              ),
+                            : Container(),
                         const SizedBox(height: 5),
                         ElevatedButton(
                           style: ButtonStyle(
@@ -243,79 +221,158 @@ class _AccountSettigScreenState extends State<AccountSettigScreen> {
                                 MaterialStateProperty.all(Colors.red[500]),
                           ),
                           onPressed: () {
-                            showDialog<bool>(
-                              context: context,
-                              builder: (context) => AlertDialog(
-                                // backgroundColor: Colors.white,
-                                // surfaceTintColor: Colors.white,
-                                title: const Text('ยืนยันการออกจากระบบ'),
-                                content: const Text(
-                                    'คุณต้องการออกจากระบบใช่หรือไม่?'),
-                                actions: <Widget>[
-                                  TextButton(
-                                    onPressed: () =>
-                                        Navigator.of(context).pop(false),
-                                    child: const Text(
-                                      'ยกเลิก',
-                                      // style: TextStyle(color: Colors.black),
+                            if (UserData.email != 'ไม่ได้เข้าสู่ระบบ') {
+                              showDialog<bool>(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  // backgroundColor: Colors.white,
+                                  // surfaceTintColor: Colors.white,
+                                  title: const Text('ยืนยันการออกจากระบบ'),
+                                  content: const Text(
+                                      'คุณต้องการออกจากระบบใช่หรือไม่?'),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      onPressed: () =>
+                                          Navigator.of(context).pop(false),
+                                      child: const Text(
+                                        'ยกเลิก',
+                                        // style: TextStyle(color: Colors.black),
+                                      ),
                                     ),
-                                  ),
-                                  TextButton(
-                                    onPressed: () {
-                                      UserData.clear();
-                                      Auth.signOut();
-                                      Navigator.pushAndRemoveUntil(
-                                          context,
-                                          PageRouteBuilder(
-                                            pageBuilder: (context, animation1,
-                                                    animation2) =>
-                                                const LoginScreen(),
-                                            transitionDuration: const Duration(
-                                                milliseconds: 500),
-                                            transitionsBuilder: (context,
-                                                animation1, animation2, child) {
-                                              animation1 = CurvedAnimation(
-                                                parent: animation1,
-                                                curve: Curves.easeInOut,
-                                              );
-                                              return FadeTransition(
-                                                opacity:
-                                                    Tween(begin: 0.0, end: 1.0)
-                                                        .animate(animation1),
-                                                child: SlideTransition(
-                                                  position: Tween<Offset>(
-                                                    begin:
-                                                        const Offset(0.0, 1.0),
-                                                    end: Offset.zero,
-                                                  ).animate(animation1),
-                                                  child: child,
-                                                ),
-                                              );
-                                            },
-                                          ),
-                                          (Route<dynamic> route) => false);
-                                    },
-                                    child: const Text('ออกจากระบบ',
-                                        style: TextStyle(color: Colors.red)),
-                                  ),
-                                ],
-                              ),
-                            );
+                                    TextButton(
+                                      onPressed: () {
+                                        UserData.clear();
+                                        Auth.signOut();
+                                        Navigator.pushAndRemoveUntil(
+                                            context,
+                                            PageRouteBuilder(
+                                              pageBuilder: (context, animation1,
+                                                      animation2) =>
+                                                  const LoginScreen(),
+                                              transitionDuration:
+                                                  const Duration(
+                                                      milliseconds: 500),
+                                              transitionsBuilder: (context,
+                                                  animation1,
+                                                  animation2,
+                                                  child) {
+                                                animation1 = CurvedAnimation(
+                                                  parent: animation1,
+                                                  curve: Curves.easeInOut,
+                                                );
+                                                return FadeTransition(
+                                                  opacity: Tween(
+                                                          begin: 0.0, end: 1.0)
+                                                      .animate(animation1),
+                                                  child: SlideTransition(
+                                                    position: Tween<Offset>(
+                                                      begin: const Offset(
+                                                          0.0, 1.0),
+                                                      end: Offset.zero,
+                                                    ).animate(animation1),
+                                                    child: child,
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                            (Route<dynamic> route) => false);
+                                      },
+                                      child: const Text('ออกจากระบบ',
+                                          style: TextStyle(color: Colors.red)),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            } else {
+                              showDialog<bool>(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  title: const Text('กลับสู่หน้าล็อกอิน'),
+                                  content: const Text(
+                                      'คุณต้องการกลับสู่หน้าล็อกอินใช่หรือไม่?'),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      onPressed: () =>
+                                          Navigator.of(context).pop(false),
+                                      child: const Text(
+                                        'ยกเลิก',
+                                      ),
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
+                                        UserData.clear();
+                                        Auth.signOut();
+                                        Navigator.pushAndRemoveUntil(
+                                            context,
+                                            PageRouteBuilder(
+                                              pageBuilder: (context, animation1,
+                                                      animation2) =>
+                                                  const LoginScreen(),
+                                              transitionDuration:
+                                                  const Duration(
+                                                      milliseconds: 500),
+                                              transitionsBuilder: (context,
+                                                  animation1,
+                                                  animation2,
+                                                  child) {
+                                                animation1 = CurvedAnimation(
+                                                  parent: animation1,
+                                                  curve: Curves.easeInOut,
+                                                );
+                                                return FadeTransition(
+                                                  opacity: Tween(
+                                                          begin: 0.0, end: 1.0)
+                                                      .animate(animation1),
+                                                  child: SlideTransition(
+                                                    position: Tween<Offset>(
+                                                      begin: const Offset(
+                                                          0.0, 1.0),
+                                                      end: Offset.zero,
+                                                    ).animate(animation1),
+                                                    child: child,
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                            (Route<dynamic> route) => false);
+                                      },
+                                      child: const Text('กลับสู่หน้าล็อกอิน',
+                                          style: TextStyle(color: Colors.red)),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }
                           },
-                          child: const Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                FontAwesomeIcons.rightFromBracket,
-                                color: Colors.white,
-                              ),
-                              SizedBox(width: 10),
-                              Text(
-                                "ออกจากระบบ",
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ],
-                          ),
+                          child: UserData.email != 'ไม่ได้เข้าสู่ระบบ'
+                              ? const Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      FontAwesomeIcons.rightFromBracket,
+                                      color: Colors.white,
+                                    ),
+                                    SizedBox(width: 10),
+                                    Text(
+                                      "ออกจากระบบ",
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  ],
+                                )
+                              : const Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      FontAwesomeIcons.rightFromBracket,
+                                      color: Colors.white,
+                                    ),
+                                    SizedBox(width: 10),
+                                    Text(
+                                      "กลับสู่หน้าล็อกอิน",
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  ],
+                                ),
                         ),
                       ],
                     ),

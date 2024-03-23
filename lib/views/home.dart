@@ -235,7 +235,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: ValueListenableBuilder<String>(
                         valueListenable: UserData.imageNotifier,
                         builder: (context, imageUrl, _) {
-                          return imageUrl.isEmpty
+                          return imageUrl.isEmpty ||
+                                  UserData.email == 'ไม่ได้เข้าสู่ระบบ'
                               ? const Padding(
                                   padding: EdgeInsets.all(8.0),
                                   child: Icon(FontAwesomeIcons.userSecret),
@@ -283,23 +284,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       end: Alignment.topCenter,
                       colors: [
                         Theme.of(context).colorScheme.background,
-                        Theme.of(context).colorScheme.background,
-                        Theme.of(context).colorScheme.background,
-                        Theme.of(context).colorScheme.background,
-                        Theme.of(context)
-                            .colorScheme
-                            .background
-                            .withOpacity(0.75),
-                        Theme.of(context)
-                            .colorScheme
-                            .background
-                            .withOpacity(0.5),
-                        Theme.of(context)
-                            .colorScheme
-                            .background
-                            .withOpacity(0.25),
                         Theme.of(context).colorScheme.background.withOpacity(0),
                       ],
+                      stops: const [0.3, 1.0],
                     ),
                   ),
                 ),

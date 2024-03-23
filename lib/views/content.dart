@@ -121,68 +121,60 @@ class _ContentScreenState extends State<ContentScreen>
         child: IgnorePointer(
           ignoring: true,
           child: AppBar(
-              title: Column(
-                children: [
-                  Text(
-                    "$greetingWord ${UserData.userName}",
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      shadows: [
-                        Shadow(
-                          blurRadius: 20.0,
-                          color: AppColor.primarSnakeColor.withOpacity(0.5),
-                          offset: const Offset(0.0, 5.0),
-                        ),
-                      ],
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      // color: Colors.black,
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  Text(
-                    "บทเรียน",
-                    style: TextStyle(shadows: [
+            title: Column(
+              children: [
+                Text(
+                  UserData.email == 'ไม่ได้เข้าสู่ระบบ'
+                      ? greetingWord
+                      : '$greetingWord ${UserData.userName}',
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    shadows: [
                       Shadow(
                         blurRadius: 20.0,
-                        color: Theme.of(context).colorScheme.background,
-                        offset: const Offset(0.0, 0.0),
+                        color: AppColor.primarSnakeColor.withOpacity(0.5),
+                        offset: const Offset(0.0, 5.0),
                       ),
-                    ]),
-                  ),
-                  // const SizedBox(height: 50),
-                ],
-              ),
-              centerTitle: true,
-              surfaceTintColor: Colors.transparent,
-              backgroundColor: Colors.transparent,
-              toolbarHeight: 100,
-              elevation: 0,
-              // backgroundColor: Colors.transparent,
-              flexibleSpace: Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Theme.of(context).colorScheme.background,
-                      Theme.of(context).colorScheme.background,
-                      Theme.of(context).colorScheme.background,
-                      Theme.of(context).colorScheme.background,
-                      Theme.of(context)
-                          .colorScheme
-                          .background
-                          .withOpacity(0.75),
-                      Theme.of(context).colorScheme.background.withOpacity(0.5),
-                      Theme.of(context)
-                          .colorScheme
-                          .background
-                          .withOpacity(0.25),
-                      Theme.of(context).colorScheme.background.withOpacity(0),
                     ],
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    // color: Colors.black,
                   ),
                 ),
-              )),
+                const SizedBox(height: 20),
+                Text(
+                  "บทเรียน",
+                  style: TextStyle(shadows: [
+                    Shadow(
+                      blurRadius: 20.0,
+                      color: Theme.of(context).colorScheme.background,
+                      offset: const Offset(0.0, 0.0),
+                    ),
+                  ]),
+                ),
+                // const SizedBox(height: 50),
+              ],
+            ),
+            centerTitle: true,
+            surfaceTintColor: Colors.transparent,
+            backgroundColor: Colors.transparent,
+            toolbarHeight: 100,
+            elevation: 0,
+            // backgroundColor: Colors.transparent,
+            flexibleSpace: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Theme.of(context).colorScheme.background,
+                    Theme.of(context).colorScheme.background.withOpacity(0),
+                  ],
+                  stops: const [0.3, 1.0],
+                ),
+              ),
+            ),
+          ),
         ),
       ),
       // floatingActionButtonLocation: CustomFabLocation(),
@@ -323,13 +315,15 @@ class _ContentScreenState extends State<ContentScreen>
                                       // postTestColor = Theme.of(context)
                                       //     .colorScheme
                                       //     .background
-                                      postTestColor = AppColor.primarSnakeColorAccent;
+                                      postTestColor =
+                                          AppColor.primarSnakeColorAccent;
                                     }
                                     return Column(
                                       children: [
                                         Card(
                                           elevation: 10,
-                                          color: AppColor.primarSnakeColorAccent,
+                                          color:
+                                              AppColor.primarSnakeColorAccent,
                                           child: lessonTitle(
                                             "assets/icons/pre_test.png",
                                             "pre_test_$i",
@@ -473,6 +467,7 @@ class _ContentScreenState extends State<ContentScreen>
       stream: isUnlocked,
       builder: (context, snapshot) {
         bool unlocked = snapshot.data ?? false;
+        Color textColor = unlocked ? Colors.black : Colors.grey;
         return ListTile(
           leading: Hero(
             tag: heroTag,
@@ -486,14 +481,14 @@ class _ContentScreenState extends State<ContentScreen>
               : null,
           title: Text(
             title,
-            style: const TextStyle(
-                fontWeight: FontWeight.bold, overflow: TextOverflow.ellipsis),
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                overflow: TextOverflow.ellipsis,
+                color: textColor),
           ),
           subtitle: Text(
             subtitle,
-            style: const TextStyle(
-              overflow: TextOverflow.ellipsis,
-            ),
+            style: TextStyle(overflow: TextOverflow.ellipsis, color: textColor),
           ),
           trailing: type == 'Lesson'
               ? StreamBuilder<bool>(
