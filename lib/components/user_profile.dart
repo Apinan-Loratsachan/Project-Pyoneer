@@ -93,7 +93,7 @@ class _UserProfileState extends State<UserProfile> {
                                   PageRouteBuilder(
                                     pageBuilder: (context, animation,
                                             secondaryAnimation) =>
-                                        ProfilePictureUploadScreen()
+                                        const ProfilePictureUploadScreen()
                                             .animate()
                                             .fade()
                                             .slide(),

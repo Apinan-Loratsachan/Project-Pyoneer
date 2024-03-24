@@ -131,7 +131,7 @@ class _LoginScreenState extends State<LoginScreen>
                     onPressed: () async {
                       UserCredential? userCredential =
                           await Auth.signInWithEmailAndPassword(
-                              _email, _password);
+                              _email, _password, context);
                       if (userCredential != null) {
                         await UserData.saveUserData(userCredential, 'Email');
                         await UserData.loadUserData();
@@ -195,14 +195,39 @@ class _LoginScreenState extends State<LoginScreen>
                         ),
                         onPressed: () async {
                           UserCredential? userCredential =
-                              await Auth.signInWithGoogle();
+                              await Auth.signInWithGoogle(context);
                           if (userCredential != null) {
                             await UserData.saveUserData(
                                 userCredential, 'Google');
                             await UserData.loadUserData();
                             if (mounted) {
                               Navigator.pushReplacement(
-                                  // ignore: use_build_context_synchronously
+                                  context,
+                                  PageRouteBuilder(
+                                    pageBuilder: (context, animation,
+                                            secondaryAnimation) =>
+                                        const HomeScreen()
+                                            .animate()
+                                            .fade()
+                                            .slide(),
+                                    transitionDuration:
+                                        const Duration(milliseconds: 500),
+                                  ));
+                            }
+                          } else {}
+                        },
+                      ),
+                      IconButton(
+                        icon: const FaIcon(FontAwesomeIcons.facebook),
+                        onPressed: () async {
+                          UserCredential? userCredential =
+                              await Auth.signInWithFacebook(context);
+                          if (userCredential != null) {
+                            await UserData.saveUserData(
+                                userCredential, 'Facebook');
+                            await UserData.loadUserData();
+                            if (mounted) {
+                              Navigator.pushReplacement(
                                   context,
                                   PageRouteBuilder(
                                     pageBuilder: (context, animation,
@@ -218,16 +243,6 @@ class _LoginScreenState extends State<LoginScreen>
                           } else {
                             // User cancelled the sign in process or sign in failed
                           }
-                        },
-                      ),
-                      IconButton(
-                        icon: const FaIcon(FontAwesomeIcons.facebook),
-                        onPressed: () async {
-                          await Auth.signInWithFacebook();
-                          setState(() {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => const HomeScreen()));
-                          });
                         },
                         color: Colors.blue,
                       ),

@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:pyoneer/services/auth.dart';
 import 'package:pyoneer/utils/animate_fade_slide.dart';
-import 'package:pyoneer/views/login.dart';
 import 'package:pyoneer/views/account/profile_picture_upload.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -232,7 +231,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                           if (_passwordsMatch) {
                             UserCredential? userCredential =
                                 await Auth.signUpWithEmailAndPassword(
-                                    _email, _password);
+                                    _email, _password, context);
                             if (userCredential != null) {
                               await userCredential.user
                                   ?.updateDisplayName(_username);
@@ -253,7 +252,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                                             PageRouteBuilder(
                                               pageBuilder: (context, animation,
                                                       secondaryAnimation) =>
-                                                  ProfilePictureUploadScreen()
+                                                  const ProfilePictureUploadScreen()
                                                       .animate()
                                                       .fade()
                                                       .slide(),
@@ -270,57 +269,24 @@ class _RegisterScreenState extends State<RegisterScreen>
                                 ),
                               );
                             } else {
-                              User? existingUser =
-                                  (await Auth.checkExistingUser(_email))
-                                      as User?;
-                              if (existingUser != null &&
-                                  existingUser.providerData.any((provider) =>
-                                      provider.providerId == 'google.com')) {
-                                showDialog(
-                                  context: context,
-                                  builder: (context) => AlertDialog(
-                                    title:
-                                        const Text('อีเมลนี้มีบัญชีอยู่แล้ว'),
-                                    content: const Text(
-                                        'อีเมลนี้เชื่อมโยงกับบัญชี Google ของคุณอยู่แล้ว โปรดลงชื่อเข้าใช้ด้วยบัญชี Google แทน'),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () {
-                                          if (mounted) {
-                                            Navigator.pop(context);
-                                            Navigator.pushReplacement(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      const LoginScreen()),
-                                            );
-                                          }
-                                        },
-                                        child: const Text('ตกลง'),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              } else {
-                                showDialog(
-                                  context: context,
-                                  builder: (context) => AlertDialog(
-                                    title: const Text('สมัครสมาชิกไม่สำเร็จ'),
-                                    content: const Text(
-                                        'อีเมลนี้มีบัญชีอยู่แล้ว โปรดลงชื่อเข้าใช้ด้วยวิธีเดิม หรือใช้อีเมลอื่นเพื่อสมัครสมาชิกใหม่'),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () {
-                                          if (mounted) {
-                                            Navigator.pop(context);
-                                          }
-                                        },
-                                        child: const Text('ปิด'),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              }
+                              showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  title: const Text('สมัครสมาชิกไม่สำเร็จ'),
+                                  content: const Text(
+                                      'อีเมลนี้มีอาจมีบัญชีอยู่แล้ว โปรดลองลงชื่อเข้าใช้ด้วยวิธีอื่นหรือลองใช้อีเมลอื่น'),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        if (mounted) {
+                                          Navigator.pop(context);
+                                        }
+                                      },
+                                      child: const Text('ปิด'),
+                                    ),
+                                  ],
+                                ),
+                              );
                             }
                           }
                         },

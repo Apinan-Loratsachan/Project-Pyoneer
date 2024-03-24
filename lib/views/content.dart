@@ -170,7 +170,7 @@ class _ContentScreenState extends State<ContentScreen>
                     Theme.of(context).colorScheme.background,
                     Theme.of(context).colorScheme.background.withOpacity(0),
                   ],
-                  stops: const [0.3, 1.0],
+                  stops: const [0.2, 1.0],
                 ),
               ),
             ),
