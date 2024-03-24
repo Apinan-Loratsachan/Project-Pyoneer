@@ -241,6 +241,7 @@ class _ContentScreenState extends State<ContentScreen>
                             0,
                             'Lesson',
                             Stream.value(true),
+                            Stream.value(true),
                           ),
                         ),
                         SizedBox(height: spaceSize),
@@ -334,6 +335,7 @@ class _ContentScreenState extends State<ContentScreen>
                                             i,
                                             'Pre-test',
                                             Stream.value(true),
+                                            Stream.value(true),
                                           ),
                                         ),
                                         Card(
@@ -360,6 +362,7 @@ class _ContentScreenState extends State<ContentScreen>
                                                     'pre-test', i)
                                                 .map((data) =>
                                                     data['score'] != null),
+                                            Stream.value(true),
                                           ),
                                         ),
                                         StreamBuilder<Map<String, dynamic>>(
@@ -413,6 +416,8 @@ class _ContentScreenState extends State<ContentScreen>
                                                       .map((data) =>
                                                           data['score'] !=
                                                           null),
+                                                  checkLessonReadStatus(
+                                                      UserData.email, i),
                                                 ),
                                               );
                                             }
@@ -461,52 +466,64 @@ class _ContentScreenState extends State<ContentScreen>
     BuildContext context,
     int index,
     String type,
-    Stream<bool> isUnlocked,
+    Stream<bool> isPreTestUnlocked,
+    Stream<bool> isPostTestUnlocked,
   ) {
     return StreamBuilder<bool>(
-      stream: isUnlocked,
-      builder: (context, snapshot) {
-        bool unlocked = snapshot.data ?? false;
-        Color textColor = unlocked ? Colors.black : Colors.grey;
-        return ListTile(
-          leading: Hero(
-            tag: heroTag,
-            child: Image.asset(imageSrc, width: 50, height: 50),
-          ),
-          onTap: unlocked
-              ? () => Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => targetScreen),
-                  )
-              : null,
-          title: Text(
-            title,
-            style: TextStyle(
-                fontWeight: FontWeight.bold,
-                overflow: TextOverflow.ellipsis,
-                color: textColor),
-          ),
-          subtitle: Text(
-            subtitle,
-            style: TextStyle(overflow: TextOverflow.ellipsis, color: textColor),
-          ),
-          trailing: type == 'Lesson'
-              ? StreamBuilder<bool>(
-                  stream: _ContentScreenState.checkLessonReadStatus(
-                      UserData.email, index),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const SizedBox();
-                    } else if (snapshot.data == true) {
-                      return const Icon(Icons.check, color: Colors.black);
-                    } else {
-                      return const SizedBox.shrink();
-                    }
-                  },
-                )
-              : null, // Only show the check status for the main lesson
-          // tileColor: !unlocked ? Colors.grey : null,
-          enabled: unlocked,
+      stream: isPreTestUnlocked,
+      builder: (context, preTestSnapshot) {
+        bool preTestUnlocked = preTestSnapshot.data ?? false;
+        return StreamBuilder<bool>(
+          stream: isPostTestUnlocked,
+          builder: (context, postTestSnapshot) {
+            bool postTestUnlocked = postTestSnapshot.data ?? false;
+            bool unlocked = (type == 'Pre-test' && preTestUnlocked) ||
+                (type == 'Lesson' && preTestUnlocked) ||
+                (type == 'Post-test' && preTestUnlocked && postTestUnlocked);
+            Color textColor = unlocked ? Colors.black : Colors.grey;
+            return ListTile(
+              leading: Hero(
+                tag: heroTag,
+                child: Image.asset(imageSrc, width: 50, height: 50),
+              ),
+              onTap: unlocked
+                  ? () => Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => targetScreen),
+                      )
+                  : null,
+              title: Text(
+                title,
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    overflow: TextOverflow.ellipsis,
+                    color: textColor),
+              ),
+              subtitle: Text(
+                subtitle,
+                style: TextStyle(
+                    overflow: TextOverflow.ellipsis, color: textColor),
+              ),
+              trailing: type == 'Lesson'
+                  ? StreamBuilder<bool>(
+                      stream: _ContentScreenState.checkLessonReadStatus(
+                          UserData.email, index),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const CircularProgressIndicator();
+                        } else if (snapshot.data == true) {
+                          return const Icon(Icons.check, color: Colors.black);
+                        } else {
+                          return const SizedBox.shrink();
+                        }
+                      },
+                    )
+                  : null, // Only show the check status for the main lesson
+              // tileColor: !unlocked ? Colors.grey : null,
+              enabled: unlocked,
+            );
+          },
         );
       },
     );

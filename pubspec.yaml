@@ -66,6 +66,9 @@ dependencies:
   flutter_image_compress: ^2.2.0
   image: ^4.1.7
   firebase_app_check: ^0.2.1+18
+  loading_animation_widget: ^1.2.1
+  icons_plus: ^5.0.0
+  
   
 
 dev_dependencies:
@@ -113,6 +116,8 @@ flutter:
   assets:
     - assets/icons/
     - assets/icons/google/
+    - assets/icons/facebook/
+    - assets/icons/email/
     - assets/images/lesson0/
     - assets/images/lesson1/
     - assets/images/lesson2/

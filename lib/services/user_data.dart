@@ -86,6 +86,10 @@ class UserData {
       );
     } else if (accountType == 'Google') {
       return loginProvider("assets/icons/google/google-icon-2048x2048.png");
+    } else if (accountType == 'Facebook') {
+      return loginProvider("assets/icons/facebook/Facebook_icon.png");
+    } else if (accountType == 'Email') {
+      return loginProvider("assets/icons/email/email_icon.png");
     }
     return Text(accountType);
   }
