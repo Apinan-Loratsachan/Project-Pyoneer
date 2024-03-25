@@ -5,6 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:image/image.dart' as img;
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:pyoneer/services/auth.dart';
 import 'package:pyoneer/services/user_data.dart';
 
@@ -20,6 +21,7 @@ class _ProfilePictureUploadScreenState
     extends State<ProfilePictureUploadScreen> {
   File? _selectedImage;
   String? _currentProfilePictureUrl;
+  bool _isUploading = false;
 
   @override
   void initState() {
@@ -46,7 +48,10 @@ class _ProfilePictureUploadScreenState
   }
 
   Future<void> _uploadProfilePicture() async {
-    if (_selectedImage != null) {
+    if (_selectedImage != null && !_isUploading) {
+      setState(() {
+        _isUploading = true;
+      });
       try {
         final resizedImage = await _resizeImage(_selectedImage!, 1024, 1024);
         String userId = FirebaseAuth.instance.currentUser!.uid;
@@ -99,6 +104,10 @@ class _ProfilePictureUploadScreenState
             ),
           ],
         );
+      } finally {
+        setState(() {
+          _isUploading = false;
+        });
       }
     }
   }
@@ -147,8 +156,17 @@ class _ProfilePictureUploadScreenState
             ),
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: _uploadProfilePicture,
-              child: const Text('อัปโหลดรูปภาพโปรไฟล์'),
+              onPressed: _isUploading ? null : _uploadProfilePicture,
+              child: _isUploading
+                  ? SizedBox(
+                      width: 50,
+                      height: 50,
+                      child: LoadingAnimationWidget.stretchedDots(
+                        size: 20,
+                        color: Colors.white,
+                      ),
+                    )
+                  : const Text('อัปโหลดรูปภาพโปรไฟล์'),
             ),
           ],
         ),
