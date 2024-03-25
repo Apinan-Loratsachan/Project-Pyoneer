@@ -236,8 +236,10 @@ class _RegisterScreenState extends State<RegisterScreen>
                                     GestureDetector(
                                       onTap: () {
                                         setState(() {
-                                          _emailController.text =
+                                          final selectedEmail =
                                               '${_emailController.text.split('@')[0]}@$_suggestedDomain';
+                                          _emailController.text = selectedEmail;
+                                          _email = selectedEmail;
                                           _showSuggestions = false;
                                         });
                                       },

@@ -5,6 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:image/image.dart' as img;
+import 'package:pyoneer/services/auth.dart';
 import 'package:pyoneer/services/user_data.dart';
 
 class ProfilePictureUploadScreen extends StatefulWidget {
@@ -55,6 +56,12 @@ class _ProfilePictureUploadScreenState
             .ref()
             .child('user_profiles')
             .child('$userId.jpg');
+
+        bool imageExists = await storageReference
+            .getMetadata()
+            .then((_) => true)
+            .catchError((_) => false);
+
         UploadTask uploadTask = storageReference.putFile(resizedImage);
         TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() => null);
         String downloadURL = await taskSnapshot.ref.getDownloadURL();
@@ -63,6 +70,12 @@ class _ProfilePictureUploadScreenState
           _currentProfilePictureUrl = downloadURL;
         });
         await UserData.updateUserImage(downloadURL);
+
+        if (!imageExists) {
+          await UserData.clear();
+          await Auth.signOut();
+        }
+
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
@@ -75,7 +88,7 @@ class _ProfilePictureUploadScreenState
           print('Error uploading profile picture: $e');
         }
         AlertDialog(
-          title: const Text('เกิดข้อผิดพลาดในการอัปโหลดรูปภาพโปรไฟล์ของคุณ'),
+          title: const Text('อัปโหลดรูปภาพโปรไฟล์ของคุณไม่สำเร็จ'),
           content: const Text('เกิดข้อผิดพลาดในการอัปโหลดรูปภาพโปรไฟล์ของคุณ'),
           actions: [
             TextButton(

@@ -264,6 +264,7 @@ class Auth {
   static Future<void> signOut() async {
     await FirebaseAuth.instance.signOut();
     await GoogleSignIn().signOut();
+    await FacebookAuth.instance.logOut();
     await UserData.clear();
   }
 
