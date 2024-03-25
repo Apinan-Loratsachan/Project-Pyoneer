@@ -19,37 +19,80 @@ class _RegisterScreenState extends State<RegisterScreen>
   bool _obscureText2 = true;
   bool _isFieldEmpty = true;
   bool _isFieldEmpty2 = true;
-  final TextEditingController _controller1 = TextEditingController();
-  final TextEditingController _controller2 = TextEditingController();
   bool _passwordsMatch = false;
   bool _hasInteractedWithField2 = false;
+  bool _showSuggestions = false;
+  String _suggestedDomain = '';
+
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
 
   String _email = '';
   String _username = '';
   String _password = '';
   String? _emailError;
 
+  String? validateEmail(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'โปรดระบุอีเมล';
+    }
+    if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
+      return 'รูปแบบอีเมลไม่ถูกต้อง';
+    }
+    return null;
+  }
+
+  String? validatePassword(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'โปรดระบุรหัสผ่าน';
+    }
+    if (value.length < 8 || value.length > 16) {
+      return 'รหัสผ่านต้องมีอย่างน้อย 8-16 ตัวอักษร';
+    }
+    return null;
+  }
+
+  String? validateConfirmPassword(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'โปรดยืนยันรหัสผ่าน';
+    }
+    if (value != _passwordController.text) {
+      return 'รหัสผ่านไม่ตรงกัน';
+    }
+    return null;
+  }
+
+  final List<String> _emailDomains = [
+    'gmail.com',
+    'outlook.com',
+    'hotmail.com',
+    'yahoo.com',
+    'live.',
+  ];
+
   @override
   void initState() {
     super.initState();
 
-    _controller1.addListener(() {
-      if (_controller1.text.isEmpty && !_isFieldEmpty) {
+    _passwordController.addListener(() {
+      if (_passwordController.text.isEmpty && !_isFieldEmpty) {
         setState(() {
           _isFieldEmpty = true;
         });
-      } else if (_controller1.text.isNotEmpty && _isFieldEmpty) {
+      } else if (_passwordController.text.isNotEmpty && _isFieldEmpty) {
         setState(() {
           _isFieldEmpty = false;
         });
       }
     });
-    _controller2.addListener(() {
-      if (_controller2.text.isEmpty && !_isFieldEmpty2) {
+    _confirmPasswordController.addListener(() {
+      if (_confirmPasswordController.text.isEmpty && !_isFieldEmpty2) {
         setState(() {
           _isFieldEmpty2 = true;
         });
-      } else if (_controller2.text.isNotEmpty && _isFieldEmpty2) {
+      } else if (_confirmPasswordController.text.isNotEmpty && _isFieldEmpty2) {
         setState(() {
           _isFieldEmpty2 = false;
         });
@@ -60,8 +103,8 @@ class _RegisterScreenState extends State<RegisterScreen>
   }
 
   void _checkPasswordMatch() {
-    if (_controller1.text.isNotEmpty && _hasInteractedWithField2) {
-      if (_controller1.text == _controller2.text) {
+    if (_passwordController.text.isNotEmpty && _hasInteractedWithField2) {
+      if (_passwordController.text == _confirmPasswordController.text) {
         setState(() {
           _passwordsMatch = true;
         });
@@ -73,10 +116,21 @@ class _RegisterScreenState extends State<RegisterScreen>
     }
   }
 
+  List<String> _getFilteredDomains() {
+    final emailParts = _emailController.text.split('@');
+    if (emailParts.length == 2) {
+      final typedDomain = emailParts[1].toLowerCase();
+      return _emailDomains
+          .where((domain) => domain.toLowerCase().startsWith(typedDomain))
+          .toList();
+    }
+    return [];
+  }
+
   @override
   void dispose() {
-    _controller1.dispose();
-    _controller2.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
     super.dispose();
   }
 
@@ -118,6 +172,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                   Column(
                     children: [
                       TextFormField(
+                        controller: _emailController,
                         keyboardType: TextInputType.emailAddress,
                         decoration: InputDecoration(
                           labelText: 'อีเมล',
@@ -131,23 +186,74 @@ class _RegisterScreenState extends State<RegisterScreen>
                           setState(() {
                             _email = value;
                             _emailError = null;
+                            _showSuggestions = value.contains('@');
+
+                            if (_showSuggestions) {
+                              final emailParts = value.split('@');
+                              if (emailParts.length == 2) {
+                                final typedDomain = emailParts[1].toLowerCase();
+                                final matchingDomains = _emailDomains
+                                    .where((domain) => domain
+                                        .toLowerCase()
+                                        .startsWith(typedDomain))
+                                    .toList();
+                                if (matchingDomains.isNotEmpty) {
+                                  _suggestedDomain = matchingDomains[0];
+                                } else {
+                                  _suggestedDomain = '';
+                                }
+                              }
+                            } else {
+                              _suggestedDomain = '';
+                            }
                           });
                         },
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'โปรดระบุอีเมล';
-                          }
-                          if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
-                              .hasMatch(value)) {
-                            return 'รูปแบบอีเมลไม่ถูกต้อง';
-                          }
-                          return null;
-                        },
+                        // validator: (value) {
+                        //   if (value == null || value.isEmpty) {
+                        //     return 'โปรดระบุอีเมล';
+                        //   }
+                        //   if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
+                        //       .hasMatch(value)) {
+                        //     return 'รูปแบบอีเมลไม่ถูกต้อง';
+                        //   }
+                        //   return null;
+                        // },
                         inputFormatters: [
                           FilteringTextInputFormatter.allow(
                               RegExp('[a-zA-Z0-9@._-]')),
                         ],
                       ),
+                      _showSuggestions != false
+                          ? Padding(
+                              padding: const EdgeInsets.only(top: 8.0),
+                              child: Visibility(
+                                visible: _showSuggestions &&
+                                    _suggestedDomain.isNotEmpty,
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text('หรือ '),
+                                    GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          _emailController.text =
+                                              '${_emailController.text.split('@')[0]}@$_suggestedDomain';
+                                          _showSuggestions = false;
+                                        });
+                                      },
+                                      child: Text(
+                                        '${_emailController.text.split('@')[0]}@$_suggestedDomain',
+                                        style: const TextStyle(
+                                          color: Colors.blue,
+                                          decoration: TextDecoration.underline,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            )
+                          : const SizedBox.shrink(),
                       const SizedBox(height: 16),
                       TextFormField(
                         decoration: InputDecoration(
@@ -163,7 +269,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                       ),
                       const SizedBox(height: 16),
                       TextFormField(
-                        controller: _controller1,
+                        controller: _passwordController,
                         obscureText: _obscureText,
                         decoration: InputDecoration(
                           labelText: 'รหัสผ่าน',
@@ -189,14 +295,24 @@ class _RegisterScreenState extends State<RegisterScreen>
                         onChanged: (value) {
                           _password = value;
                         },
+                        // validator: (value) {
+                        //   if (value == null || value.isEmpty) {
+                        //     return 'โปรดระบุรหัสผ่าน';
+                        //   }
+                        //   if (value.length < 8 || value.length > 16) {
+                        //     return 'รหัสผ่านต้องมีอย่างน้อย 8-16 ตัวอักษร';
+                        //   }
+                        //   return null;
+                        // },
                         inputFormatters: [
                           FilteringTextInputFormatter.allow(
                               RegExp('[a-zA-Z0-9]')),
+                          LengthLimitingTextInputFormatter(16),
                         ],
                       ),
                       const SizedBox(height: 16),
                       TextFormField(
-                        controller: _controller2,
+                        controller: _confirmPasswordController,
                         obscureText: _obscureText2,
                         decoration: InputDecoration(
                           labelText: 'ยืนยันรหัสผ่าน',
@@ -217,25 +333,56 @@ class _RegisterScreenState extends State<RegisterScreen>
                                     });
                                   },
                                 ),
-                          errorText: (_controller1.text.isNotEmpty &&
-                                  _controller2.text.isNotEmpty &&
+                          errorText: (_passwordController.text.isNotEmpty &&
+                                  _confirmPasswordController.text.isNotEmpty &&
                                   !_passwordsMatch)
                               ? 'รหัสผ่านไม่ตรงกัน'
                               : null,
                         ),
                         autofillHints: const [AutofillHints.password],
+                        // validator: (value) {
+                        //   if (value == null || value.isEmpty) {
+                        //     return 'โปรดยืนยันรหัสผ่าน';
+                        //   }
+                        //   if (value != _passwordController.text) {
+                        //     return 'รหัสผ่านไม่ตรงกัน';
+                        //   }
+                        //   return null;
+                        // },
                       ),
                       const SizedBox(height: 24),
                       ElevatedButton(
                         onPressed: () async {
-                          if (_passwordsMatch) {
+                          String? emailError = validateEmail(_email);
+                          String? passwordError = validatePassword(_password);
+                          String? confirmPasswordError =
+                              validateConfirmPassword(
+                                  _confirmPasswordController.text);
+
+                          if (emailError != null ||
+                              passwordError != null ||
+                              confirmPasswordError != null) {
+                            showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                title: const Text('ข้อมูลไม่ถูกต้อง'),
+                                content: Text(
+                                    '${emailError ?? ''}\n${passwordError ?? ''}\n${confirmPasswordError ?? ''}'),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () => Navigator.pop(context),
+                                    child: const Text('ปิด'),
+                                  ),
+                                ],
+                              ),
+                            );
+                          } else {
                             UserCredential? userCredential =
                                 await Auth.signUpWithEmailAndPassword(
                                     _email, _password, context);
                             if (userCredential != null) {
                               await userCredential.user
                                   ?.updateDisplayName(_username);
-                              // ignore: use_build_context_synchronously
                               showDialog(
                                 context: context,
                                 builder: (context) => AlertDialog(
@@ -261,25 +408,6 @@ class _RegisterScreenState extends State<RegisterScreen>
                                                       milliseconds: 500),
                                             ),
                                           );
-                                        }
-                                      },
-                                      child: const Text('ปิด'),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            } else {
-                              showDialog(
-                                context: context,
-                                builder: (context) => AlertDialog(
-                                  title: const Text('สมัครสมาชิกไม่สำเร็จ'),
-                                  content: const Text(
-                                      'อีเมลนี้มีอาจมีบัญชีอยู่แล้ว โปรดลองลงชื่อเข้าใช้ด้วยวิธีอื่นหรือลองใช้อีเมลอื่น'),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () {
-                                        if (mounted) {
-                                          Navigator.pop(context);
                                         }
                                       },
                                       child: const Text('ปิด'),
