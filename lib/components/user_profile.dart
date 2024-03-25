@@ -84,7 +84,9 @@ class _UserProfileState extends State<UserProfile> {
                   Positioned(
                     top: 8,
                     right: 8,
-                    child: UserData.accountType != 'Google'
+                    child: UserData.accountType != 'Google' &&
+                            UserData.accountType != 'Facebook' &&
+                            UserData.accountType != 'ไม่ระบุตัวตน'
                         ? GestureDetector(
                             onTap: () {
                               if (mounted) {

@@ -52,6 +52,19 @@ class _LoginScreenState extends State<LoginScreen>
     });
   }
 
+  void navigateToHomeScreen() {
+    if (mounted) {
+      Navigator.pushReplacement(
+        context,
+        PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) =>
+              const HomeScreen().animate().fade().slide(),
+          transitionDuration: const Duration(milliseconds: 500),
+        ),
+      );
+    }
+  }
+
   @override
   void dispose() {
     _controller.dispose();
@@ -200,20 +213,7 @@ class _LoginScreenState extends State<LoginScreen>
                             await UserData.saveUserData(
                                 userCredential, 'Google');
                             await UserData.loadUserData();
-                            if (mounted) {
-                              Navigator.pushReplacement(
-                                  context,
-                                  PageRouteBuilder(
-                                    pageBuilder: (context, animation,
-                                            secondaryAnimation) =>
-                                        const HomeScreen()
-                                            .animate()
-                                            .fade()
-                                            .slide(),
-                                    transitionDuration:
-                                        const Duration(milliseconds: 500),
-                                  ));
-                            }
+                            navigateToHomeScreen();
                           } else {}
                         },
                       ),
@@ -223,23 +223,8 @@ class _LoginScreenState extends State<LoginScreen>
                           UserCredential? userCredential =
                               await Auth.signInWithFacebook(context);
                           if (userCredential != null) {
-                            await UserData.saveUserData(
-                                userCredential, 'Facebook');
                             await UserData.loadUserData();
-                            if (mounted) {
-                              Navigator.pushReplacement(
-                                  context,
-                                  PageRouteBuilder(
-                                    pageBuilder: (context, animation,
-                                            secondaryAnimation) =>
-                                        const HomeScreen()
-                                            .animate()
-                                            .fade()
-                                            .slide(),
-                                    transitionDuration:
-                                        const Duration(milliseconds: 500),
-                                  ));
-                            }
+                            navigateToHomeScreen();
                           } else {
                             // User cancelled the sign in process or sign in failed
                           }

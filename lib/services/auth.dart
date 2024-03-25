@@ -59,7 +59,12 @@ class Auth {
           UserCredential userCredential = await FirebaseAuth.instance
               .signInWithCredential(facebookAuthCredential);
 
+          final facebookUser = await FacebookAuth.instance
+              .getUserData(fields: "picture.width(200)");
+          final pictureUrl = facebookUser['picture']['data']['url'];
+
           await UserData.saveUserData(userCredential, 'Facebook');
+          await UserData.updateUserImage(pictureUrl);
 
           return userCredential;
         } on FirebaseAuthException catch (e) {
