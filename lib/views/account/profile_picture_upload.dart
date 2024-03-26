@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -8,6 +9,7 @@ import 'package:image/image.dart' as img;
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:pyoneer/services/auth.dart';
 import 'package:pyoneer/services/user_data.dart';
+import 'package:pyoneer/utils/color.dart';
 
 class ProfilePictureUploadScreen extends StatefulWidget {
   const ProfilePictureUploadScreen({super.key});
@@ -47,9 +49,32 @@ class _ProfilePictureUploadScreenState
 
       final pickedFile = await ImagePicker().pickImage(source: source);
       if (pickedFile != null) {
-        setState(() {
-          _selectedImage = File(pickedFile.path);
-        });
+        final croppedFile = await ImageCropper().cropImage(
+          sourcePath: pickedFile.path,
+          aspectRatioPresets: [
+            CropAspectRatioPreset.square,
+          ],
+          uiSettings: [
+            AndroidUiSettings(
+              toolbarTitle: 'เลือกสัดส่วนรูปภาพ',
+              toolbarColor: AppColor.primarSnakeColor,
+              toolbarWidgetColor: Colors.white,
+              initAspectRatio: CropAspectRatioPreset.square,
+              lockAspectRatio: true,
+              showCropGrid: true,
+              hideBottomControls: false,
+              activeControlsWidgetColor: AppColor.primarSnakeColor,
+            ),
+            IOSUiSettings(
+              title: 'เลือกสัดส่วนรูปภาพ',
+            ),
+          ],
+        );
+        if (croppedFile != null) {
+          setState(() {
+            _selectedImage = File(croppedFile.path);
+          });
+        }
       }
 
       setState(() {
@@ -64,7 +89,6 @@ class _ProfilePictureUploadScreenState
         _isUploading = true;
       });
       try {
-        final resizedImage = await _resizeImage(_selectedImage!, 512, 512);
         String userId = FirebaseAuth.instance.currentUser!.uid;
         FirebaseStorage.instance
             .setMaxUploadRetryTime(const Duration(seconds: 3));
@@ -78,7 +102,7 @@ class _ProfilePictureUploadScreenState
             .then((_) => true)
             .catchError((_) => false);
 
-        UploadTask uploadTask = storageReference.putFile(resizedImage);
+        UploadTask uploadTask = storageReference.putFile(_selectedImage!);
         TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() => null);
         String downloadURL = await taskSnapshot.ref.getDownloadURL();
         await FirebaseAuth.instance.currentUser?.updatePhotoURL(downloadURL);
@@ -92,13 +116,14 @@ class _ProfilePictureUploadScreenState
           await Auth.signOut();
         }
 
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-                content: Text('อัปโหลดรูปภาพโปรไฟล์ของคุณสำเร็จแล้ว')),
-          );
-          Navigator.of(context).pop();
-        }
+        // if (mounted) {
+        //   ScaffoldMessenger.of(context).showSnackBar(
+        //     const SnackBar(
+        //         content: Text('อัปโหลดรูปภาพโปรไฟล์ของคุณสำเร็จแล้ว')),
+        //   );
+        //   Navigator.of(context).pop();
+        // }
+        Navigator.of(context).pop();
       } catch (e) {
         if (kDebugMode) {
           print('Error uploading profile picture: $e');
