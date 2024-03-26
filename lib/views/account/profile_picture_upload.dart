@@ -62,7 +62,7 @@ class _ProfilePictureUploadScreenState
               initAspectRatio: CropAspectRatioPreset.square,
               lockAspectRatio: true,
               showCropGrid: true,
-              hideBottomControls: false,
+              hideBottomControls: true,
               activeControlsWidgetColor: AppColor.primarSnakeColor,
             ),
             IOSUiSettings(
@@ -71,8 +71,10 @@ class _ProfilePictureUploadScreenState
           ],
         );
         if (croppedFile != null) {
+          File resizedImage =
+              await _resizeImage(File(croppedFile.path), 512, 512);
           setState(() {
-            _selectedImage = File(croppedFile.path);
+            _selectedImage = resizedImage;
           });
         }
       }
