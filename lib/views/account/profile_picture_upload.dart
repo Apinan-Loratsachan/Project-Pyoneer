@@ -22,6 +22,7 @@ class _ProfilePictureUploadScreenState
   File? _selectedImage;
   String? _currentProfilePictureUrl;
   bool _isUploading = false;
+  bool _isPickerActive = false;
 
   @override
   void initState() {
@@ -39,10 +40,20 @@ class _ProfilePictureUploadScreenState
   }
 
   Future<void> _selectImage(ImageSource source) async {
-    final pickedFile = await ImagePicker().pickImage(source: source);
-    if (pickedFile != null) {
+    if (!_isPickerActive) {
       setState(() {
-        _selectedImage = File(pickedFile.path);
+        _isPickerActive = true;
+      });
+
+      final pickedFile = await ImagePicker().pickImage(source: source);
+      if (pickedFile != null) {
+        setState(() {
+          _selectedImage = File(pickedFile.path);
+        });
+      }
+
+      setState(() {
+        _isPickerActive = false;
       });
     }
   }
@@ -53,7 +64,7 @@ class _ProfilePictureUploadScreenState
         _isUploading = true;
       });
       try {
-        final resizedImage = await _resizeImage(_selectedImage!, 1024, 1024);
+        final resizedImage = await _resizeImage(_selectedImage!, 512, 512);
         String userId = FirebaseAuth.instance.currentUser!.uid;
         FirebaseStorage.instance
             .setMaxUploadRetryTime(const Duration(seconds: 3));
@@ -124,52 +135,108 @@ class _ProfilePictureUploadScreenState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: const Text('รูปภาพโปรไฟล์ของคุณ'),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            _selectedImage != null
-                ? Image.file(
-                    _selectedImage!,
-                    width: 200,
-                    height: 200,
-                    fit: BoxFit.cover,
-                  )
-                : _currentProfilePictureUrl != null
-                    ? Image.network(
-                        _currentProfilePictureUrl!,
-                        width: 200,
-                        height: 200,
-                        fit: BoxFit.cover,
-                      )
-                    : const SizedBox.shrink(),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () => _selectImage(ImageSource.gallery),
-              child: const Text('เลือกรูปภาพจากแกลเลอรี'),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Center(
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(150),
+              child: _selectedImage != null
+                  ? Image.file(
+                      _selectedImage!,
+                      width: 200,
+                      height: 200,
+                      fit: BoxFit.cover,
+                    )
+                  : _currentProfilePictureUrl != null
+                      ? Image.network(
+                          _currentProfilePictureUrl!,
+                          width: 200,
+                          height: 200,
+                          fit: BoxFit.cover,
+                        )
+                      : const Icon(
+                          Icons.person,
+                          size: 200,
+                          color: Colors.grey,
+                        ),
             ),
-            ElevatedButton(
-              onPressed: () => _selectImage(ImageSource.camera),
-              child: const Text('ถ่ายรูปภาพ'),
+          ),
+          const SizedBox(height: 20),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              ElevatedButton.icon(
+                onPressed: _isPickerActive || _isUploading
+                    ? null
+                    : () => _selectImage(ImageSource.gallery),
+                icon: const Icon(Icons.photo_library),
+                label: const Text('เลือกรูปภาพ'),
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 15,
+                  ),
+                ),
+              ),
+              ElevatedButton.icon(
+                onPressed: _isPickerActive || _isUploading
+                    ? null
+                    : () => _selectImage(ImageSource.camera),
+                icon: const Icon(Icons.camera_alt),
+                label: const Text('ถ่ายรูปภาพ'),
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 15,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 20),
+          ElevatedButton(
+            onPressed: _isUploading ? null : _uploadProfilePicture,
+            style: ElevatedButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 40,
+                vertical: 15,
+              ),
             ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _isUploading ? null : _uploadProfilePicture,
+            child: SizedBox(
+              width: 200,
+              height: 24,
               child: _isUploading
-                  ? SizedBox(
-                      width: 50,
-                      height: 50,
+                  ? Center(
                       child: LoadingAnimationWidget.stretchedDots(
-                        size: 20,
+                        size: 24,
                         color: Colors.white,
                       ),
                     )
-                  : const Text('อัปโหลดรูปภาพโปรไฟล์'),
+                  : const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.upload),
+                        SizedBox(width: 8),
+                        Text('อัปโหลดรูปภาพโปรไฟล์'),
+                      ],
+                    ),
             ),
-          ],
-        ),
+          ),
+          const SizedBox(height: 40),
+        ],
       ),
     );
   }
