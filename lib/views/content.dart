@@ -533,14 +533,23 @@ class _ContentScreenState extends State<ContentScreen>
 String _getGreetingWord() {
   DateTime now = DateTime.now();
   int hour = now.hour;
-  if (hour >= 4 && hour < 12) {
+
+  if (hour >= 0 && hour < 4) {
+    return '🌙 ราตรีสวัสดิ์';
+  } else if (hour >= 4 && hour < 6) {
+    return '🌅 สวัสดียามเช้าตรู่';
+  } else if (hour >= 6 && hour < 12) {
     return '🌤️ อรุณสวัสดิ์';
-  } else if (hour >= 12 && hour < 16) {
+  } else if (hour >= 12 && hour < 13) {
+    return '🍚 สวัสดีตอนเที่ยง';
+  } else if (hour >= 13 && hour < 16) {
     return '☀️ สวัสดียามบ่าย';
-  } else if (hour >= 16 && hour < 19) {
+  } else if (hour >= 16 && hour < 18) {
     return '🌥️ สายัณห์สวัสดิ์';
-  } else {
+  } else if (hour >= 18 && hour < 22) {
     return '🌙 สวัสดียามค่ำ';
+  } else {
+    return '🌃 สวัสดียามดึก';
   }
 }
 
