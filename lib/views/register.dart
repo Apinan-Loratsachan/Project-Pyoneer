@@ -116,16 +116,16 @@ class _RegisterScreenState extends State<RegisterScreen>
     }
   }
 
-  List<String> _getFilteredDomains() {
-    final emailParts = _emailController.text.split('@');
-    if (emailParts.length == 2) {
-      final typedDomain = emailParts[1].toLowerCase();
-      return _emailDomains
-          .where((domain) => domain.toLowerCase().startsWith(typedDomain))
-          .toList();
-    }
-    return [];
-  }
+  // List<String> _getFilteredDomains() {
+  //   final emailParts = _emailController.text.split('@');
+  //   if (emailParts.length == 2) {
+  //     final typedDomain = emailParts[1].toLowerCase();
+  //     return _emailDomains
+  //         .where((domain) => domain.toLowerCase().startsWith(typedDomain))
+  //         .toList();
+  //   }
+  //   return [];
+  // }
 
   @override
   void dispose() {

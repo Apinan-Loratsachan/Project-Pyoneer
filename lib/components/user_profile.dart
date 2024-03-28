@@ -32,25 +32,17 @@ class _UserProfileState extends State<UserProfile> {
       final PaletteGenerator generator =
           await PaletteGenerator.fromImageProvider(
         NetworkImage(UserData.image),
-        size: const Size(200, 200),
+        size: const Size(256, 256),
       );
 
       final List<Color?> colors = [
-        generator.vibrantColor?.color,
-        generator.lightVibrantColor?.color,
-        generator.darkVibrantColor?.color,
         generator.mutedColor?.color,
-        generator.lightMutedColor?.color,
-        generator.darkMutedColor?.color,
+        generator.dominantColor?.color,
       ];
 
       final List<Color?> textColors = [
-        generator.vibrantColor?.titleTextColor,
-        generator.lightVibrantColor?.titleTextColor,
-        generator.darkVibrantColor?.titleTextColor,
         generator.mutedColor?.titleTextColor,
-        generator.lightMutedColor?.titleTextColor,
-        generator.darkMutedColor?.titleTextColor,
+        generator.dominantColor?.titleTextColor,
       ];
 
       final random = Random();
@@ -60,7 +52,7 @@ class _UserProfileState extends State<UserProfile> {
       AppColor.profileColor = dominantColor;
       textColor = textColors[randomIndex] ?? Colors.black;
       AppColor.profileTextColor = textColor;
-      iconColor = textColors[randomIndex] ?? Colors.white;
+      iconColor = textColors[randomIndex] ?? Colors.grey;
 
       setState(() {});
     }
@@ -83,13 +75,12 @@ class _UserProfileState extends State<UserProfile> {
           children: [
             Container(
               decoration: BoxDecoration(
-                color: dominantColor ?? Colors.white70,
+                color: dominantColor ?? AppColor.primarSnakeColor,
                 borderRadius: const BorderRadius.all(Radius.circular(10)),
                 boxShadow: [
                   BoxShadow(
                     color: dominantColor ?? AppColor.primarSnakeColor,
-                    offset: const Offset(0, 10),
-                    blurStyle: BlurStyle.normal,
+                    offset: const Offset(0, 4),
                     blurRadius: 20,
                   ),
                 ],
@@ -105,11 +96,33 @@ class _UserProfileState extends State<UserProfile> {
                             ? Container()
                             : Hero(
                                 tag: "profileImage",
-                                child: Image.network(
-                                  imageUrl,
-                                  width: 100,
-                                  height: 100,
-                                  fit: BoxFit.cover,
+                                flightShuttleBuilder: (
+                                  BuildContext flightContext,
+                                  Animation<double> animation,
+                                  HeroFlightDirection flightDirection,
+                                  BuildContext fromHeroContext,
+                                  BuildContext toHeroContext,
+                                ) {
+                                  return AnimatedBuilder(
+                                    animation: animation,
+                                    builder:
+                                        (BuildContext context, Widget? child) {
+                                      return ClipRRect(
+                                        borderRadius: BorderRadius.circular(
+                                            animation.value * 8),
+                                        child: toHeroContext.widget,
+                                      );
+                                    },
+                                  );
+                                },
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(8.0),
+                                  child: Image.network(
+                                    imageUrl,
+                                    width: 100,
+                                    height: 100,
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
                               );
                       },

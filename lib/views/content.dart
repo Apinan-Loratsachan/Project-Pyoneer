@@ -74,21 +74,21 @@ class _ContentScreenState extends State<ContentScreen>
     super.dispose();
   }
 
-  void _scrollDown() {
-    _scrollController.animateTo(
-      _scrollController.position.maxScrollExtent,
-      duration: const Duration(milliseconds: 500),
-      curve: Curves.easeIn,
-    );
-  }
+  // void _scrollDown() {
+  //   _scrollController.animateTo(
+  //     _scrollController.position.maxScrollExtent,
+  //     duration: const Duration(milliseconds: 500),
+  //     curve: Curves.easeIn,
+  //   );
+  // }
 
-  void _scrollUp() {
-    _scrollController.animateTo(
-      0,
-      duration: const Duration(milliseconds: 500),
-      curve: Curves.easeOut,
-    );
-  }
+  // void _scrollUp() {
+  //   _scrollController.animateTo(
+  //     0,
+  //     duration: const Duration(milliseconds: 500),
+  //     curve: Curves.easeOut,
+  //   );
+  // }
 
   Stream<Map<String, dynamic>> fetchTestScore(
       String email, String testType, int lessonIndex) {

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:icons_plus/icons_plus.dart';
 import 'package:pyoneer/components/user_profile.dart';
 import 'package:pyoneer/services/auth.dart';
 import 'package:pyoneer/services/user_data.dart';
@@ -70,7 +71,21 @@ class _AccountSettigScreenState extends State<AccountSettigScreen> {
                   ListTile(
                     leading: const Icon(FontAwesomeIcons.hashtag),
                     title: const Text("รหัสผู้ใช้"),
-                    trailing: Text(UserData.uid),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(UserData.uid),
+                        const SizedBox(width: 5),
+                        GestureDetector(
+                          onTap: () async {
+                            await Clipboard.setData(
+                                ClipboardData(text: UserData.uid));
+                            Fluttertoast.showToast(msg: "คัดลอกรหัสผู้ใช้แล้ว");
+                          },
+                          child: const Icon(Iconsax.copy_outline, size: 15),
+                        ),
+                      ],
+                    ),
                   ),
                   UserData.uid == 'ไม่ได้เข้าสู่ระบบ' ||
                           UserData.uid == '' ||
