@@ -68,25 +68,33 @@ class _AccountSettigScreenState extends State<AccountSettigScreen> {
               padding: const EdgeInsets.all(8.0),
               child: Column(
                 children: [
-                  ListTile(
-                    leading: const Icon(FontAwesomeIcons.hashtag),
-                    title: const Text("รหัสผู้ใช้"),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(UserData.uid),
-                        const SizedBox(width: 5),
-                        GestureDetector(
-                          onTap: () async {
-                            await Clipboard.setData(
-                                ClipboardData(text: UserData.uid));
-                            Fluttertoast.showToast(msg: "คัดลอกรหัสผู้ใช้แล้ว");
-                          },
-                          child: const Icon(Iconsax.copy_outline, size: 15),
+                  UserData.uid != 'ไม่ได้เข้าสู่ระบบ'
+                      ? ListTile(
+                          leading: const Icon(FontAwesomeIcons.hashtag),
+                          title: const Text("รหัสผู้ใช้"),
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(UserData.uid),
+                              const SizedBox(width: 5),
+                              GestureDetector(
+                                onTap: () async {
+                                  await Clipboard.setData(
+                                      ClipboardData(text: UserData.uid));
+                                  Fluttertoast.showToast(
+                                      msg: "คัดลอกรหัสผู้ใช้แล้ว");
+                                },
+                                child:
+                                    const Icon(Iconsax.copy_outline, size: 15),
+                              ),
+                            ],
+                          ),
+                        )
+                      : ListTile(
+                          leading: const Icon(FontAwesomeIcons.hashtag),
+                          title: const Text("รหัสผู้ใช้"),
+                          trailing: Text(UserData.uid),
                         ),
-                      ],
-                    ),
-                  ),
                   UserData.uid == 'ไม่ได้เข้าสู่ระบบ' ||
                           UserData.uid == '' ||
                           UserData.uid.isEmpty
