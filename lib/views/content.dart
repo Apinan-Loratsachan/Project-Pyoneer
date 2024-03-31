@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:pyoneer/components/lesson_component.dart';
 import 'package:pyoneer/components/testing_component.dart';
 import 'package:pyoneer/services/user_data.dart';
@@ -25,6 +26,7 @@ class _ContentScreenState extends State<ContentScreen>
   bool _showFab = true;
   Timer? _hideFabTimer;
   double spaceSize = 25;
+  int lessonsCatagoryAnimateDuration = 2000;
 
   static const Map<int, String> thaiMonths = {
     1: 'ม.ค.',
@@ -263,22 +265,57 @@ class _ContentScreenState extends State<ContentScreen>
                         indicatorStyle: const IndicatorStyle(
                           width: 40,
                           color: AppColor.primarSnakeColor,
-                          indicatorXY: 0.24,
+                          indicatorXY: 0.27,
                         ),
                         endChild: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Column(
                             children: [
-                              SizedBox(
-                                height: spaceSize,
-                                child: Padding(
-                                  padding: const EdgeInsets.only(left: 8),
-                                  child: Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Text(
-                                      "บทที่ $i",
-                                      style: const TextStyle(fontSize: 18),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 8),
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    "บทที่ $i ${LessonComponent.lessonContent[i].subTitle}",
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(
+                                      fontSize: 22,
+                                      shadows: [
+                                        Shadow(
+                                          offset: Offset(0, 1),
+                                          blurRadius: 25,
+                                        ),
+                                      ],
                                     ),
+                                  ).animate(
+                                    delay: Duration(milliseconds: 500 * i),
+                                    onPlay: (controller) => controller.repeat(),
+                                    effects: [
+                                      ShimmerEffect(
+                                        duration: Duration(milliseconds: lessonsCatagoryAnimateDuration),
+                                        color: AppColor.primarSnakeColor,
+                                        angle: (0 + (10 * i)).toDouble()
+                                      ),
+                                      ShimmerEffect(
+                                        delay: const Duration(milliseconds: 500),
+                                        duration: Duration(milliseconds: lessonsCatagoryAnimateDuration),
+                                        color: Colors.amber,
+                                        angle: (90 + (10 * i)).toDouble(),
+                                      ),
+                                      ShimmerEffect(
+                                        delay: const Duration(milliseconds: 1000),
+                                        duration: Duration(milliseconds: lessonsCatagoryAnimateDuration),
+                                        color: Colors.cyan,
+                                        angle: (270 + (10 * i)).toDouble(),
+                                      ),
+                                      ShimmerEffect(
+                                        delay: const Duration(milliseconds: 1500),
+                                        duration: Duration(milliseconds: lessonsCatagoryAnimateDuration),
+                                        color: Colors.lime,
+                                        angle: (180 + (10 * i)).toDouble(),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ),
