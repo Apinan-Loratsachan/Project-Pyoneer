@@ -48,8 +48,8 @@ class _RegisterScreenState extends State<RegisterScreen>
     if (value == null || value.isEmpty) {
       return 'โปรดระบุรหัสผ่าน';
     }
-    if (value.length < 8 || value.length > 16) {
-      return 'รหัสผ่านต้องมีอย่างน้อย 8-16 ตัวอักษร';
+    if (value.length < 8 || value.length > 1000) {
+      return 'รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร';
     }
     return null;
   }
@@ -306,11 +306,11 @@ class _RegisterScreenState extends State<RegisterScreen>
                         //   }
                         //   return null;
                         // },
-                        inputFormatters: [
-                          FilteringTextInputFormatter.allow(
-                              RegExp('[a-zA-Z0-9]')),
-                          LengthLimitingTextInputFormatter(16),
-                        ],
+                        // inputFormatters: [
+                        //   FilteringTextInputFormatter.allow(
+                        //       RegExp(r'[a-zA-Z0-9!@#$%^&*()]')),
+                        //   LengthLimitingTextInputFormatter(16),
+                        // ],
                       ),
                       const SizedBox(height: 16),
                       TextFormField(

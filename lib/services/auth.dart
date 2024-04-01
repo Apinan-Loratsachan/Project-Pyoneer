@@ -7,10 +7,10 @@ import 'package:pyoneer/services/user_data.dart';
 
 class Auth {
   static const List<String> adminUIDs = [
-    'A0ILxjzDZeQk2okmGUcs85kMCSh2',
+    'AY70aABR9ZZLGBM9D4WaNTn4pHE3',
     'wA2YJSiuLAQXMZH77esSNHmSVYI2',
-    'Jk3eN02jLqPGzdBDygd4psG7LsC3',
-    'jFs4rVGELnegEc1fuEvLe57iivG2'
+    'h43qvHVeSxX9daEPmAIJT9tQt8e2',
+    'iypXQaWknIOBt4mzmKdgfJxVHaI2'
   ];
 
   static Future<UserCredential?> signInWithGoogle(BuildContext context) async {

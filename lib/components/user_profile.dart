@@ -184,7 +184,7 @@ class _UserProfileState extends State<UserProfile> {
                     ? GestureDetector(
                         onTap: () {
                           if (mounted) {
-                            Navigator.pushReplacement(
+                            Navigator.push(
                               context,
                               PageRouteBuilder(
                                 pageBuilder:
