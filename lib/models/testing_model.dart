@@ -184,20 +184,24 @@ class _TestingScreenModelState extends State<TestingScreenModel> {
     });
 
     if (!widget.isPreTest) {
-      DocumentSnapshot doc = await FirebaseFirestore.instance
+      QuerySnapshot snapshot = await FirebaseFirestore.instance
           .collection('testResult')
           .doc(userEmail)
           .collection(testType)
-          .doc('lessonTest ${widget.testId}')
+          .where('lessonTest', isEqualTo: widget.testId)
           .get();
 
-      int attemptCount = 1;
-      Map<String, dynamic> existingData = {};
+      int attemptCount = snapshot.size + 1;
 
-      if (doc.exists) {
-        existingData = doc.data() as Map<String, dynamic>;
-        attemptCount = existingData['attemptCount'] ?? 0;
-        attemptCount++;
+      if (attemptCount > 5) {
+        showTopSnackBar(
+          Overlay.of(context),
+          const CustomSnackBar.error(
+            message: "คุณทำแบบทดสอบครบ 5 ครั้งแล้ว",
+          ),
+          displayDuration: const Duration(seconds: 3),
+        );
+        return;
       }
 
       Map<String, dynamic> testData = {
@@ -207,7 +211,6 @@ class _TestingScreenModelState extends State<TestingScreenModel> {
         'score': correctAnswers,
         'totalScore': totalQuestions,
         'attemptCount': attemptCount,
-        'chapter': 'lessonTest ${widget.testId}',
         'timestamp': FieldValue.serverTimestamp(),
       };
 
@@ -215,8 +218,8 @@ class _TestingScreenModelState extends State<TestingScreenModel> {
           .collection('testResult')
           .doc(userEmail)
           .collection(testType)
-          .doc('lessonTest ${widget.testId}')
-          .set(testData, SetOptions(merge: true));
+          .doc('lessonTest${widget.testId}_attempt$attemptCount')
+          .set(testData);
     } else {
       Map<String, dynamic> testData = {
         'email': userEmail,

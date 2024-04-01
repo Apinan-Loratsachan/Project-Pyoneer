@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:icons_plus/icons_plus.dart';
@@ -99,19 +100,47 @@ class _ContentScreenState extends State<ContentScreen>
       return Stream.value(
           {'score': null, 'totalScore': null, 'testDate': null});
     }
-    return FirebaseFirestore.instance
-        .collection('testResult')
-        .doc(email)
-        .collection(testType)
-        .doc('lessonTest $lessonIndex')
-        .snapshots()
-        .map((snapshot) {
-      if (snapshot.exists) {
-        return snapshot.data()!;
-      } else {
+    if (testType == 'pre-test') {
+      return FirebaseFirestore.instance
+          .collection('testResult')
+          .doc(email)
+          .collection(testType)
+          .doc('lessonTest $lessonIndex')
+          .snapshots()
+          .map((snapshot) {
+        if (snapshot.exists) {
+          return snapshot.data()!;
+        } else {
+          return {'score': null, 'totalScore': null, 'testDate': null};
+        }
+      }).handleError((error) {
+        if (kDebugMode) {
+          print('Error fetching pre-test score: $error');
+        }
         return {'score': null, 'totalScore': null, 'testDate': null};
-      }
-    });
+      });
+    } else {
+      return FirebaseFirestore.instance
+          .collection('testResult')
+          .doc(email)
+          .collection(testType)
+          .where('lessonTest', isEqualTo: lessonIndex)
+          .orderBy('attemptCount', descending: true)
+          .limit(1)
+          .snapshots()
+          .map((querySnapshot) {
+        if (querySnapshot.docs.isNotEmpty) {
+          return querySnapshot.docs.first.data();
+        } else {
+          return {'score': null, 'totalScore': null, 'testDate': null};
+        }
+      }).handleError((error) {
+        if (kDebugMode) {
+          print('Error fetching post-test score: $error');
+        }
+        return {'score': null, 'totalScore': null, 'testDate': null};
+      });
+    }
   }
 
   @override
@@ -489,27 +518,29 @@ class _ContentScreenState extends State<ContentScreen>
                                                       "ต้องเรียนบทนี้ก่อนทำแบบทดสอบนี้";
                                                   Color postTestColor =
                                                       Colors.grey.shade200;
-                                                  if (score != null &&
-                                                      totalScore != null &&
-                                                      testDate != null) {
-                                                    String thaiMonth =
-                                                        thaiMonths[testDate
-                                                                .month] ??
-                                                            '';
-                                                    int thaiYear =
-                                                        testDate.year + 543;
-                                                    subtitle =
-                                                        "$score/$totalScore คะแนน | ${testDate.day} $thaiMonth $thaiYear ${testDate.hour.toString().padLeft(2, '0')}:${testDate.minute.toString().padLeft(2, '0')} น.";
-                                                    postTestColor = AppColor
-                                                        .primarSnakeColorAccent;
-                                                  } else if (lessonReadSnapshot
+                                                  if (lessonReadSnapshot
                                                           .hasData &&
                                                       lessonReadSnapshot
                                                           .data!) {
-                                                    subtitle =
-                                                        "ยังไม่ได้ทำแบบทดสอบ";
-                                                    postTestColor = AppColor
-                                                        .primarSnakeColorAccent;
+                                                    if (score != null &&
+                                                        totalScore != null &&
+                                                        testDate != null) {
+                                                      String thaiMonth =
+                                                          thaiMonths[testDate
+                                                                  .month] ??
+                                                              '';
+                                                      int thaiYear =
+                                                          testDate.year + 543;
+                                                      subtitle =
+                                                          "$score/$totalScore คะแนน | ${testDate.day} $thaiMonth $thaiYear ${testDate.hour.toString().padLeft(2, '0')}:${testDate.minute.toString().padLeft(2, '0')} น.";
+                                                      postTestColor = AppColor
+                                                          .primarSnakeColorAccent;
+                                                    } else {
+                                                      subtitle =
+                                                          "ยังไม่ได้ทำแบบทดสอบ";
+                                                      postTestColor = AppColor
+                                                          .primarSnakeColorAccent;
+                                                    }
                                                   }
                                                   return Card(
                                                     color: postTestColor,
