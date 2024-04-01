@@ -1,6 +1,8 @@
 import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pyoneer/models/navigation_bar_icon_animation.dart';
@@ -140,94 +142,93 @@ class _HomeScreenState extends State<HomeScreen> {
         },
         child: Scaffold(
           appBar: AppBar(
-                  centerTitle: true,
-                  title: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          PyoneerHero.hero(
-                              Image.asset(
-                                "assets/icons/pyoneer_snake.png",
-                                fit: BoxFit.cover,
-                                height: 60,
-                              ),
-                              "hero-title"),
-                          PyoneerHero.hero(
-                              Image.asset(
-                                "assets/icons/pyoneer_text.png",
-                                fit: BoxFit.cover,
-                                height: 40,
-                              ),
-                              "pyoneer_text-title"),
-                        ],
-                      ),
-                    ],
-                  ),
-                  leading: Container(),
-                  actions: <Widget>[
-                    InkWell(
-                      onTap: () => Navigator.push(
-                        context,
-                        PageRouteBuilder(
-                          pageBuilder: (context, animation1, animation2) =>
-                              const AccountSettigScreen(),
-                          transitionDuration: Duration(
-                              milliseconds:
-                                  PyoneerAnimation.changeScreenDuration),
-                          transitionsBuilder:
-                              (context, animation1, animation2, child) {
-                            animation1 = CurvedAnimation(
-                              parent: animation1,
-                              curve: Curves.easeOutQuart,
-                            );
-                            return FadeTransition(
-                              opacity: Tween(
-                                begin: 0.0,
-                                end: 1.0,
-                              ).animate(animation1),
-                              child: SlideTransition(
-                                position: Tween<Offset>(
-                                  begin: const Offset(1.0, 0.0),
-                                  end: Offset.zero,
-                                ).animate(animation1),
-                                child: child,
-                              ),
-                            );
-                          },
+            centerTitle: true,
+            title: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    PyoneerHero.hero(
+                        Image.asset(
+                          "assets/icons/pyoneer_snake.png",
+                          fit: BoxFit.cover,
+                          height: 60,
                         ),
-                      ),
-                      borderRadius: BorderRadius.circular(50),
-                      customBorder: const CircleBorder(),
-                      child: ValueListenableBuilder<String>(
-                        valueListenable: UserData.imageNotifier,
-                        builder: (context, imageUrl, _) {
-                          return imageUrl.isEmpty ||
-                                  UserData.email == 'ไม่ได้เข้าสู่ระบบ'
-                              ? const Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Icon(FontAwesomeIcons.userSecret),
-                                )
-                              : Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(50),
-                                    child: Hero(
-                                      tag: "profileImage",
-                                      child: ClipOval(
-                                        child: Image.network(
-                                          imageUrl,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                );
-                        },
-                      ),
-                    )
+                        "hero-title"),
+                    PyoneerHero.hero(
+                        Image.asset(
+                          "assets/icons/pyoneer_text.png",
+                          fit: BoxFit.cover,
+                          height: 40,
+                        ),
+                        "pyoneer_text-title"),
                   ],
-                  toolbarHeight: 60,
                 ),
+              ],
+            ),
+            leading: Container(),
+            actions: <Widget>[
+              InkWell(
+                onTap: () => Navigator.push(
+                  context,
+                  PageRouteBuilder(
+                    pageBuilder: (context, animation1, animation2) =>
+                        const AccountSettigScreen(),
+                    transitionDuration: Duration(
+                        milliseconds: PyoneerAnimation.changeScreenDuration),
+                    transitionsBuilder:
+                        (context, animation1, animation2, child) {
+                      animation1 = CurvedAnimation(
+                        parent: animation1,
+                        curve: Curves.easeOutQuart,
+                      );
+                      return FadeTransition(
+                        opacity: Tween(
+                          begin: 0.0,
+                          end: 1.0,
+                        ).animate(animation1),
+                        child: SlideTransition(
+                          position: Tween<Offset>(
+                            begin: const Offset(1.0, 0.0),
+                            end: Offset.zero,
+                          ).animate(animation1),
+                          child: child,
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                borderRadius: BorderRadius.circular(50),
+                customBorder: const CircleBorder(),
+                child: ValueListenableBuilder<String>(
+                  valueListenable: UserData.imageNotifier,
+                  builder: (context, imageUrl, _) {
+                    return imageUrl.isEmpty ||
+                            UserData.email == 'ไม่ได้เข้าสู่ระบบ'
+                        ? const Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Icon(FontAwesomeIcons.userSecret),
+                          )
+                        : Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(50),
+                              child: Hero(
+                                tag: "profileImage",
+                                child: ClipOval(
+                                  child: Image.network(
+                                    imageUrl,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                  },
+                ),
+              )
+            ],
+            toolbarHeight: 60,
+          ),
           extendBody: true,
           body: PageView(
             controller: pageController,
@@ -239,74 +240,82 @@ class _HomeScreenState extends State<HomeScreen> {
             },
             children: _children,
           ),
-          bottomNavigationBar: Stack(
-            children: [
-              AnimatedContainer(
-                duration: const Duration(milliseconds: 1000),
-                height: currentIndex == 1 ? 150 : 80,
-                transform: Matrix4.translationValues(0, currentIndex != 1 ? 80 : 0, 0),
-                curve: Curves.easeInOut,
-                child: IgnorePointer(
-                  ignoring: true,
-                  child: Container(
-                    height: 150,
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.bottomCenter,
-                        end: Alignment.topCenter,
-                        colors: [
-                          Theme.of(context).colorScheme.background,
-                          Theme.of(context).colorScheme.background.withOpacity(0),
-                        ],
-                        stops: const [0.2, 1.0],
+          bottomNavigationBar: AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            height: MediaQuery.of(context).viewInsets.bottom > 0 ? 0.0 : 150.0,
+            child: Stack(
+              children: [
+                AnimatedOpacity(
+                  opacity:
+                      MediaQuery.of(context).viewInsets.bottom > 0 ? 0.0 : 1.0,
+                  duration: const Duration(milliseconds: 200),
+                  child: IgnorePointer(
+                    child: Container(
+                      height: currentIndex == 1 ? 150 : 150,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.bottomCenter,
+                          end: Alignment.topCenter,
+                          colors: [
+                            Theme.of(context).colorScheme.background,
+                            Theme.of(context)
+                                .colorScheme
+                                .background
+                                .withOpacity(0),
+                          ],
+                          stops: const [0.2, 1.0],
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-              SizedBox(
-                height: 150,
-                child: Align(
-                  alignment: Alignment.bottomCenter,
-                  child: NavigationBar(
-                    surfaceTintColor: Colors.transparent,
-                    indicatorColor: AppColor.primarSnakeColor.withOpacity(0.5),
-                    // backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                    backgroundColor: Colors.transparent,
-                    labelBehavior:
-                        NavigationDestinationLabelBehavior.onlyShowSelected,
-                    onDestinationSelected: onDestinationSelected,
-                    selectedIndex: currentIndex,
-                    destinations: <Widget>[
-                      NavigationDestination(
-                        icon: AnimatedNavigationIcon(
-                          icon: FontAwesomeIcons.solidCompass,
-                          selectedIcon: FontAwesomeIcons.compass,
-                          isSelected: currentIndex == 0,
+                AnimatedOpacity(
+                  opacity:
+                      MediaQuery.of(context).viewInsets.bottom > 0 ? 0.0 : 1.0,
+                  duration: const Duration(milliseconds: 200),
+                  child: Align(
+                    alignment: Alignment.bottomCenter,
+                    child: NavigationBar(
+                      surfaceTintColor: Colors.transparent,
+                      indicatorColor:
+                          AppColor.primarSnakeColor.withOpacity(0.5),
+                      // backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                      backgroundColor: Colors.transparent,
+                      labelBehavior:
+                          NavigationDestinationLabelBehavior.onlyShowSelected,
+                      onDestinationSelected: onDestinationSelected,
+                      selectedIndex: currentIndex,
+                      destinations: <Widget>[
+                        NavigationDestination(
+                          icon: AnimatedNavigationIcon(
+                            icon: FontAwesomeIcons.solidCompass,
+                            selectedIcon: FontAwesomeIcons.compass,
+                            isSelected: currentIndex == 0,
+                          ),
+                          label: 'สำรวจ',
                         ),
-                        label: 'สำรวจ',
-                      ),
-                      NavigationDestination(
-                        icon: AnimatedNavigationIcon(
-                          icon: FontAwesomeIcons.book,
-                          selectedIcon: FontAwesomeIcons.bookOpen,
-                          isSelected: currentIndex == 1,
+                        NavigationDestination(
+                          icon: AnimatedNavigationIcon(
+                            icon: FontAwesomeIcons.book,
+                            selectedIcon: FontAwesomeIcons.bookOpen,
+                            isSelected: currentIndex == 1,
+                          ),
+                          label: 'บทเรียน',
                         ),
-                        label: 'บทเรียน',
-                      ),
-                      NavigationDestination(
-                        icon: AnimatedNavigationIcon(
-                          icon: FontAwesomeIcons.code,
-                          selectedIcon: FontAwesomeIcons.laptopCode,
-                          isSelected: currentIndex == 2,
+                        NavigationDestination(
+                          icon: AnimatedNavigationIcon(
+                            icon: FontAwesomeIcons.code,
+                            selectedIcon: FontAwesomeIcons.laptopCode,
+                            isSelected: currentIndex == 2,
+                          ),
+                          label: 'IDE',
                         ),
-                        label: 'IDE',
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

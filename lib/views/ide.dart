@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_code_editor/flutter_code_editor.dart';
 import 'package:flutter_highlight/themes/monokai-sublime.dart';
-import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:highlight/languages/python.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:pyoneer/utils/color.dart';
@@ -75,7 +74,8 @@ class _IDEScreenState extends State<IDEScreen>
 
       setState(() {
         if (error != null) {
-          _output = 'ข้อความจาก PY৹NEER : พบ ERROR ต่อไปนี้\n------------------------------------------------------\n$error';
+          _output =
+              'ข้อความจาก PY৹NEER : พบ ERROR ต่อไปนี้\n------------------------------------------------------\n$error';
           isError = true;
         } else {
           _output = '$output';
@@ -116,20 +116,20 @@ class _IDEScreenState extends State<IDEScreen>
               ),
             ],
           ).animate(
-          onPlay: (controller) => controller.repeat(),
-          effects: [
-            const ShimmerEffect(
-              delay: Duration(milliseconds: 500),
-              duration: Duration(milliseconds: 1000),
-              color: Colors.amber,
-            ),
-            const ShimmerEffect(
-              delay: Duration(milliseconds: 700),
-              duration: Duration(milliseconds: 1000),
-              color: Colors.blue,
-            ),
-          ],
-        ),
+            onPlay: (controller) => controller.repeat(),
+            effects: [
+              const ShimmerEffect(
+                delay: Duration(milliseconds: 500),
+                duration: Duration(milliseconds: 1000),
+                color: Colors.amber,
+              ),
+              const ShimmerEffect(
+                delay: Duration(milliseconds: 700),
+                duration: Duration(milliseconds: 1000),
+                color: Colors.blue,
+              ),
+            ],
+          ),
           leading: IgnorePointer(
             child: SizedBox(
               width: 60,
@@ -147,9 +147,9 @@ class _IDEScreenState extends State<IDEScreen>
               child: Center(
                 child: _isLoading
                     ? LoadingAnimationWidget.beat(
-                          color: AppColor.primarSnakeColor,
-                          size: 30,
-                        )
+                        color: AppColor.primarSnakeColor,
+                        size: 30,
+                      )
                     : IconButton(
                         iconSize: 40,
                         icon: const Icon(Icons.play_circle_fill),
@@ -159,55 +159,57 @@ class _IDEScreenState extends State<IDEScreen>
             ),
           ],
         ),
-        body: Column(
-          children: [
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: SingleChildScrollView(
-                    child: CodeTheme(
-                      data: CodeThemeData(styles: monokaiSublimeTheme),
-                      child: CodeField(
-                          focusNode: _focusNode,
-                          minLines: 50,
-                          wrap: true,
-                          controller: controller,
-                          gutterStyle: const GutterStyle(
-                              textStyle: TextStyle(height: 1.55)),
-                          textStyle: const TextStyle(fontSize: 16),
-                          onChanged: (codeString) {
-                            saveUserCode(codeString);
-                          }),
+        body: Expanded(
+          child: Column(
+            children: [
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: SingleChildScrollView(
+                      child: CodeTheme(
+                        data: CodeThemeData(styles: monokaiSublimeTheme),
+                        child: CodeField(
+                            focusNode: _focusNode,
+                            minLines: 50,
+                            wrap: true,
+                            controller: controller,
+                            gutterStyle: const GutterStyle(
+                                textStyle: TextStyle(height: 1.55)),
+                            textStyle: const TextStyle(fontSize: 16),
+                            onChanged: (codeString) {
+                              saveUserCode(codeString);
+                            }),
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-            const Text(
-              "Output",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
+              const Text(
+                "Output",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
               ),
-            ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: SingleChildScrollView(
-                    child: Container(
-                      height: MediaQuery.of(context).size.height * 0.4,
-                      width: double.infinity,
-                      color: AppColor.ideColor,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          _output,
-                          style: TextStyle(
-                            color: isError ? Colors.red : Colors.white,
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: SingleChildScrollView(
+                      child: Container(
+                        height: MediaQuery.of(context).size.height * 0.25,
+                        width: double.infinity,
+                        color: AppColor.ideColor,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            _output,
+                            style: TextStyle(
+                              color: isError ? Colors.red : Colors.white,
+                            ),
                           ),
                         ),
                       ),
@@ -215,18 +217,8 @@ class _IDEScreenState extends State<IDEScreen>
                   ),
                 ),
               ),
-            ),
-            KeyboardVisibilityBuilder(
-            builder: (context, isKeyboardVisible) {
-              return AnimatedContainer(
-                duration: const Duration(milliseconds: 500),
-                height: isKeyboardVisible ? 0 : 100,
-                curve: Curves.easeInOut,
-                transform: Matrix4.translationValues(0, isKeyboardVisible ? 100 : 0, 0),
-              );
-            },
+            ],
           ),
-          ],
         ),
       ),
     );
