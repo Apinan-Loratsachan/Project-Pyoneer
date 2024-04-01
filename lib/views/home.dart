@@ -140,39 +140,7 @@ class _HomeScreenState extends State<HomeScreen> {
           FocusManager.instance.primaryFocus?.unfocus();
         },
         child: Scaffold(
-          appBar: currentIndex == 2
-              ? AppBar(
-                  centerTitle: true,
-                  toolbarHeight: 60,
-                  leading: Container(),
-                  title: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      PyoneerHero.hero(
-                          Image.asset(
-                            "assets/icons/pyoneer_snake.png",
-                            fit: BoxFit.cover,
-                            height: 60,
-                          ),
-                          "hero-title"),
-                      PyoneerHero.hero(
-                          Image.asset(
-                            "assets/icons/pyoneer_text.png",
-                            fit: BoxFit.cover,
-                            height: 40,
-                          ),
-                          "pyoneer_text-title"),
-                    ],
-                  ),
-                  actions: [
-                    IconButton(
-                      iconSize: 45,
-                      icon: const Icon(Icons.play_circle),
-                      onPressed: () {},
-                    ),
-                  ],
-                )
-              : AppBar(
+          appBar: AppBar(
                   centerTitle: true,
                   title: Column(
                     children: [

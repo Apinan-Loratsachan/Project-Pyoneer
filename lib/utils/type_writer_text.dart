@@ -6,6 +6,7 @@ class TypeWriterText extends StatefulWidget {
   final TextStyle? textStyle;
   final int typingSpeed; // milliseconds for each character
   final int cursorSpeed; // milliseconds for cursor blink
+  final TextAlign textAlign;
 
   const TypeWriterText({
     super.key,
@@ -13,10 +14,10 @@ class TypeWriterText extends StatefulWidget {
     this.textStyle,
     this.typingSpeed = 85,
     this.cursorSpeed = 500,
+    this.textAlign = TextAlign.start,
   });
 
   @override
-  // ignore: library_private_types_in_public_api
   _TypeWriterTextState createState() => _TypeWriterTextState();
 }
 
@@ -71,6 +72,7 @@ class _TypeWriterTextState extends State<TypeWriterText> {
       displayedText + (showCursor ? cursor : ''),
       style: widget.textStyle,
       overflow: TextOverflow.ellipsis,
+      textAlign: widget.textAlign,
     );
   }
 }

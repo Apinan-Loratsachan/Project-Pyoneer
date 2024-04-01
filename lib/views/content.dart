@@ -125,34 +125,58 @@ class _ContentScreenState extends State<ContentScreen>
           child: AppBar(
             title: Column(
               children: [
+                UserData.email == 'ไม่ได้เข้าสู่ระบบ'
+                    ? Text("$greetingWord ")
+                    : Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            greetingWord,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              shadows: [
+                                Shadow(
+                                  blurRadius: 20.0,
+                                  color: AppColor.primarSnakeColor
+                                      .withOpacity(0.5),
+                                  offset: const Offset(0.0, 5.0),
+                                ),
+                              ],
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              // color: Colors.black,
+                            ),
+                          ),
+                          Text(
+                            " ${UserData.userName}",
+                            style: TextStyle(
+                              shadows: [
+                                Shadow(
+                                  blurRadius: 20.0,
+                                  color: AppColor.primarSnakeColor
+                                      .withOpacity(0.5),
+                                  offset: const Offset(0.0, 5.0),
+                                ),
+                              ],
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              // color: Colors.black,
+                            ),
+                          ),
+                        ],
+                      ),
+                const SizedBox(height: 20),
                 Text(
-                  UserData.email == 'ไม่ได้เข้าสู่ระบบ'
-                      ? greetingWord
-                      : '$greetingWord ${UserData.userName}',
-                  overflow: TextOverflow.ellipsis,
+                  "บทเรียน",
                   style: TextStyle(
                     shadows: [
                       Shadow(
                         blurRadius: 20.0,
-                        color: AppColor.primarSnakeColor.withOpacity(0.5),
-                        offset: const Offset(0.0, 5.0),
+                        color: Theme.of(context).colorScheme.background,
+                        offset: const Offset(0.0, 0.0),
                       ),
                     ],
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    // color: Colors.black,
                   ),
-                ),
-                const SizedBox(height: 20),
-                Text(
-                  "บทเรียน",
-                  style: TextStyle(shadows: [
-                    Shadow(
-                      blurRadius: 20.0,
-                      color: Theme.of(context).colorScheme.background,
-                      offset: const Offset(0.0, 0.0),
-                    ),
-                  ]),
                 ),
                 // const SizedBox(height: 50),
               ],
@@ -293,25 +317,35 @@ class _ContentScreenState extends State<ContentScreen>
                                     onPlay: (controller) => controller.repeat(),
                                     effects: [
                                       ShimmerEffect(
-                                        duration: Duration(milliseconds: lessonsCatagoryAnimateDuration),
-                                        color: AppColor.primarSnakeColor,
-                                        angle: (0 + (10 * i)).toDouble()
-                                      ),
+                                          duration: Duration(
+                                              milliseconds:
+                                                  lessonsCatagoryAnimateDuration),
+                                          color: AppColor.primarSnakeColor,
+                                          angle: (0 + (10 * i)).toDouble()),
                                       ShimmerEffect(
-                                        delay: const Duration(milliseconds: 500),
-                                        duration: Duration(milliseconds: lessonsCatagoryAnimateDuration),
+                                        delay:
+                                            const Duration(milliseconds: 500),
+                                        duration: Duration(
+                                            milliseconds:
+                                                lessonsCatagoryAnimateDuration),
                                         color: Colors.amber,
                                         angle: (90 + (10 * i)).toDouble(),
                                       ),
                                       ShimmerEffect(
-                                        delay: const Duration(milliseconds: 1000),
-                                        duration: Duration(milliseconds: lessonsCatagoryAnimateDuration),
+                                        delay:
+                                            const Duration(milliseconds: 1000),
+                                        duration: Duration(
+                                            milliseconds:
+                                                lessonsCatagoryAnimateDuration),
                                         color: Colors.cyan,
                                         angle: (270 + (10 * i)).toDouble(),
                                       ),
                                       ShimmerEffect(
-                                        delay: const Duration(milliseconds: 1500),
-                                        duration: Duration(milliseconds: lessonsCatagoryAnimateDuration),
+                                        delay:
+                                            const Duration(milliseconds: 1500),
+                                        duration: Duration(
+                                            milliseconds:
+                                                lessonsCatagoryAnimateDuration),
                                         color: Colors.lime,
                                         angle: (180 + (10 * i)).toDouble(),
                                       ),

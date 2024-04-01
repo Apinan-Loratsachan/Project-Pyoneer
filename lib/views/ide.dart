@@ -1,11 +1,14 @@
 // ignore_for_file: depend_on_referenced_packages
 
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_code_editor/flutter_code_editor.dart';
 import 'package:flutter_highlight/themes/monokai-sublime.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:highlight/languages/python.dart';
 import 'package:pyoneer/utils/color.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class IDEScreen extends StatefulWidget {
   const IDEScreen({super.key});
@@ -17,13 +20,63 @@ class IDEScreen extends StatefulWidget {
 class _IDEScreenState extends State<IDEScreen>
     with AutomaticKeepAliveClientMixin {
   final controller = CodeController(
-    text: '# เขียน Code ที่นี่เลย\n',
+    text:
+        '# เขียน Code ที่นี่เลย\n# ข้อจำกัด ไม่สามารถรับ Input ได้\n# ไม่สามารถใช้ Library อื่นๆได้\n\nprint("Hello, World!")',
     language: python,
   );
+
+  static Future<void> saveUserCode(String string) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('code', string);
+  }
+
+  static Future<String> getUserCode() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('code') ?? '';
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getUserCode().then((value) {
+      controller.text = value;
+    });
+  }
+
+  String _output = 'ยังไม่ได้ Run';
 
   @override
   bool get wantKeepAlive => true;
   final _focusNode = FocusNode();
+
+  Future<void> _runCode() async {
+    final code = controller.text;
+    const apiUrl = 'https://Kantz.pythonanywhere.com/run_code';
+
+    final response = await http.post(
+      Uri.parse(apiUrl),
+      headers: {'Content-Type': 'application/json'},
+      body: json.encode({'code': code}),
+    );
+
+    if (response.statusCode == 200) {
+      final jsonResponse = json.decode(response.body);
+      final output = jsonResponse['output'];
+      final error = jsonResponse['error'];
+
+      setState(() {
+        if (error != null) {
+          _output = 'Error:\n$error';
+        } else {
+          _output = '$output';
+        }
+      });
+    } else {
+      setState(() {
+        _output = 'HTTP Error: ${response.statusCode}';
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,6 +102,21 @@ class _IDEScreenState extends State<IDEScreen>
               ),
             ],
           ),
+          leading: IgnorePointer(
+            child: IconButton(
+              color: Colors.transparent,
+              iconSize: 30,
+              icon: const Icon(Icons.play_circle_fill),
+              onPressed: () {},
+            ),
+          ),
+          actions: [
+            IconButton(
+              iconSize: 30,
+              icon: const Icon(Icons.play_circle_fill),
+              onPressed: _runCode,
+            ),
+          ],
         ),
         body: Column(
           children: [
@@ -61,11 +129,16 @@ class _IDEScreenState extends State<IDEScreen>
                     child: CodeTheme(
                       data: CodeThemeData(styles: monokaiSublimeTheme),
                       child: CodeField(
-                        focusNode: _focusNode,
-                        minLines: 50,
-                        wrap: true,
-                        controller: controller,
-                      ),
+                          focusNode: _focusNode,
+                          minLines: 50,
+                          wrap: true,
+                          controller: controller,
+                          gutterStyle: const GutterStyle(
+                              textStyle: TextStyle(height: 1.55)),
+                          textStyle: const TextStyle(fontSize: 16),
+                          onChanged: (codeString) {
+                            saveUserCode(codeString);
+                          }),
                     ),
                   ),
                 ),
@@ -85,13 +158,14 @@ class _IDEScreenState extends State<IDEScreen>
                   borderRadius: BorderRadius.circular(8),
                   child: SingleChildScrollView(
                     child: Container(
+                      height: MediaQuery.of(context).size.height * 0.4,
                       width: double.infinity,
                       color: AppColor.ideColor,
-                      child: const Padding(
-                        padding: EdgeInsets.all(8.0),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
                         child: Text(
-                          '1 Test String\n2 Test String\n3 Test String\n4 Test String\n5 Test String\n6 Test String\n7 Test String\n8 Test String\n9 Test String\n10 Test String\n11 Test String\n12 Test String\n13 Test String\n14 Test String\n15 Test String\n16 Test String',
-                          style: TextStyle(
+                          _output,
+                          style: const TextStyle(
                             color: Colors.white,
                           ),
                         ),
@@ -101,9 +175,11 @@ class _IDEScreenState extends State<IDEScreen>
                 ),
               ),
             ),
-            KeyboardVisibilityBuilder(builder: (context, isKeyboardVisible) {
-              return  SizedBox(height: isKeyboardVisible ? 0 : 140);
-            }),
+            KeyboardVisibilityBuilder(
+              builder: (context, isKeyboardVisible) {
+                return SizedBox(height: isKeyboardVisible ? 0 : 140);
+              },
+            ),
           ],
         ),
       ),

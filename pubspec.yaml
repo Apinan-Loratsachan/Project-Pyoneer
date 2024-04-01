@@ -69,7 +69,7 @@ dependencies:
   loading_animation_widget: ^1.2.1
   icons_plus: ^5.0.0
   image_cropper: ^5.0.1
-  
+  http: ^1.2.1
 
 dev_dependencies:
   flutter_test:

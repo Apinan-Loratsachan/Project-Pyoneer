@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:icons_plus/icons_plus.dart';
 import 'package:pyoneer/components/user_profile.dart';
 import 'package:pyoneer/services/auth.dart';
 import 'package:pyoneer/services/user_data.dart';
+import 'package:pyoneer/utils/animation.dart';
+import 'package:pyoneer/utils/hero.dart';
+import 'package:pyoneer/views/account/credit.dart';
 import 'package:pyoneer/views/login.dart';
 
 class AccountSettigScreen extends StatefulWidget {
@@ -17,6 +19,8 @@ class AccountSettigScreen extends StatefulWidget {
 }
 
 class _AccountSettigScreenState extends State<AccountSettigScreen> {
+  bool _isCopied = false;
+
   Future<void> deleteTestResults(String userEmail) async {
     List<String> testType = ["pre-test", "post-test"];
     var testResultCollection =
@@ -81,11 +85,19 @@ class _AccountSettigScreenState extends State<AccountSettigScreen> {
                                 onTap: () async {
                                   await Clipboard.setData(
                                       ClipboardData(text: UserData.uid));
-                                  Fluttertoast.showToast(
-                                      msg: "คัดลอกรหัสผู้ใช้แล้ว");
+                                  setState(() {
+                                    _isCopied = true;
+                                  });
+                                  Future.delayed(
+                                      const Duration(seconds: 2),
+                                      () => setState(() {
+                                            _isCopied = false;
+                                          }));
                                 },
-                                child:
-                                    const Icon(Iconsax.copy_outline, size: 15),
+                                child: Icon(
+                                  _isCopied ? Icons.check : Icons.copy,
+                                  size: 20,
+                                ),
                               ),
                             ],
                           ),
@@ -95,35 +107,27 @@ class _AccountSettigScreenState extends State<AccountSettigScreen> {
                           title: const Text("รหัสผู้ใช้"),
                           trailing: Text(UserData.uid),
                         ),
-                  UserData.uid == 'ไม่ได้เข้าสู่ระบบ' ||
-                          UserData.uid == '' ||
-                          UserData.uid.isEmpty
-                      ? Container()
-                      : ListTile(
-                          title: ElevatedButton(
-                            // style: ButtonStyle(
-                            //   overlayColor: MaterialStateColor.resolveWith(
-                            //       (states) => AppColor.primarSnakeColor),
-                            //   iconColor: MaterialStateColor.resolveWith(
-                            //       (states) => Colors.black),
-                            //   foregroundColor: MaterialStateColor.resolveWith(
-                            //       (states) => Colors.black),
-                            // ),
-                            onPressed: () async {
-                              await Clipboard.setData(
-                                  ClipboardData(text: UserData.uid));
-                              Fluttertoast.showToast(msg: "คัดลอก UID แล้ว");
-                            },
-                            child: const Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(Icons.copy),
-                                SizedBox(width: 10),
-                                Text("คัดลอกรหัสผู้ใช้")
-                              ],
-                            ),
-                          ),
-                        ),
+                  // UserData.uid == 'ไม่ได้เข้าสู่ระบบ' ||
+                  //         UserData.uid == '' ||
+                  //         UserData.uid.isEmpty
+                  //     ? Container()
+                  //     : ListTile(
+                  //         title: ElevatedButton(
+                  //           onPressed: () async {
+                  //             await Clipboard.setData(
+                  //                 ClipboardData(text: UserData.uid));
+                  //             Fluttertoast.showToast(msg: "คัดลอก UID แล้ว");
+                  //           },
+                  //           child: const Row(
+                  //             mainAxisSize: MainAxisSize.min,
+                  //             children: [
+                  //               Icon(Icons.copy),
+                  //               SizedBox(width: 10),
+                  //               Text("คัดลอกรหัสผู้ใช้")
+                  //             ],
+                  //           ),
+                  //         ),
+                  //       ),
                   ListTile(
                     leading: const Icon(FontAwesomeIcons.userGraduate),
                     title: const Text("ชื่อผู้ใช้"),
@@ -404,6 +408,72 @@ class _AccountSettigScreenState extends State<AccountSettigScreen> {
               ),
             )
           ],
+        ),
+      ),
+      bottomNavigationBar: SizedBox(
+        height: MediaQuery.of(context).size.height * 0.15,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                      pageBuilder: (context, animation1, animation2) =>
+                          const CreditScreen(),
+                      transitionDuration: Duration(
+                          milliseconds: PyoneerAnimation.changeScreenDuration),
+                      transitionsBuilder:
+                          (context, animation1, animation2, child) {
+                        animation1 = CurvedAnimation(
+                          parent: animation1,
+                          curve: Curves.easeOutQuart,
+                        );
+                        return FadeTransition(
+                          opacity: Tween(
+                            begin: 0.0,
+                            end: 1.0,
+                          ).animate(animation1),
+                          child: SlideTransition(
+                            position: Tween<Offset>(
+                              begin: const Offset(0.0, 1.0),
+                              end: Offset.zero,
+                            ).animate(animation1),
+                            child: child,
+                          ),
+                        );
+                      },
+                    ),
+                  );
+                },
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        PyoneerHero.hero(
+                            Image.asset(
+                              "assets/icons/pyoneer_snake.png",
+                              height: 50,
+                            ),
+                            "dev-snake"),
+                        PyoneerHero.hero(
+                            Image.asset(
+                              "assets/icons/pyoneer_text.png",
+                              height: 30,
+                            ),
+                            "dev-text"),
+                      ],
+                    ),
+                    const Text("Deverloper Team")
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
