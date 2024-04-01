@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pyoneer/services/content_counter.dart';
 import 'package:pyoneer/services/launch_url.dart';
 import 'package:pyoneer/utils/animation.dart';
+import 'package:pyoneer/utils/color.dart';
 import 'package:pyoneer/utils/hero.dart';
 import 'package:pyoneer/views/menu/learning_hub.dart';
 import 'package:pyoneer/views/menu/news.dart';
@@ -47,6 +49,21 @@ class _PrimaryScreenState extends State<MenuScreen> {
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
           ],
+        ).animate(
+          onPlay: (controller) => controller.repeat(),
+          effects: [
+            const ShimmerEffect(
+              delay: Duration(milliseconds: 500),
+              duration: Duration(milliseconds: 1000),
+              color: Colors.blue,
+              angle: 180
+            ),
+            const ShimmerEffect(
+              delay: Duration(milliseconds: 800),
+              duration: Duration(milliseconds: 1000),
+              color: Colors.deepPurpleAccent,
+            ),
+          ],
         ),
         centerTitle: true,
       ),
@@ -77,7 +94,7 @@ class _PrimaryScreenState extends State<MenuScreen> {
                     //         // Handle error case
                     //         return const Text('0 รายการ');
                     //       }
-
+            
                     //       // Display the news count as a string in the trailing
                     //       return PyoneerHero.hero(
                     //         Text(
@@ -105,7 +122,8 @@ class _PrimaryScreenState extends State<MenuScreen> {
                     //   },
                     // ),
                     onTap: () {
-                      PyoneerAnimation.changeScreen(context, const NewsScreen())
+                      PyoneerAnimation.changeScreen(
+                              context, const NewsScreen())
                           .then((value) => refreshNewsItemCount());
                     },
                   ),
@@ -148,7 +166,7 @@ class _PrimaryScreenState extends State<MenuScreen> {
                     //         // Handle error case
                     //         return const Text('0 รายการ');
                     //       }
-
+            
                     //       // Display the news count as a string in the trailing
                     //       return PyoneerHero.hero(
                     //         Text(
@@ -184,7 +202,8 @@ class _PrimaryScreenState extends State<MenuScreen> {
                   SizedBox(height: listTileSpace),
                   ListTile(
                     leading: PyoneerHero.hero(
-                        Image.asset("assets/icons/unknow3.png"), "menu4-icon"),
+                        Image.asset("assets/icons/unknow3.png"),
+                        "menu4-icon"),
                     title: const Text(
                       "อะไรสักอย่าง 3",
                       style: TextStyle(
@@ -198,7 +217,66 @@ class _PrimaryScreenState extends State<MenuScreen> {
                 ],
               ),
             ),
-            const SizedBox(height: 120),
+            Animate(
+              delay: const Duration(milliseconds: 500),
+              effects: const [
+                FadeEffect(
+                  duration: Duration(milliseconds: 1000),
+                  curve: Curves.easeInOut,
+                ),
+                SlideEffect(
+                  duration: Duration(milliseconds: 1000),
+                  begin: Offset(0, 0.5),
+                  curve: Curves.easeInOut,
+                )
+              ],
+              child: Padding(
+                padding: const EdgeInsets.all(50),
+                child: ElevatedButton(
+                  onPressed: () {},
+                  style: ButtonStyle(
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                        side:
+                            const BorderSide(color: AppColor.primarSnakeColor),
+                      ),
+                    ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          "assets/icons/quiz.png",
+                          height: 50,
+                        ),
+                        const SizedBox(
+                          width: 20,
+                        ),
+                        const Text("Challenge"),
+                      ],
+                    ),
+                  ).animate(
+                    onPlay: (controller) => controller.repeat(reverse: true),
+                    effects: [
+                      const ScaleEffect(
+                          duration: Duration(milliseconds: 1000),
+                          begin: Offset(1, 1),
+                          end: Offset(1.2, 1.2),
+                          curve: Curves.easeInOut),
+                    ],
+                  ),
+                ),
+              ).animate(
+                effects: [
+                  const FadeEffect(
+                      duration: Duration(milliseconds: 2000),
+                      curve: Curves.easeInOut),
+                ],
+              ),
+            ),
           ],
         ),
       ),

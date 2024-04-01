@@ -1,5 +1,4 @@
 import 'dart:ui';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -242,19 +241,25 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           bottomNavigationBar: Stack(
             children: [
-              IgnorePointer(
-                ignoring: true,
-                child: Container(
-                  height: 150,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.bottomCenter,
-                      end: Alignment.topCenter,
-                      colors: [
-                        Theme.of(context).colorScheme.background,
-                        Theme.of(context).colorScheme.background.withOpacity(0),
-                      ],
-                      stops: const [0.2, 1.0],
+              AnimatedContainer(
+                duration: const Duration(milliseconds: 1000),
+                height: currentIndex == 1 ? 150 : 80,
+                transform: Matrix4.translationValues(0, currentIndex != 1 ? 80 : 0, 0),
+                curve: Curves.easeInOut,
+                child: IgnorePointer(
+                  ignoring: true,
+                  child: Container(
+                    height: 150,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.bottomCenter,
+                        end: Alignment.topCenter,
+                        colors: [
+                          Theme.of(context).colorScheme.background,
+                          Theme.of(context).colorScheme.background.withOpacity(0),
+                        ],
+                        stops: const [0.2, 1.0],
+                      ),
                     ),
                   ),
                 ),

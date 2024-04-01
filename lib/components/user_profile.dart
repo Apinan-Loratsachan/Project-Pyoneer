@@ -20,6 +20,8 @@ class _UserProfileState extends State<UserProfile> {
   Color? textColor;
   Color? iconColor;
   bool showEditIcon = false;
+  Color profilePrimaryColor = AppColor.primarSnakeColor;
+  Color profileSecondaryColor = AppColor.secondarySnakeColor;
 
   @override
   void initState() {
@@ -34,6 +36,9 @@ class _UserProfileState extends State<UserProfile> {
         NetworkImage(UserData.image),
         size: const Size(256, 256),
       );
+
+      profilePrimaryColor = generator.dominantColor!.color;
+      profileSecondaryColor = generator.mutedColor!.color;
 
       final List<Color?> colors = [
         generator.mutedColor?.color,
@@ -75,7 +80,16 @@ class _UserProfileState extends State<UserProfile> {
           children: [
             Container(
               decoration: BoxDecoration(
-                color: dominantColor ?? AppColor.primarSnakeColor,
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: const Alignment(0.8, 1),
+                  colors: <Color>[
+                    profilePrimaryColor,
+                    profileSecondaryColor,
+                  ],
+                  tileMode: TileMode.mirror,
+                ),
+                // color: dominantColor ?? AppColor.primarSnakeColor,
                 borderRadius: const BorderRadius.all(Radius.circular(10)),
                 boxShadow: [
                   BoxShadow(

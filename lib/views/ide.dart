@@ -2,10 +2,12 @@
 
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_code_editor/flutter_code_editor.dart';
 import 'package:flutter_highlight/themes/monokai-sublime.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:highlight/languages/python.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:pyoneer/utils/color.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -32,8 +34,12 @@ class _IDEScreenState extends State<IDEScreen>
 
   static Future<String> getUserCode() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getString('code') ?? '';
+    return prefs.getString('code') ??
+        '# เขียน Code ที่นี่เลย\n# ข้อจำกัด ไม่สามารถรับ Input ได้\n# ไม่สามารถใช้ Library อื่นๆได้\n\nprint("Hello, World!")';
   }
+
+  bool isError = false;
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -43,13 +49,16 @@ class _IDEScreenState extends State<IDEScreen>
     });
   }
 
-  String _output = 'ยังไม่ได้ Run';
+  String _output = 'ข้อความจาก PY৹NEER : ยังไม่ได้ execute';
 
   @override
   bool get wantKeepAlive => true;
   final _focusNode = FocusNode();
 
   Future<void> _runCode() async {
+    setState(() {
+      _isLoading = true;
+    });
     final code = controller.text;
     const apiUrl = 'https://Kantz.pythonanywhere.com/run_code';
 
@@ -66,14 +75,19 @@ class _IDEScreenState extends State<IDEScreen>
 
       setState(() {
         if (error != null) {
-          _output = 'Error:\n$error';
+          _output = 'ข้อความจาก PY৹NEER : พบ ERROR ต่อไปนี้\n------------------------------------------------------\n$error';
+          isError = true;
         } else {
           _output = '$output';
+          isError = false;
         }
+        _isLoading = false;
       });
     } else {
       setState(() {
         _output = 'HTTP Error: ${response.statusCode}';
+        isError = true;
+        _isLoading = false;
       });
     }
   }
@@ -101,20 +115,47 @@ class _IDEScreenState extends State<IDEScreen>
                 ),
               ),
             ],
-          ),
+          ).animate(
+          onPlay: (controller) => controller.repeat(),
+          effects: [
+            const ShimmerEffect(
+              delay: Duration(milliseconds: 500),
+              duration: Duration(milliseconds: 1000),
+              color: Colors.amber,
+            ),
+            const ShimmerEffect(
+              delay: Duration(milliseconds: 700),
+              duration: Duration(milliseconds: 1000),
+              color: Colors.blue,
+            ),
+          ],
+        ),
           leading: IgnorePointer(
-            child: IconButton(
-              color: Colors.transparent,
-              iconSize: 30,
-              icon: const Icon(Icons.play_circle_fill),
-              onPressed: () {},
+            child: SizedBox(
+              width: 60,
+              child: IconButton(
+                color: Colors.transparent,
+                iconSize: 40,
+                icon: const Icon(Icons.play_circle_fill),
+                onPressed: () {},
+              ),
             ),
           ),
           actions: [
-            IconButton(
-              iconSize: 30,
-              icon: const Icon(Icons.play_circle_fill),
-              onPressed: _runCode,
+            SizedBox(
+              width: 60,
+              child: Center(
+                child: _isLoading
+                    ? LoadingAnimationWidget.beat(
+                          color: AppColor.primarSnakeColor,
+                          size: 30,
+                        )
+                    : IconButton(
+                        iconSize: 40,
+                        icon: const Icon(Icons.play_circle_fill),
+                        onPressed: _runCode,
+                      ),
+              ),
             ),
           ],
         ),
@@ -165,8 +206,8 @@ class _IDEScreenState extends State<IDEScreen>
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
                           _output,
-                          style: const TextStyle(
-                            color: Colors.white,
+                          style: TextStyle(
+                            color: isError ? Colors.red : Colors.white,
                           ),
                         ),
                       ),
@@ -176,10 +217,15 @@ class _IDEScreenState extends State<IDEScreen>
               ),
             ),
             KeyboardVisibilityBuilder(
-              builder: (context, isKeyboardVisible) {
-                return SizedBox(height: isKeyboardVisible ? 0 : 140);
-              },
-            ),
+            builder: (context, isKeyboardVisible) {
+              return AnimatedContainer(
+                duration: const Duration(milliseconds: 500),
+                height: isKeyboardVisible ? 0 : 100,
+                curve: Curves.easeInOut,
+                transform: Matrix4.translationValues(0, isKeyboardVisible ? 100 : 0, 0),
+              );
+            },
+          ),
           ],
         ),
       ),

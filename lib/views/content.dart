@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:icons_plus/icons_plus.dart';
 import 'package:pyoneer/components/lesson_component.dart';
 import 'package:pyoneer/components/testing_component.dart';
 import 'package:pyoneer/services/user_data.dart';
@@ -166,17 +167,41 @@ class _ContentScreenState extends State<ContentScreen>
                         ],
                       ),
                 const SizedBox(height: 20),
-                Text(
-                  "บทเรียน",
-                  style: TextStyle(
-                    shadows: [
-                      Shadow(
-                        blurRadius: 20.0,
-                        color: Theme.of(context).colorScheme.background,
-                        offset: const Offset(0.0, 0.0),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(FontAwesome.book_open_solid),
+                    const SizedBox(width: 10),
+                    Text(
+                      "บทเรียน",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        shadows: [
+                          Shadow(
+                            blurRadius: 20.0,
+                            color: Theme.of(context).colorScheme.background,
+                            offset: const Offset(0.0, 0.0),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
+                ).animate(
+                  onPlay: (controller) => controller.repeat(),
+                  effects: [
+                    const ShimmerEffect(
+                      angle: 2,
+                      delay: Duration(milliseconds: 500),
+                      duration: Duration(milliseconds: 1000),
+                      color: AppColor.primarSnakeColor,
+                    ),
+                    const ShimmerEffect(
+                      angle: 5,
+                      delay: Duration(milliseconds: 1000),
+                      duration: Duration(milliseconds: 1000),
+                      color: Colors.amber,
+                    ),
+                  ],
                 ),
                 // const SizedBox(height: 50),
               ],
@@ -372,9 +397,8 @@ class _ContentScreenState extends State<ContentScreen>
                                         snapshot.data?['timestamp'];
                                     DateTime? testDate = timeStamp?.toDate();
                                     String subtitle =
-                                        "โปรดทำแบบทดสอบก่อนที่จะเริ่มเรียนบทนี้";
+                                        "โปรดทำแบบทดสอบก่อนที่จะเริ่มเรียน";
                                     Color lessonColor = Colors.grey.shade100;
-                                    Color postTestColor = Colors.grey.shade200;
                                     if (score != null &&
                                         totalScore != null &&
                                         testDate != null) {
@@ -387,8 +411,6 @@ class _ContentScreenState extends State<ContentScreen>
                                       // postTestColor = Theme.of(context)
                                       //     .colorScheme
                                       //     .background
-                                      postTestColor =
-                                          AppColor.primarSnakeColorAccent;
                                     }
                                     return Column(
                                       children: [
@@ -457,39 +479,63 @@ class _ContentScreenState extends State<ContentScreen>
                                                   snapshot.data?['timestamp'];
                                               DateTime? testDate =
                                                   timeStamp?.toDate();
-                                              String subtitle =
-                                                  "ยังไม่ได้ทำแบบทดสอบ";
-                                              if (score != null &&
-                                                  totalScore != null &&
-                                                  testDate != null) {
-                                                String thaiMonth = thaiMonths[
-                                                        testDate.month] ??
-                                                    '';
-                                                int thaiYear =
-                                                    testDate.year + 543;
-                                                subtitle =
-                                                    "$score/$totalScore คะแนน | ${testDate.day} $thaiMonth $thaiYear ${testDate.hour.toString().padLeft(2, '0')}:${testDate.minute.toString().padLeft(2, '0')} น.";
-                                              }
-                                              return Card(
-                                                color: postTestColor,
-                                                elevation: 10,
-                                                child: lessonTitle(
-                                                  "assets/icons/post_test.png",
-                                                  "post_test_$i",
-                                                  "แบบทดสอบหลังเรียนบทที่ $i",
-                                                  subtitle,
-                                                  TestingScreen.postTest[i - 1],
-                                                  context,
-                                                  i,
-                                                  'Post-test',
-                                                  fetchTestScore(UserData.email,
-                                                          'pre-test', i)
-                                                      .map((data) =>
-                                                          data['score'] !=
-                                                          null),
-                                                  checkLessonReadStatus(
-                                                      UserData.email, i),
-                                                ),
+
+                                              return StreamBuilder<bool>(
+                                                stream: checkLessonReadStatus(
+                                                    UserData.email, i),
+                                                builder: (context,
+                                                    lessonReadSnapshot) {
+                                                  String subtitle =
+                                                      "ต้องเรียนบทนี้ก่อนทำแบบทดสอบนี้";
+                                                  Color postTestColor =
+                                                      Colors.grey.shade200;
+                                                  if (score != null &&
+                                                      totalScore != null &&
+                                                      testDate != null) {
+                                                    String thaiMonth =
+                                                        thaiMonths[testDate
+                                                                .month] ??
+                                                            '';
+                                                    int thaiYear =
+                                                        testDate.year + 543;
+                                                    subtitle =
+                                                        "$score/$totalScore คะแนน | ${testDate.day} $thaiMonth $thaiYear ${testDate.hour.toString().padLeft(2, '0')}:${testDate.minute.toString().padLeft(2, '0')} น.";
+                                                    postTestColor = AppColor
+                                                        .primarSnakeColorAccent;
+                                                  } else if (lessonReadSnapshot
+                                                          .hasData &&
+                                                      lessonReadSnapshot
+                                                          .data!) {
+                                                    subtitle =
+                                                        "ยังไม่ได้ทำแบบทดสอบ";
+                                                    postTestColor = AppColor
+                                                        .primarSnakeColorAccent;
+                                                  }
+                                                  return Card(
+                                                    color: postTestColor,
+                                                    elevation: 10,
+                                                    child: lessonTitle(
+                                                      "assets/icons/post_test.png",
+                                                      "post_test_$i",
+                                                      "แบบทดสอบหลังเรียนบทที่ $i",
+                                                      subtitle,
+                                                      TestingScreen
+                                                          .postTest[i - 1],
+                                                      context,
+                                                      i,
+                                                      'Post-test',
+                                                      fetchTestScore(
+                                                              UserData.email,
+                                                              'pre-test',
+                                                              i)
+                                                          .map((data) =>
+                                                              data['score'] !=
+                                                              null),
+                                                      checkLessonReadStatus(
+                                                          UserData.email, i),
+                                                    ),
+                                                  );
+                                                },
                                               );
                                             }
                                           },
@@ -514,6 +560,7 @@ class _ContentScreenState extends State<ContentScreen>
       ),
     );
   }
+
   //-----------------------------------------------------------------------------------
 
   static Stream<bool> checkLessonReadStatus(String email, int lessonIndex) {
