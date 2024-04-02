@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_code_editor/flutter_code_editor.dart';
 import 'package:flutter_highlight/themes/monokai-sublime.dart';
@@ -159,57 +160,55 @@ class _IDEScreenState extends State<IDEScreen>
             ),
           ],
         ),
-        body: Expanded(
-          child: Column(
-            children: [
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: SingleChildScrollView(
-                      child: CodeTheme(
-                        data: CodeThemeData(styles: monokaiSublimeTheme),
-                        child: CodeField(
-                            focusNode: _focusNode,
-                            minLines: 50,
-                            wrap: true,
-                            controller: controller,
-                            gutterStyle: const GutterStyle(
-                                textStyle: TextStyle(height: 1.55)),
-                            textStyle: const TextStyle(fontSize: 16),
-                            onChanged: (codeString) {
-                              saveUserCode(codeString);
-                            }),
-                      ),
+        body: Column(
+          children: [
+            Flexible(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: SingleChildScrollView(
+                    child: CodeTheme(
+                      data: CodeThemeData(styles: monokaiSublimeTheme),
+                      child: CodeField(
+                          focusNode: _focusNode,
+                          minLines: 50,
+                          wrap: true,
+                          controller: controller,
+                          gutterStyle: const GutterStyle(
+                              textStyle: TextStyle(height: 1.55)),
+                          textStyle: const TextStyle(fontSize: 16),
+                          onChanged: (codeString) {
+                            saveUserCode(codeString);
+                          }),
                     ),
                   ),
                 ),
               ),
-              const Text(
-                "Output",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                ),
+            ),
+            const Text(
+              "Output",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
               ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: SingleChildScrollView(
-                      child: Container(
-                        height: MediaQuery.of(context).size.height * 0.25,
-                        width: double.infinity,
-                        color: AppColor.ideColor,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            _output,
-                            style: TextStyle(
-                              color: isError ? Colors.red : Colors.white,
-                            ),
+            ),
+            Flexible(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: SingleChildScrollView(
+                    child: Container(
+                      height: MediaQuery.of(context).size.height * 0.25,
+                      width: double.infinity,
+                      color: AppColor.ideColor,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          _output,
+                          style: TextStyle(
+                            color: isError ? Colors.red : Colors.white,
                           ),
                         ),
                       ),
@@ -217,8 +216,8 @@ class _IDEScreenState extends State<IDEScreen>
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
