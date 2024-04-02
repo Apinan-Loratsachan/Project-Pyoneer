@@ -22,8 +22,7 @@ class UserData {
     imageNotifier.value = imageUrl;
   }
 
-  static Future<void> saveUserData(
-      UserCredential userCredential, String accountType) async {
+  static Future<void> saveUserData(UserCredential userCredential, String accountType) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('uid', userCredential.user?.uid ?? "");
     await prefs.setString('userName', userCredential.user?.displayName ?? "");
@@ -87,7 +86,7 @@ class UserData {
     } else if (accountType == 'Google') {
       return loginProvider("assets/icons/google/google-icon-2048x2048.png");
     } else if (accountType == 'Facebook') {
-      return loginProvider("assets/icons/facebook/facebook_icon.png");
+      return loginProvider("assets/icons/facebook/Facebook_icon.png");
     } else if (accountType == 'Email') {
       return loginProvider("assets/icons/email/email_icon.png");
     }

@@ -1,8 +1,6 @@
 import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pyoneer/models/navigation_bar_icon_animation.dart';
@@ -83,8 +81,7 @@ class _HomeScreenState extends State<HomeScreen> {
           filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
           child: AlertDialog(
               surfaceTintColor: Theme.of(context).colorScheme.background,
-              backgroundColor:
-                  Theme.of(context).colorScheme.background.withOpacity(0.5),
+              backgroundColor: Theme.of(context).colorScheme.background.withOpacity(0.5),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
@@ -93,8 +90,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       borderRadius: BorderRadius.circular(5),
                       child: Image.network(currentPopup['imageUrl']),
                     ),
-                  if (currentPopup['text'] != null &&
-                      currentPopup['text'].isNotEmpty)
+                  if (currentPopup['text'] != null && currentPopup['text'].isNotEmpty)
                     Padding(
                       padding: const EdgeInsets.only(top: 8.0),
                       child: Text(currentPopup['text']),
@@ -124,8 +120,7 @@ class _HomeScreenState extends State<HomeScreen> {
     Future.delayed(const Duration(milliseconds: 100), () {
       pageController.animateToPage(
         index,
-        duration: Duration(
-            milliseconds: PyoneerAnimation.pageviewChangeScreenDuration),
+        duration: Duration(milliseconds: PyoneerAnimation.pageviewChangeScreenDuration),
         curve: PyoneerAnimation.pageviewChangeScreenCurve,
       );
     });
@@ -172,12 +167,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 onTap: () => Navigator.push(
                   context,
                   PageRouteBuilder(
-                    pageBuilder: (context, animation1, animation2) =>
-                        const AccountSettigScreen(),
-                    transitionDuration: Duration(
-                        milliseconds: PyoneerAnimation.changeScreenDuration),
-                    transitionsBuilder:
-                        (context, animation1, animation2, child) {
+                    pageBuilder: (context, animation1, animation2) => const AccountSettigScreen(),
+                    transitionDuration: Duration(milliseconds: PyoneerAnimation.changeScreenDuration),
+                    transitionsBuilder: (context, animation1, animation2, child) {
                       animation1 = CurvedAnimation(
                         parent: animation1,
                         curve: Curves.easeOutQuart,
@@ -203,8 +195,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: ValueListenableBuilder<String>(
                   valueListenable: UserData.imageNotifier,
                   builder: (context, imageUrl, _) {
-                    return imageUrl.isEmpty ||
-                            UserData.email == 'ไม่ได้เข้าสู่ระบบ'
+                    return imageUrl.isEmpty || UserData.email == 'ไม่ได้เข้าสู่ระบบ'
                         ? const Padding(
                             padding: EdgeInsets.all(8.0),
                             child: Icon(FontAwesomeIcons.userSecret),
@@ -246,8 +237,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Stack(
               children: [
                 AnimatedOpacity(
-                  opacity:
-                      MediaQuery.of(context).viewInsets.bottom > 0 ? 0.0 : 1.0,
+                  opacity: MediaQuery.of(context).viewInsets.bottom > 0 ? 0.0 : 1.0,
                   duration: const Duration(milliseconds: 200),
                   child: IgnorePointer(
                     child: Container(
@@ -258,10 +248,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           end: Alignment.topCenter,
                           colors: [
                             Theme.of(context).colorScheme.background,
-                            Theme.of(context)
-                                .colorScheme
-                                .background
-                                .withOpacity(0),
+                            Theme.of(context).colorScheme.background.withOpacity(0),
                           ],
                           stops: const [0.2, 1.0],
                         ),
@@ -270,19 +257,16 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
                 AnimatedOpacity(
-                  opacity:
-                      MediaQuery.of(context).viewInsets.bottom > 0 ? 0.0 : 1.0,
+                  opacity: MediaQuery.of(context).viewInsets.bottom > 0 ? 0.0 : 1.0,
                   duration: const Duration(milliseconds: 200),
                   child: Align(
                     alignment: Alignment.bottomCenter,
                     child: NavigationBar(
                       surfaceTintColor: Colors.transparent,
-                      indicatorColor:
-                          AppColor.primarSnakeColor.withOpacity(0.5),
+                      indicatorColor: AppColor.primarSnakeColor.withOpacity(0.5),
                       // backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                       backgroundColor: Colors.transparent,
-                      labelBehavior:
-                          NavigationDestinationLabelBehavior.onlyShowSelected,
+                      labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
                       onDestinationSelected: onDestinationSelected,
                       selectedIndex: currentIndex,
                       destinations: <Widget>[
@@ -324,8 +308,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<bool> _onWillPop() async {
     DateTime now = DateTime.now();
-    if (lastPressedTime == null ||
-        now.difference(lastPressedTime!) > const Duration(seconds: 2)) {
+    if (lastPressedTime == null || now.difference(lastPressedTime!) > const Duration(seconds: 2)) {
       lastPressedTime = now;
       Fluttertoast.showToast(
         msg: "แตะอีกครั้งเพื่อออก",

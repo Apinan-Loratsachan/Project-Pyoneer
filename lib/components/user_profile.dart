@@ -31,14 +31,13 @@ class _UserProfileState extends State<UserProfile> {
 
   void _updatePaletteGenerator() async {
     if (UserData.image.isNotEmpty) {
-      final PaletteGenerator generator =
-          await PaletteGenerator.fromImageProvider(
+      final PaletteGenerator generator = await PaletteGenerator.fromImageProvider(
         NetworkImage(UserData.image),
         size: const Size(256, 256),
       );
 
-      profilePrimaryColor = generator.dominantColor!.color;
-      profileSecondaryColor = generator.mutedColor!.color;
+      profilePrimaryColor = generator.dominantColor?.color ?? AppColor.primarSnakeColor;
+      profileSecondaryColor = generator.mutedColor?.color ?? AppColor.secondarySnakeColor;
 
       final List<Color?> colors = [
         generator.mutedColor?.color,
@@ -53,7 +52,7 @@ class _UserProfileState extends State<UserProfile> {
       final random = Random();
       final randomIndex = random.nextInt(colors.length);
 
-      dominantColor = colors[randomIndex] ?? Colors.white70;
+      dominantColor = colors[randomIndex] ?? AppColor.primarSnakeColor;
       AppColor.profileColor = dominantColor;
       textColor = textColors[randomIndex] ?? Colors.black;
       AppColor.profileTextColor = textColor;
@@ -119,11 +118,9 @@ class _UserProfileState extends State<UserProfile> {
                                 ) {
                                   return AnimatedBuilder(
                                     animation: animation,
-                                    builder:
-                                        (BuildContext context, Widget? child) {
+                                    builder: (BuildContext context, Widget? child) {
                                       return ClipRRect(
-                                        borderRadius: BorderRadius.circular(
-                                            animation.value * 8),
+                                        borderRadius: BorderRadius.circular(animation.value * 8),
                                         child: toHeroContext.widget,
                                       );
                                     },
@@ -187,14 +184,9 @@ class _UserProfileState extends State<UserProfile> {
                             Navigator.push(
                               context,
                               PageRouteBuilder(
-                                pageBuilder:
-                                    (context, animation, secondaryAnimation) =>
-                                        const ProfilePictureUploadScreen()
-                                            .animate()
-                                            .fade()
-                                            .slide(),
-                                transitionDuration:
-                                    const Duration(milliseconds: 500),
+                                pageBuilder: (context, animation, secondaryAnimation) =>
+                                    const ProfilePictureUploadScreen().animate().fade().slide(),
+                                transitionDuration: const Duration(milliseconds: 500),
                               ),
                             );
                           }

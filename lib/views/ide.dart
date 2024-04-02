@@ -1,5 +1,3 @@
-// ignore_for_file: depend_on_referenced_packages
-
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -18,8 +16,7 @@ class IDEScreen extends StatefulWidget {
   State<IDEScreen> createState() => _IDEScreenState();
 }
 
-class _IDEScreenState extends State<IDEScreen>
-    with AutomaticKeepAliveClientMixin {
+class _IDEScreenState extends State<IDEScreen> with AutomaticKeepAliveClientMixin {
   final controller = CodeController(
     text:
         '# เขียน Code ที่นี่เลย\n# ข้อจำกัด ไม่สามารถรับ Input ได้\n# ไม่สามารถใช้ Library อื่นๆได้\n\nprint("Hello, World!")',
@@ -33,8 +30,7 @@ class _IDEScreenState extends State<IDEScreen>
 
   static Future<String> getUserCode() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getString('code') ??
-        '# เขียน Code ที่นี่เลย\n# ข้อจำกัด ไม่สามารถรับ Input ได้\n# ไม่สามารถใช้ Library อื่นๆได้\n\nprint("Hello, World!")';
+    return prefs.getString('code') ?? '';
   }
 
   bool isError = false;
@@ -44,7 +40,12 @@ class _IDEScreenState extends State<IDEScreen>
   void initState() {
     super.initState();
     getUserCode().then((value) {
-      controller.text = value;
+      if (value.isEmpty) {
+        controller.text =
+            '# เขียน Code ที่นี่เลย\n# ข้อจำกัด ไม่สามารถรับ Input ได้\n# ไม่สามารถใช้ Library อื่นๆได้\n\nprint("Hello, World!")';
+      } else {
+        controller.text = value;
+      }
     });
   }
 
@@ -159,57 +160,56 @@ class _IDEScreenState extends State<IDEScreen>
             ),
           ],
         ),
-        body: Expanded(
-          child: Column(
-            children: [
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: SingleChildScrollView(
-                      child: CodeTheme(
-                        data: CodeThemeData(styles: monokaiSublimeTheme),
-                        child: CodeField(
-                            focusNode: _focusNode,
-                            minLines: 50,
-                            wrap: true,
-                            controller: controller,
-                            gutterStyle: const GutterStyle(
-                                textStyle: TextStyle(height: 1.55)),
-                            textStyle: const TextStyle(fontSize: 16),
-                            onChanged: (codeString) {
-                              saveUserCode(codeString);
-                            }),
+        body: Column(
+          children: [
+            Flexible(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: SingleChildScrollView(
+                    child: CodeTheme(
+                      data: CodeThemeData(styles: monokaiSublimeTheme),
+                      child: CodeField(
+                        focusNode: _focusNode,
+                        minLines: 50,
+                        wrap: true,
+                        controller: controller,
+                        gutterStyle: const GutterStyle(textStyle: TextStyle(height: 1.55)),
+                        textStyle: const TextStyle(fontSize: 16),
+                        onChanged: (codeString) {
+                          controller.text = codeString;
+                          saveUserCode(codeString);
+                        },
                       ),
                     ),
                   ),
                 ),
               ),
-              const Text(
-                "Output",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                ),
+            ),
+            const Text(
+              "Output",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
               ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: SingleChildScrollView(
-                      child: Container(
-                        height: MediaQuery.of(context).size.height * 0.25,
-                        width: double.infinity,
-                        color: AppColor.ideColor,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            _output,
-                            style: TextStyle(
-                              color: isError ? Colors.red : Colors.white,
-                            ),
+            ),
+            Flexible(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: SingleChildScrollView(
+                    child: Container(
+                      height: MediaQuery.of(context).size.height * 0.25,
+                      width: double.infinity,
+                      color: AppColor.ideColor,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          _output,
+                          style: TextStyle(
+                            color: isError ? Colors.red : Colors.white,
                           ),
                         ),
                       ),
@@ -217,8 +217,8 @@ class _IDEScreenState extends State<IDEScreen>
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
