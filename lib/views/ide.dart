@@ -1,6 +1,7 @@
+// ignore_for_file: depend_on_referenced_packages
+
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_code_editor/flutter_code_editor.dart';
 import 'package:flutter_highlight/themes/monokai-sublime.dart';
@@ -31,7 +32,8 @@ class _IDEScreenState extends State<IDEScreen> with AutomaticKeepAliveClientMixi
 
   static Future<String> getUserCode() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getString('code') ?? '';
+    return prefs.getString('code') ??
+        '# เขียน Code ที่นี่เลย\n# ข้อจำกัด ไม่สามารถรับ Input ได้\n# ไม่สามารถใช้ Library อื่นๆได้\n\nprint("Hello, World!")';
   }
 
   bool isError = false;
@@ -41,12 +43,7 @@ class _IDEScreenState extends State<IDEScreen> with AutomaticKeepAliveClientMixi
   void initState() {
     super.initState();
     getUserCode().then((value) {
-      if (value.isEmpty) {
-        controller.text =
-            '# เขียน Code ที่นี่เลย\n# ข้อจำกัด ไม่สามารถรับ Input ได้\n# ไม่สามารถใช้ Library อื่นๆได้\n\nprint("Hello, World!")';
-      } else {
-        controller.text = value;
-      }
+      controller.text = value;
     });
   }
 
@@ -172,17 +169,15 @@ class _IDEScreenState extends State<IDEScreen> with AutomaticKeepAliveClientMixi
                     child: CodeTheme(
                       data: CodeThemeData(styles: monokaiSublimeTheme),
                       child: CodeField(
-                        focusNode: _focusNode,
-                        minLines: 50,
-                        wrap: true,
-                        controller: controller,
-                        gutterStyle: const GutterStyle(textStyle: TextStyle(height: 1.55)),
-                        textStyle: const TextStyle(fontSize: 16),
-                        onChanged: (codeString) {
-                          controller.text = codeString;
-                          saveUserCode(codeString);
-                        },
-                      ),
+                          focusNode: _focusNode,
+                          minLines: 50,
+                          wrap: true,
+                          controller: controller,
+                          gutterStyle: const GutterStyle(textStyle: TextStyle(height: 1.55)),
+                          textStyle: const TextStyle(fontSize: 16),
+                          onChanged: (codeString) {
+                            saveUserCode(codeString);
+                          }),
                     ),
                   ),
                 ),
