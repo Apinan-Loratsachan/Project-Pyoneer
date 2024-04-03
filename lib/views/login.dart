@@ -290,14 +290,35 @@ class _LoginScreenState extends State<LoginScreen>
                           UserData.email = 'ไม่ได้เข้าสู่ระบบ';
                           UserData.tel = 'ไม่ได้เข้าสู่ระบบ';
                           Navigator.pushReplacement(
-                              context,
-                              PageRouteBuilder(
-                                pageBuilder: (context, animation,
-                                        secondaryAnimation) =>
-                                    const HomeScreen().animate().fade().slide(),
-                                transitionDuration:
-                                    const Duration(milliseconds: 500),
-                              ));
+                            context,
+                            PageRouteBuilder(
+                              pageBuilder: (context, animation1, animation2) =>
+                                  const RegisterScreen(),
+                              transitionDuration: Duration(
+                                  milliseconds:
+                                      PyoneerAnimation.changeScreenDuration),
+                              transitionsBuilder:
+                                  (context, animation1, animation2, child) {
+                                animation1 = CurvedAnimation(
+                                  parent: animation1,
+                                  curve: Curves.easeOutQuart,
+                                );
+                                return FadeTransition(
+                                  opacity: Tween(
+                                    begin: 0.0,
+                                    end: 1.0,
+                                  ).animate(animation1),
+                                  child: SlideTransition(
+                                    position: Tween<Offset>(
+                                      begin: const Offset(0.0, 1.0),
+                                      end: Offset.zero,
+                                    ).animate(animation1),
+                                    child: child,
+                                  ),
+                                );
+                              },
+                            ),
+                          );
                         },
                         color: Colors.grey,
                       ),
@@ -312,34 +333,35 @@ class _LoginScreenState extends State<LoginScreen>
                       GestureDetector(
                         onTap: () async {
                           final result = await Navigator.push(
-                  context,
-                  PageRouteBuilder(
-                    pageBuilder: (context, animation1, animation2) =>
-                        const RegisterScreen(),
-                    transitionDuration: Duration(
-                        milliseconds: PyoneerAnimation.changeScreenDuration),
-                    transitionsBuilder:
-                        (context, animation1, animation2, child) {
-                      animation1 = CurvedAnimation(
-                        parent: animation1,
-                        curve: Curves.easeOutQuart,
-                      );
-                      return FadeTransition(
-                        opacity: Tween(
-                          begin: 0.0,
-                          end: 1.0,
-                        ).animate(animation1),
-                        child: SlideTransition(
-                          position: Tween<Offset>(
-                            begin: const Offset(0.0, 1.0),
-                            end: Offset.zero,
-                          ).animate(animation1),
-                          child: child,
-                        ),
-                      );
-                    },
-                  ),
-                );
+                            context,
+                            PageRouteBuilder(
+                              pageBuilder: (context, animation1, animation2) =>
+                                  const RegisterScreen(),
+                              transitionDuration: Duration(
+                                  milliseconds:
+                                      PyoneerAnimation.changeScreenDuration),
+                              transitionsBuilder:
+                                  (context, animation1, animation2, child) {
+                                animation1 = CurvedAnimation(
+                                  parent: animation1,
+                                  curve: Curves.easeOutQuart,
+                                );
+                                return FadeTransition(
+                                  opacity: Tween(
+                                    begin: 0.0,
+                                    end: 1.0,
+                                  ).animate(animation1),
+                                  child: SlideTransition(
+                                    position: Tween<Offset>(
+                                      begin: const Offset(0.0, 1.0),
+                                      end: Offset.zero,
+                                    ).animate(animation1),
+                                    child: child,
+                                  ),
+                                );
+                              },
+                            ),
+                          );
 
                           if (result != null && result is String) {
                             setState(() {
