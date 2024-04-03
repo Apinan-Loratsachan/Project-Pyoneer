@@ -1,5 +1,3 @@
-// ignore_for_file: depend_on_referenced_packages
-
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -9,6 +7,7 @@ import 'package:highlight/languages/python.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:pyoneer/utils/color.dart';
 import 'package:http/http.dart' as http;
+import 'package:pyoneer/utils/log.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class IDEScreen extends StatefulWidget {
@@ -18,22 +17,27 @@ class IDEScreen extends StatefulWidget {
   State<IDEScreen> createState() => _IDEScreenState();
 }
 
-class _IDEScreenState extends State<IDEScreen> with AutomaticKeepAliveClientMixin {
+class _IDEScreenState extends State<IDEScreen>
+    with AutomaticKeepAliveClientMixin {
   final controller = CodeController(
     text:
-        '# เขียน Code ที่นี่เลย\n# ข้อจำกัด ไม่สามารถรับ Input ได้\n# ไม่สามารถใช้ Library อื่นๆได้\n\nprint("Hello, World!")',
+        '# เขียน Code ที่นี่เลย\n# ข้อจำกัด ไม่สามารถรับ Input ได้\n# ไม่สามารถใช้ Library อื่นๆได้\n\nprint("Hello, World!")\n',
     language: python,
   );
 
   static Future<void> saveUserCode(String string) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('code', string);
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('code', string);
+    } catch (e) {
+      PyoneerLog.red(e.toString());
+    }
   }
 
   static Future<String> getUserCode() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString('code') ??
-        '# เขียน Code ที่นี่เลย\n# ข้อจำกัด ไม่สามารถรับ Input ได้\n# ไม่สามารถใช้ Library อื่นๆได้\n\nprint("Hello, World!")';
+        '# เขียน Code ที่นี่เลย\n# ข้อจำกัด ไม่สามารถรับ Input ได้\n# ไม่สามารถใช้ Library อื่นๆได้\n\nprint("Hello, World!")\n';
   }
 
   bool isError = false;
@@ -165,19 +169,22 @@ class _IDEScreenState extends State<IDEScreen> with AutomaticKeepAliveClientMixi
                 padding: const EdgeInsets.all(8.0),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8),
-                  child: SingleChildScrollView(
-                    child: CodeTheme(
-                      data: CodeThemeData(styles: monokaiSublimeTheme),
-                      child: CodeField(
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.35,
+                    child: SingleChildScrollView(
+                      child: CodeTheme(
+                        data: CodeThemeData(styles: monokaiSublimeTheme),
+                        child: CodeField(
                           focusNode: _focusNode,
                           minLines: 50,
                           wrap: true,
                           controller: controller,
-                          gutterStyle: const GutterStyle(textStyle: TextStyle(height: 1.55)),
+                          gutterStyle: const GutterStyle(
+                              textStyle: TextStyle(height: 1.55)),
                           textStyle: const TextStyle(fontSize: 16),
-                          onChanged: (codeString) {
-                            saveUserCode(codeString);
-                          }),
+                          onChanged: (codeString) => saveUserCode(codeString),
+                        ),
+                      ),
                     ),
                   ),
                 ),

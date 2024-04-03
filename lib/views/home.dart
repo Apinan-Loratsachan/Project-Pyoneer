@@ -249,13 +249,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   duration: const Duration(milliseconds: 200),
                   child: IgnorePointer(
                     child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 300),
-                      // height: currentIndex == 1 ? 150 : 0,
+                      duration: const Duration(milliseconds: 500),
                       transform: Matrix4.translationValues(
-                        0,
-                        currentIndex == 1 ? 0 : 150,
-                        0,
-                      ),
+                          0, currentIndex != 1 ? 150 : 0, 0),
+                      curve: Curves.easeInOut,
+                      height: currentIndex == 1 ? 150 : 0,
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
                           begin: Alignment.bottomCenter,
@@ -267,7 +265,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 .background
                                 .withOpacity(0),
                           ],
-                          stops: const [0.2, 1.0],
+                          stops: const [0.35, 1.2],
                         ),
                       ),
                     ),
