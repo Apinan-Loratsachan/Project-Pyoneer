@@ -1,10 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:pyoneer/services/auth.dart';
 import 'package:pyoneer/utils/animate_fade_slide.dart';
-import 'package:pyoneer/views/account/profile_picture_upload.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -395,22 +393,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                                     TextButton(
                                       onPressed: () {
                                         Navigator.pop(context);
-                                        if (mounted) {
-                                          Navigator.pushReplacement(
-                                            context,
-                                            PageRouteBuilder(
-                                              pageBuilder: (context, animation,
-                                                      secondaryAnimation) =>
-                                                  const ProfilePictureUploadScreen()
-                                                      .animate()
-                                                      .fade()
-                                                      .slide(),
-                                              transitionDuration:
-                                                  const Duration(
-                                                      milliseconds: 500),
-                                            ),
-                                          );
-                                        }
+                                        Navigator.pop(context, _email);
                                       },
                                       child: const Text('ปิด'),
                                     ),
