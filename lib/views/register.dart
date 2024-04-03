@@ -47,8 +47,8 @@ class _RegisterScreenState extends State<RegisterScreen>
     if (value == null || value.isEmpty) {
       return 'โปรดระบุรหัสผ่าน';
     }
-    if (value.length < 8 || value.length > 1000) {
-      return 'รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร';
+    if (value.length < 6 || value.length > 1000) {
+      return 'รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร';
     }
     return null;
   }
@@ -175,7 +175,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                     fontWeight: FontWeight.bold,
                     fontSize: 28,
                   ),
-                ).loginAnimate(delay: const Duration(milliseconds: 500)),
+                ).loginAnimate(delay: const Duration(milliseconds: 250)),
                 const SizedBox(height: 28),
                 Column(
                   children: [
@@ -230,7 +230,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                         FilteringTextInputFormatter.allow(
                             RegExp('[a-zA-Z0-9@._-]')),
                       ],
-                    ).loginAnimate(delay: const Duration(milliseconds: 1000)),
+                    ).loginAnimate(delay: const Duration(milliseconds: 500)),
                     _showSuggestions != false
                         ? Padding(
                             padding: const EdgeInsets.only(top: 8.0),
@@ -276,7 +276,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                       onChanged: (value) {
                         _username = value;
                       },
-                    ).loginAnimate(delay: const Duration(milliseconds: 1500)),
+                    ).loginAnimate(delay: const Duration(milliseconds: 750)),
                     const SizedBox(height: 16),
                     TextFormField(
                       controller: _passwordController,
@@ -319,7 +319,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                       //       RegExp(r'[a-zA-Z0-9!@#$%^&*()]')),
                       //   LengthLimitingTextInputFormatter(16),
                       // ],
-                    ).loginAnimate(delay: const Duration(milliseconds: 2000)),
+                    ).loginAnimate(delay: const Duration(milliseconds: 1000)),
                     const SizedBox(height: 16),
                     TextFormField(
                       controller: _confirmPasswordController,
@@ -359,7 +359,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                       //   }
                       //   return null;
                       // },
-                    ).loginAnimate(delay: const Duration(milliseconds: 2500)),
+                    ).loginAnimate(delay: const Duration(milliseconds: 1250)),
                     const SizedBox(height: 24),
                     ElevatedButton(
                       onPressed: () async {
@@ -420,7 +420,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                     ).animate(effects: [
                       const ScaleEffect(
                           curve: Curves.easeInOut,
-                          delay: Duration(milliseconds: 3500),
+                          delay: Duration(milliseconds: 1500),
                           duration: Duration(milliseconds: 1000))
                     ]),
                   ],
@@ -449,7 +449,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                 ).animate(effects: [
                   const ScaleEffect(
                       curve: Curves.easeInOut,
-                      delay: Duration(milliseconds: 4000),
+                      delay: Duration(milliseconds: 1750),
                       duration: Duration(milliseconds: 1000))
                 ]),
                 const SizedBox(height: 24),

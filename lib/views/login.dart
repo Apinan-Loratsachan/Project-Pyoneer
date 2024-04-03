@@ -145,7 +145,7 @@ class _LoginScreenState extends State<LoginScreen>
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
                     ),
-                  ).loginAnimate(delay: const Duration(milliseconds: 500)),
+                  ).loginAnimate(delay: const Duration(milliseconds: 250)),
                   const SizedBox(height: 28),
                   TextFormField(
                     controller: _emailController,
@@ -160,7 +160,7 @@ class _LoginScreenState extends State<LoginScreen>
                     onChanged: (value) {
                       _email = value;
                     },
-                  ).loginAnimate(delay: const Duration(milliseconds: 1000)),
+                  ).loginAnimate(delay: const Duration(milliseconds: 500)),
                   const SizedBox(height: 16),
                   TextFormField(
                     controller: _controller,
@@ -189,7 +189,7 @@ class _LoginScreenState extends State<LoginScreen>
                     onChanged: (value) {
                       _password = value;
                     },
-                  ).loginAnimate(delay: const Duration(milliseconds: 1500)),
+                  ).loginAnimate(delay: const Duration(milliseconds: 750)),
                   const SizedBox(height: 24),
                   ElevatedButton(
                     onPressed: () async {
@@ -240,12 +240,12 @@ class _LoginScreenState extends State<LoginScreen>
                   ).animate(effects: [
                     const ScaleEffect(
                         curve: Curves.easeInOut,
-                        delay: Duration(milliseconds: 2000),
+                        delay: Duration(milliseconds: 1000),
                         duration: Duration(milliseconds: 1000))
                   ]),
                   const SizedBox(height: 16),
                   const Center(child: Text('หรือ'))
-                      .loginAnimate(delay: const Duration(milliseconds: 2500)),
+                      .loginAnimate(delay: const Duration(milliseconds: 1250)),
                   const SizedBox(height: 16),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -302,7 +302,7 @@ class _LoginScreenState extends State<LoginScreen>
                         color: Colors.grey,
                       ),
                     ],
-                  ).loginAnimate(delay: const Duration(milliseconds: 3000)),
+                  ).loginAnimate(delay: const Duration(milliseconds: 1500)),
                   const SizedBox(height: 24),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -353,7 +353,7 @@ class _LoginScreenState extends State<LoginScreen>
                   ).animate(effects: [
                     const ScaleEffect(
                         curve: Curves.easeInOut,
-                        delay: Duration(milliseconds: 3500),
+                        delay: Duration(milliseconds: 1750),
                         duration: Duration(milliseconds: 1000))
                   ]),
                   const SizedBox(height: 24),
@@ -363,7 +363,7 @@ class _LoginScreenState extends State<LoginScreen>
                   ).animate(effects: [
                     const ScaleEffect(
                         curve: Curves.easeInOut,
-                        delay: Duration(milliseconds: 4000),
+                        delay: Duration(milliseconds: 2000),
                         duration: Duration(milliseconds: 1000))
                   ]),
                   const SizedBox(height: 16),
