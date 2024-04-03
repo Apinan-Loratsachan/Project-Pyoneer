@@ -78,7 +78,6 @@ class _MyAppState extends State<MyApp> {
                   isDarkMode ? Brightness.light : Brightness.dark,
             ),
           );
-
           return AnnotatedRegion<SystemUiOverlayStyle>(
             value: SystemUiOverlayStyle(
               statusBarColor: Colors.transparent,

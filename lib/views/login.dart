@@ -6,6 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:pyoneer/services/user_data.dart';
 import 'package:pyoneer/utils/animate_fade_slide.dart';
+import 'package:pyoneer/utils/animation.dart';
 import 'package:pyoneer/views/home.dart';
 import 'package:pyoneer/views/register.dart';
 import 'package:pyoneer/services/auth.dart';
@@ -26,11 +27,14 @@ class _LoginScreenState extends State<LoginScreen>
   String _appVersion = '';
   String _email = '';
   String _password = '';
+  bool isFirstAnimate = true;
 
   @override
   void initState() {
     super.initState();
     _initPackageInfo();
+
+    isFirstAnimate = true;
 
     _controller.addListener(() {
       if (_controller.text.isEmpty && !_isFieldEmpty) {
@@ -57,9 +61,28 @@ class _LoginScreenState extends State<LoginScreen>
       Navigator.pushReplacement(
         context,
         PageRouteBuilder(
-          pageBuilder: (context, animation, secondaryAnimation) =>
-              const HomeScreen().animate().fade().slide(),
-          transitionDuration: const Duration(milliseconds: 500),
+          pageBuilder: (context, animation1, animation2) => const HomeScreen(),
+          transitionDuration:
+              Duration(milliseconds: PyoneerAnimation.changeScreenDuration),
+          transitionsBuilder: (context, animation1, animation2, child) {
+            animation1 = CurvedAnimation(
+              parent: animation1,
+              curve: Curves.easeOutQuart,
+            );
+            return FadeTransition(
+              opacity: Tween(
+                begin: 0.0,
+                end: 1.0,
+              ).animate(animation1),
+              child: SlideTransition(
+                position: Tween<Offset>(
+                  begin: const Offset(0, 1),
+                  end: Offset.zero,
+                ).animate(animation1),
+                child: child,
+              ),
+            );
+          },
         ),
       );
     }
@@ -83,10 +106,35 @@ class _LoginScreenState extends State<LoginScreen>
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  Image.asset(
-                    'assets/icons/pyoneer_bg_less.png',
-                    height: MediaQuery.of(context).size.height * 0.3,
-                  ).animateFadeSlide(),
+                  isFirstAnimate
+                      ? Hero(
+                          tag: 'login-logo',
+                          child: Image.asset(
+                            'assets/icons/pyoneer_bg_less.png',
+                            height: MediaQuery.of(context).size.height * 0.3,
+                          ).animate(
+                            effects: [
+                              const FadeEffect(
+                                duration: Duration(milliseconds: 1000),
+                              ),
+                              const SlideEffect(
+                                curve: Curves.easeInOut,
+                                begin: Offset(0, 0.5),
+                                duration: Duration(milliseconds: 1000),
+                              ),
+                            ],
+                            onComplete: (controller) => setState(() {
+                              isFirstAnimate = false;
+                            }),
+                          ),
+                        )
+                      : Hero(
+                          tag: 'login-logo',
+                          child: Image.asset(
+                            'assets/icons/pyoneer_bg_less.png',
+                            height: MediaQuery.of(context).size.height * 0.3,
+                          ),
+                        ),
                   const SizedBox(height: 0),
                   const Text(
                     'Created By DTI',
@@ -95,7 +143,7 @@ class _LoginScreenState extends State<LoginScreen>
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
                     ),
-                  ).animateFadeSlide(),
+                  ).loginAnimate(delay: const Duration(milliseconds: 500)),
                   const SizedBox(height: 28),
                   TextFormField(
                     keyboardType: TextInputType.emailAddress,
@@ -109,7 +157,7 @@ class _LoginScreenState extends State<LoginScreen>
                     onChanged: (value) {
                       _email = value;
                     },
-                  ).animateFadeSlide(),
+                  ).loginAnimate(delay: const Duration(milliseconds: 1000)),
                   const SizedBox(height: 16),
                   TextFormField(
                     controller: _controller,
@@ -138,7 +186,7 @@ class _LoginScreenState extends State<LoginScreen>
                     onChanged: (value) {
                       _password = value;
                     },
-                  ).animateFadeSlide(),
+                  ).loginAnimate(delay: const Duration(milliseconds: 1500)),
                   const SizedBox(height: 24),
                   ElevatedButton(
                     onPressed: () async {
@@ -186,17 +234,15 @@ class _LoginScreenState extends State<LoginScreen>
                       backgroundColor: const Color(0xFF1ABDAD),
                     ),
                     child: const Text('เข้าสู่ระบบ'),
-                  ).animateFadeSlide(),
+                  ).animate(effects: [
+                    const ScaleEffect(
+                        curve: Curves.easeInOut,
+                        delay: Duration(milliseconds: 2000),
+                        duration: Duration(milliseconds: 1000))
+                  ]),
                   const SizedBox(height: 16),
                   const Center(child: Text('หรือ'))
-                      .animate(
-                        onPlay: (controller) => controller.forward(),
-                      )
-                      .fade()
-                      .slide(
-                          begin: const Offset(0.0, 1.0),
-                          duration: 1500.ms,
-                          curve: Curves.easeInOut),
+                      .loginAnimate(delay: const Duration(milliseconds: 2500)),
                   const SizedBox(height: 16),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -253,7 +299,7 @@ class _LoginScreenState extends State<LoginScreen>
                         color: Colors.grey,
                       ),
                     ],
-                  ).animateFadeSlide(),
+                  ).loginAnimate(delay: const Duration(milliseconds: 3000)),
                   const SizedBox(height: 24),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -263,14 +309,35 @@ class _LoginScreenState extends State<LoginScreen>
                       GestureDetector(
                         onTap: () {
                           Navigator.push(
-                              context,
-                              PageRouteBuilder(
-                                pageBuilder: (context, animation,
-                                        secondaryAnimation) =>
-                                    const RegisterScreen().animate().slide(),
-                                transitionDuration:
-                                    const Duration(milliseconds: 300),
-                              ));
+                            context,
+                            PageRouteBuilder(
+                              pageBuilder: (context, animation1, animation2) =>
+                                  const RegisterScreen(),
+                              transitionDuration: Duration(
+                                  milliseconds:
+                                      PyoneerAnimation.changeScreenDuration),
+                              transitionsBuilder:
+                                  (context, animation1, animation2, child) {
+                                animation1 = CurvedAnimation(
+                                  parent: animation1,
+                                  curve: Curves.easeOutQuart,
+                                );
+                                return FadeTransition(
+                                  opacity: Tween(
+                                    begin: 0.0,
+                                    end: 1.0,
+                                  ).animate(animation1),
+                                  child: SlideTransition(
+                                    position: Tween<Offset>(
+                                      begin: const Offset(0.0, 1.0),
+                                      end: Offset.zero,
+                                    ).animate(animation1),
+                                    child: child,
+                                  ),
+                                );
+                              },
+                            ),
+                          );
                         },
                         child: const Text(
                           "สมัครสมาชิก",
@@ -281,12 +348,22 @@ class _LoginScreenState extends State<LoginScreen>
                         ),
                       ),
                     ],
-                  ).animateFadeSlide(),
+                  ).animate(effects: [
+                    const ScaleEffect(
+                        curve: Curves.easeInOut,
+                        delay: Duration(milliseconds: 3500),
+                        duration: Duration(milliseconds: 1000))
+                  ]),
                   const SizedBox(height: 24),
                   Text(
                     _appVersion,
                     style: const TextStyle(color: Colors.grey, fontSize: 12),
-                  ).animateFadeSlide(),
+                  ).animate(effects: [
+                    const ScaleEffect(
+                        curve: Curves.easeInOut,
+                        delay: Duration(milliseconds: 4000),
+                        duration: Duration(milliseconds: 1000))
+                  ]),
                   const SizedBox(height: 16),
                 ],
               ),
