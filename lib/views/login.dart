@@ -7,7 +7,6 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:pyoneer/services/user_data.dart';
 import 'package:pyoneer/utils/animate_fade_slide.dart';
 import 'package:pyoneer/utils/animation.dart';
-import 'package:pyoneer/views/account/profile_picture_upload.dart';
 import 'package:pyoneer/views/home.dart';
 import 'package:pyoneer/views/register.dart';
 import 'package:pyoneer/services/auth.dart';
@@ -310,36 +309,37 @@ class _LoginScreenState extends State<LoginScreen>
                       const Text("ยังไม่มีบัญชี?"),
                       const SizedBox(width: 5),
                       GestureDetector(
-                        onTap: () async {
-                          final result = await Navigator.push(
+                        onTap: () {
+                          Navigator.push(
                             context,
-                            MaterialPageRoute(
-                              builder: (context) => const RegisterScreen(),
+                            PageRouteBuilder(
+                              pageBuilder: (context, animation1, animation2) =>
+                                  const RegisterScreen(),
+                              transitionDuration: Duration(
+                                  milliseconds:
+                                      PyoneerAnimation.changeScreenDuration),
+                              transitionsBuilder:
+                                  (context, animation1, animation2, child) {
+                                animation1 = CurvedAnimation(
+                                  parent: animation1,
+                                  curve: Curves.easeOutQuart,
+                                );
+                                return FadeTransition(
+                                  opacity: Tween(
+                                    begin: 0.0,
+                                    end: 1.0,
+                                  ).animate(animation1),
+                                  child: SlideTransition(
+                                    position: Tween<Offset>(
+                                      begin: const Offset(0.0, 1.0),
+                                      end: Offset.zero,
+                                    ).animate(animation1),
+                                    child: child,
+                                  ),
+                                );
+                              },
                             ),
                           );
-
-                          if (result != null && result is String) {
-                            setState(() {
-                              _emailController.text = result;
-                            });
-                            Navigator.push(
-                              context,
-                              PageRouteBuilder(
-                                pageBuilder:
-                                    (context, animation, secondaryAnimation) =>
-                                        const ProfilePictureUploadScreen(),
-                                transitionDuration:
-                                    const Duration(milliseconds: 500),
-                                transitionsBuilder: (context, animation,
-                                    secondaryAnimation, child) {
-                                  return child.animate().slide(
-                                        begin: const Offset(0.0, 1.0),
-                                        end: Offset.zero,
-                                      );
-                                },
-                              ),
-                            );
-                          }
                         },
                         child: const Text(
                           "สมัครสมาชิก",
