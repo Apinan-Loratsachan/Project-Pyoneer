@@ -23,10 +23,14 @@ class _AccountSettigScreenState extends State<AccountSettigScreen> {
 
   Future<void> deleteTestResults(String userEmail) async {
     List<String> testType = ["pre-test", "post-test"];
-    var testResultCollection = FirebaseFirestore.instance.collection('testResult');
+    var testResultCollection =
+        FirebaseFirestore.instance.collection('testResult');
 
     for (int i = 0; i < testType.length; i++) {
-      var querySnapshot = await testResultCollection.doc(userEmail).collection(testType[i]).get();
+      var querySnapshot = await testResultCollection
+          .doc(userEmail)
+          .collection(testType[i])
+          .get();
       var batch = FirebaseFirestore.instance.batch();
       for (var document in querySnapshot.docs) {
         batch.delete(document.reference);
@@ -37,10 +41,14 @@ class _AccountSettigScreenState extends State<AccountSettigScreen> {
 
   Future<void> deleteUserChoices(String userEmail) async {
     List<String> testType = ["pre-test", "post-test"];
-    var userChoicesCollection = FirebaseFirestore.instance.collection('userChoices');
+    var userChoicesCollection =
+        FirebaseFirestore.instance.collection('userChoices');
 
     for (int i = 0; i < testType.length; i++) {
-      var querySnapshot = await userChoicesCollection.doc(userEmail).collection(testType[i]).get();
+      var querySnapshot = await userChoicesCollection
+          .doc(userEmail)
+          .collection(testType[i])
+          .get();
       var batch = FirebaseFirestore.instance.batch();
       for (var document in querySnapshot.docs) {
         batch.delete(document.reference);
@@ -76,7 +84,8 @@ class _AccountSettigScreenState extends State<AccountSettigScreen> {
                                 const SizedBox(width: 5),
                                 GestureDetector(
                                   onTap: () async {
-                                    await Clipboard.setData(ClipboardData(text: UserData.uid));
+                                    await Clipboard.setData(
+                                        ClipboardData(text: UserData.uid));
                                     setState(() {
                                       _isCopied = true;
                                     });
@@ -128,13 +137,15 @@ class _AccountSettigScreenState extends State<AccountSettigScreen> {
                     ListTile(
                       leading: const Icon(Icons.mail),
                       title: const Text("อีเมล"),
-                      trailing: Text(UserData.email == '' ? 'ไม่ทราบ' : UserData.email),
+                      trailing: Text(
+                          UserData.email == '' ? 'ไม่ทราบ' : UserData.email),
                     ),
-                    ListTile(
-                      leading: const Icon(Icons.phone),
-                      title: const Text("เบอร์โทรศัพท์"),
-                      trailing: Text(UserData.tel == '' ? 'ไม่ทราบ' : UserData.tel),
-                    ),
+                    // ListTile(
+                    //   leading: const Icon(Icons.phone),
+                    //   title: const Text("เบอร์โทรศัพท์"),
+                    //   trailing:
+                    //       Text(UserData.tel == '' ? 'ไม่ทราบ' : UserData.tel),
+                    // ),
                     ListTile(
                       leading: const Icon(Icons.link),
                       title: const Text("ประเภทบัญชี"),
@@ -147,8 +158,10 @@ class _AccountSettigScreenState extends State<AccountSettigScreen> {
                           UserData.email != 'ไม่ได้เข้าสู่ระบบ'
                               ? ElevatedButton(
                                   style: ButtonStyle(
-                                    overlayColor: MaterialStateProperty.all(Colors.redAccent),
-                                    backgroundColor: MaterialStateProperty.all(Colors.red[500]),
+                                    overlayColor: MaterialStateProperty.all(
+                                        Colors.redAccent),
+                                    backgroundColor: MaterialStateProperty.all(
+                                        Colors.red[500]),
                                   ),
                                   onPressed: () async {
                                     showDialog<bool>(
@@ -156,12 +169,15 @@ class _AccountSettigScreenState extends State<AccountSettigScreen> {
                                       builder: (context) => AlertDialog(
                                         // backgroundColor: Colors.white,
                                         // surfaceTintColor: Colors.white,
-                                        title: const Text('ลบประวัติการอ่านบทเรียนและบททดสอบ'),
+                                        title: const Text(
+                                            'ลบประวัติการอ่านบทเรียนและบททดสอบ'),
                                         content: const Text(
                                             'คุณต้องการลบประวัติการอ่านบทเรียนและแบบทดสอบทั้งหมดใช่หรือไม่?'),
                                         actions: <Widget>[
                                           TextButton(
-                                            onPressed: () => Navigator.of(context).pop(false),
+                                            onPressed: () =>
+                                                Navigator.of(context)
+                                                    .pop(false),
                                             child: const Text(
                                               'ยกเลิก',
                                               // style:
@@ -172,28 +188,41 @@ class _AccountSettigScreenState extends State<AccountSettigScreen> {
                                             onPressed: () async {
                                               // Navigate back to the previous screen
                                               Navigator.pop(context);
-                                              await deleteTestResults(UserData.email);
-                                              await deleteUserChoices(UserData.email);
+                                              await deleteTestResults(
+                                                  UserData.email);
+                                              await deleteUserChoices(
+                                                  UserData.email);
 
                                               // Query to retrieve documents that match the user's email
-                                              QuerySnapshot<Map<String, dynamic>> querySnapshot =
-                                                  await FirebaseFirestore.instance
+                                              QuerySnapshot<
+                                                      Map<String, dynamic>>
+                                                  querySnapshot =
+                                                  await FirebaseFirestore
+                                                      .instance
                                                       .collection('lessons')
-                                                      .where('email', isEqualTo: UserData.email)
+                                                      .where('email',
+                                                          isEqualTo:
+                                                              UserData.email)
                                                       .get();
 
                                               // Loop through the documents and delete each one
-                                              for (QueryDocumentSnapshot<Map<String, dynamic>> document
+                                              for (QueryDocumentSnapshot<
+                                                      Map<String,
+                                                          dynamic>> document
                                                   in querySnapshot.docs) {
-                                                await document.reference.delete();
+                                                await document.reference
+                                                    .delete();
                                               }
 
                                               //-----------------------------------------------------
 
                                               Fluttertoast.showToast(
-                                                  msg: "ลบประวัติการอ่านบทเรียนและบททดสอบทั้งหมดแล้ว");
+                                                  msg:
+                                                      "ลบประวัติการอ่านบทเรียนและบททดสอบทั้งหมดแล้ว");
                                             },
-                                            child: const Text('ลบประวัติ', style: TextStyle(color: Colors.red)),
+                                            child: const Text('ลบประวัติ',
+                                                style: TextStyle(
+                                                    color: Colors.red)),
                                           ),
                                         ],
                                       ),
@@ -218,8 +247,10 @@ class _AccountSettigScreenState extends State<AccountSettigScreen> {
                           const SizedBox(height: 5),
                           ElevatedButton(
                             style: ButtonStyle(
-                              overlayColor: MaterialStateProperty.all(Colors.redAccent),
-                              backgroundColor: MaterialStateProperty.all(Colors.red[500]),
+                              overlayColor:
+                                  MaterialStateProperty.all(Colors.redAccent),
+                              backgroundColor:
+                                  MaterialStateProperty.all(Colors.red[500]),
                             ),
                             onPressed: () {
                               if (UserData.email != 'ไม่ได้เข้าสู่ระบบ') {
@@ -229,10 +260,12 @@ class _AccountSettigScreenState extends State<AccountSettigScreen> {
                                     // backgroundColor: Colors.white,
                                     // surfaceTintColor: Colors.white,
                                     title: const Text('ยืนยันการออกจากระบบ'),
-                                    content: const Text('คุณต้องการออกจากระบบใช่หรือไม่?'),
+                                    content: const Text(
+                                        'คุณต้องการออกจากระบบใช่หรือไม่?'),
                                     actions: <Widget>[
                                       TextButton(
-                                        onPressed: () => Navigator.of(context).pop(false),
+                                        onPressed: () =>
+                                            Navigator.of(context).pop(false),
                                         child: const Text(
                                           'ยกเลิก',
                                           // style: TextStyle(color: Colors.black),
@@ -245,18 +278,30 @@ class _AccountSettigScreenState extends State<AccountSettigScreen> {
                                           Navigator.pushAndRemoveUntil(
                                               context,
                                               PageRouteBuilder(
-                                                pageBuilder: (context, animation1, animation2) => const LoginScreen(),
-                                                transitionDuration: const Duration(milliseconds: 500),
-                                                transitionsBuilder: (context, animation1, animation2, child) {
+                                                pageBuilder: (context,
+                                                        animation1,
+                                                        animation2) =>
+                                                    const LoginScreen(),
+                                                transitionDuration:
+                                                    const Duration(
+                                                        milliseconds: 500),
+                                                transitionsBuilder: (context,
+                                                    animation1,
+                                                    animation2,
+                                                    child) {
                                                   animation1 = CurvedAnimation(
                                                     parent: animation1,
                                                     curve: Curves.easeInOut,
                                                   );
                                                   return FadeTransition(
-                                                    opacity: Tween(begin: 0.0, end: 1.0).animate(animation1),
+                                                    opacity: Tween(
+                                                            begin: 0.0,
+                                                            end: 1.0)
+                                                        .animate(animation1),
                                                     child: SlideTransition(
                                                       position: Tween<Offset>(
-                                                        begin: const Offset(0.0, 1.0),
+                                                        begin: const Offset(
+                                                            0.0, 1.0),
                                                         end: Offset.zero,
                                                       ).animate(animation1),
                                                       child: child,
@@ -266,7 +311,9 @@ class _AccountSettigScreenState extends State<AccountSettigScreen> {
                                               ),
                                               (Route<dynamic> route) => false);
                                         },
-                                        child: const Text('ออกจากระบบ', style: TextStyle(color: Colors.red)),
+                                        child: const Text('ออกจากระบบ',
+                                            style:
+                                                TextStyle(color: Colors.red)),
                                       ),
                                     ],
                                   ),
@@ -276,10 +323,12 @@ class _AccountSettigScreenState extends State<AccountSettigScreen> {
                                   context: context,
                                   builder: (context) => AlertDialog(
                                     title: const Text('กลับสู่หน้าล็อกอิน'),
-                                    content: const Text('คุณต้องการกลับสู่หน้าล็อกอินใช่หรือไม่?'),
+                                    content: const Text(
+                                        'คุณต้องการกลับสู่หน้าล็อกอินใช่หรือไม่?'),
                                     actions: <Widget>[
                                       TextButton(
-                                        onPressed: () => Navigator.of(context).pop(false),
+                                        onPressed: () =>
+                                            Navigator.of(context).pop(false),
                                         child: const Text(
                                           'ยกเลิก',
                                         ),
@@ -291,18 +340,30 @@ class _AccountSettigScreenState extends State<AccountSettigScreen> {
                                           Navigator.pushAndRemoveUntil(
                                               context,
                                               PageRouteBuilder(
-                                                pageBuilder: (context, animation1, animation2) => const LoginScreen(),
-                                                transitionDuration: const Duration(milliseconds: 500),
-                                                transitionsBuilder: (context, animation1, animation2, child) {
+                                                pageBuilder: (context,
+                                                        animation1,
+                                                        animation2) =>
+                                                    const LoginScreen(),
+                                                transitionDuration:
+                                                    const Duration(
+                                                        milliseconds: 500),
+                                                transitionsBuilder: (context,
+                                                    animation1,
+                                                    animation2,
+                                                    child) {
                                                   animation1 = CurvedAnimation(
                                                     parent: animation1,
                                                     curve: Curves.easeInOut,
                                                   );
                                                   return FadeTransition(
-                                                    opacity: Tween(begin: 0.0, end: 1.0).animate(animation1),
+                                                    opacity: Tween(
+                                                            begin: 0.0,
+                                                            end: 1.0)
+                                                        .animate(animation1),
                                                     child: SlideTransition(
                                                       position: Tween<Offset>(
-                                                        begin: const Offset(0.0, 1.0),
+                                                        begin: const Offset(
+                                                            0.0, 1.0),
                                                         end: Offset.zero,
                                                       ).animate(animation1),
                                                       child: child,
@@ -312,7 +373,9 @@ class _AccountSettigScreenState extends State<AccountSettigScreen> {
                                               ),
                                               (Route<dynamic> route) => false);
                                         },
-                                        child: const Text('กลับสู่หน้าล็อกอิน', style: TextStyle(color: Colors.red)),
+                                        child: const Text('กลับสู่หน้าล็อกอิน',
+                                            style:
+                                                TextStyle(color: Colors.red)),
                                       ),
                                     ],
                                   ),
@@ -371,9 +434,13 @@ class _AccountSettigScreenState extends State<AccountSettigScreen> {
                     Navigator.push(
                       context,
                       PageRouteBuilder(
-                        pageBuilder: (context, animation1, animation2) => const CreditScreen(),
-                        transitionDuration: Duration(milliseconds: PyoneerAnimation.changeScreenDuration),
-                        transitionsBuilder: (context, animation1, animation2, child) {
+                        pageBuilder: (context, animation1, animation2) =>
+                            const CreditScreen(),
+                        transitionDuration: Duration(
+                            milliseconds:
+                                PyoneerAnimation.changeScreenDuration),
+                        transitionsBuilder:
+                            (context, animation1, animation2, child) {
                           animation1 = CurvedAnimation(
                             parent: animation1,
                             curve: Curves.easeOutQuart,

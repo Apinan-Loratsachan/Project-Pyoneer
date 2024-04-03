@@ -21,7 +21,7 @@ class _IDEScreenState extends State<IDEScreen>
     with AutomaticKeepAliveClientMixin {
   final controller = CodeController(
     text:
-        '# เขียน Code ที่นี่เลย\n# ข้อจำกัด ไม่สามารถรับ Input ได้\n# ไม่สามารถใช้ Library อื่นๆได้\n\nprint("Hello, World!")\n',
+        '# เขียน Code ที่นี่เลย\n# ข้อจำกัด ไม่สามารถรับ Input ได้\n# สามารถใช้งานได้แค่ Built-in Module\n\nimport random\n\nnumber = random.randint(1,100)\nprint("ตัวเลขที่สุ่มได้คือ :", number)',
     language: python,
   );
 
@@ -37,7 +37,7 @@ class _IDEScreenState extends State<IDEScreen>
   static Future<String> getUserCode() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString('code') ??
-        '# เขียน Code ที่นี่เลย\n# ข้อจำกัด ไม่สามารถรับ Input ได้\n# ไม่สามารถใช้ Library อื่นๆได้\n\nprint("Hello, World!")\n';
+        '# เขียน Code ที่นี่เลย\n# ข้อจำกัด ไม่สามารถรับ Input ได้\n# สามารถใช้งานได้แค่ Built-in Module\n\nimport random\n\nnumber = random.randint(1,100)\nprint("ตัวเลขที่สุ่มได้คือ :", number)';
   }
 
   bool isError = false;
@@ -212,6 +212,7 @@ class _IDEScreenState extends State<IDEScreen>
                         child: Text(
                           _output,
                           style: TextStyle(
+                            fontSize: 16,
                             color: isError ? Colors.red : Colors.white,
                           ),
                         ),
