@@ -113,19 +113,13 @@ class _ProfilePictureUploadScreenState
         });
         await UserData.updateUserImage(downloadURL);
 
-        if (!imageExists) {
+        bool isNewUser = UserData.accountType.isEmpty;
+
+        if (isNewUser && !imageExists) {
           await UserData.clear();
           await Auth.signOut();
         }
-
-        // if (mounted) {
-        //   ScaffoldMessenger.of(context).showSnackBar(
-        //     const SnackBar(
-        //         content: Text('อัปโหลดรูปภาพโปรไฟล์ของคุณสำเร็จแล้ว')),
-        //   );
-        //   Navigator.of(context).pop();
-        // }
-        Navigator.of(context).pop(imageExists);
+        Navigator.of(context).pop(isNewUser ? imageExists : true);
       } catch (e) {
         if (kDebugMode) {
           print('Error uploading profile picture: $e');

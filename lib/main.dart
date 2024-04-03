@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:pyoneer/services/auth.dart';
 import 'package:pyoneer/services/firebase_options.dart';
 import 'package:pyoneer/services/user_data.dart';
 import 'package:pyoneer/utils/color.dart';
@@ -11,12 +12,22 @@ import 'package:pyoneer/views/login.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  await UserData.loadUserData();
 
-  Widget initialScreen = const LoginScreen();
-  if (FirebaseAuth.instance.currentUser != null) {
-    initialScreen = const HomeScreen();
+  User? currentUser = FirebaseAuth.instance.currentUser;
+
+  if (currentUser != null) {
+    bool hasUserData = await UserData.hasData();
+    if (hasUserData) {
+      await UserData.loadUserData();
+    } else {
+      await UserData.clear();
+      await Auth.signOut();
+      currentUser = null;
+    }
   }
+
+  Widget initialScreen =
+      currentUser != null ? const HomeScreen() : const LoginScreen();
 
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
@@ -24,6 +35,7 @@ void main() async {
   ]);
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge,
       overlays: [SystemUiOverlay.top]);
+
   runApp(MyApp(initialScreen: initialScreen));
 }
 

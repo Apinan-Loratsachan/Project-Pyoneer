@@ -22,7 +22,8 @@ class UserData {
     imageNotifier.value = imageUrl;
   }
 
-  static Future<void> saveUserData(UserCredential userCredential, String accountType) async {
+  static Future<void> saveUserData(
+      UserCredential userCredential, String accountType) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('uid', userCredential.user?.uid ?? "");
     await prefs.setString('userName', userCredential.user?.displayName ?? "");
@@ -39,9 +40,17 @@ class UserData {
     userName = "";
     email = "";
     image = "";
+    imageNotifier.value = "";
     tel = "";
     accountType = "";
     showProfile = true;
+  }
+
+  static Future<bool> hasData() async {
+    final prefs = await SharedPreferences.getInstance();
+    String uid = prefs.getString('uid') ?? '';
+    String accountType = prefs.getString('accountType') ?? '';
+    return uid.isNotEmpty && accountType.isNotEmpty;
   }
 
   static Future<void> loadUserData() async {
