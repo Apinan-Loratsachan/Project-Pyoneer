@@ -169,18 +169,21 @@ class _IDEScreenState extends State<IDEScreen>
                 padding: const EdgeInsets.all(8.0),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8),
-                  child: SizedBox(
+                  child: Container(
+                    color: AppColor.ideColor,
                     height: MediaQuery.of(context).size.height * 0.35,
                     child: SingleChildScrollView(
                       child: CodeTheme(
                         data: CodeThemeData(styles: monokaiSublimeTheme),
                         child: CodeField(
                           focusNode: _focusNode,
-                          minLines: 50,
                           wrap: true,
                           controller: controller,
                           gutterStyle: const GutterStyle(
-                              textStyle: TextStyle(height: 1.55)),
+                              textStyle: TextStyle(
+                            height: 1.55,
+                            fontSize: 10,
+                          )),
                           textStyle: const TextStyle(fontSize: 16),
                           onChanged: (codeString) => saveUserCode(codeString),
                         ),
@@ -202,13 +205,13 @@ class _IDEScreenState extends State<IDEScreen>
                 padding: const EdgeInsets.all(8.0),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8),
-                  child: SingleChildScrollView(
-                    child: Container(
-                      height: MediaQuery.of(context).size.height * 0.25,
-                      width: double.infinity,
-                      color: AppColor.ideColor,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    height: MediaQuery.of(context).size.height * 0.25,
+                    width: double.infinity,
+                    color: AppColor.ideColor,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: SingleChildScrollView(
                         child: Text(
                           _output,
                           style: TextStyle(
