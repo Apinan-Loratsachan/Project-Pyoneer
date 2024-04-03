@@ -7,6 +7,7 @@ import 'package:icons_plus/icons_plus.dart';
 import 'package:pyoneer/components/lesson_component.dart';
 import 'package:pyoneer/components/testing_component.dart';
 import 'package:pyoneer/services/user_data.dart';
+import 'package:pyoneer/utils/animation.dart';
 import 'package:pyoneer/utils/color.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 
@@ -638,7 +639,33 @@ class _ContentScreenState extends State<ContentScreen>
               onTap: unlocked
                   ? () => Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => targetScreen),
+                        PageRouteBuilder(
+                          pageBuilder: (context, animation1, animation2) =>
+                              targetScreen,
+                          transitionDuration: Duration(
+                              milliseconds:
+                                  PyoneerAnimation.changeScreenDuration),
+                          transitionsBuilder:
+                              (context, animation1, animation2, child) {
+                            animation1 = CurvedAnimation(
+                              parent: animation1,
+                              curve: Curves.easeOutQuart,
+                            );
+                            return FadeTransition(
+                              opacity: Tween(
+                                begin: 0.0,
+                                end: 1.0,
+                              ).animate(animation1),
+                              child: SlideTransition(
+                                position: Tween<Offset>(
+                                  begin: type == "Lesson" ? const Offset(1.0 , 0.0) : const Offset(0.0 , 1.0),
+                                  end: Offset.zero,
+                                ).animate(animation1),
+                                child: child,
+                              ),
+                            );
+                          },
+                        ),
                       )
                   : null,
               title: Text(

@@ -240,7 +240,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           bottomNavigationBar: AnimatedContainer(
             duration: const Duration(milliseconds: 200),
-            height: MediaQuery.of(context).viewInsets.bottom > 0 ? 0.0 : 150.0,
+            height: MediaQuery.of(context).viewInsets.bottom > 0 ? 0.0 : 120.0,
             child: Stack(
               children: [
                 AnimatedOpacity(
@@ -250,10 +250,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: IgnorePointer(
                     child: AnimatedContainer(
                       duration: const Duration(milliseconds: 500),
-                      transform: Matrix4.translationValues(
-                          0, currentIndex != 1 ? 150 : 0, 0),
-                      curve: Curves.easeInOut,
-                      height: currentIndex == 1 ? 150 : 0,
+                      // transform: Matrix4.translationValues(
+                      //     0, currentIndex != 1 ? 150 : 0, 0),
+                      // curve: Curves.easeInOut,
+                      height: 120,
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
                           begin: Alignment.bottomCenter,
