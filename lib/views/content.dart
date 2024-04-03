@@ -324,7 +324,7 @@ class _ContentScreenState extends State<ContentScreen>
                             Stream.value(true),
                           ),
                         ),
-                        SizedBox(height: spaceSize),
+                        Flexible(child: SizedBox(height: spaceSize)),
                       ],
                     ),
                   ),
@@ -576,7 +576,7 @@ class _ContentScreenState extends State<ContentScreen>
                                   }
                                 },
                               ),
-                              SizedBox(height: spaceSize),
+                              Flexible(child: SizedBox(height: spaceSize)),
                             ],
                           ),
                         ),

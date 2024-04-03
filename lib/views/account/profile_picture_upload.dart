@@ -125,7 +125,7 @@ class _ProfilePictureUploadScreenState
         //   );
         //   Navigator.of(context).pop();
         // }
-        Navigator.of(context).pop();
+        Navigator.of(context).pop(imageExists);
       } catch (e) {
         if (kDebugMode) {
           print('Error uploading profile picture: $e');
