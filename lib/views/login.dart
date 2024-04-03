@@ -11,6 +11,8 @@ import 'package:pyoneer/views/account/profile_picture_upload.dart';
 import 'package:pyoneer/views/home.dart';
 import 'package:pyoneer/views/register.dart';
 import 'package:pyoneer/services/auth.dart';
+import 'package:top_snackbar_flutter/custom_snack_bar.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -190,6 +192,103 @@ class _LoginScreenState extends State<LoginScreen>
                       _password = value;
                     },
                   ).loginAnimate(delay: const Duration(milliseconds: 750)),
+                  const SizedBox(height: 8),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      GestureDetector(
+                        onTap: () async {
+                          final TextEditingController resetEmailController =
+                              TextEditingController();
+                          final result = await showDialog<bool>(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: const Text('รีเซ็ตรหัสผ่าน'),
+                                content: TextField(
+                                  controller: resetEmailController,
+                                  decoration:
+                                      const InputDecoration(hintText: "อีเมล"),
+                                  keyboardType: TextInputType.emailAddress,
+                                ),
+                                actions: <Widget>[
+                                  TextButton(
+                                    child: const Text('ส่งการรีเซ็ตรหัสผ่าน'),
+                                    onPressed: () async {
+                                      Navigator.of(context).pop(true);
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+
+                          if (result == true) {
+                            if (resetEmailController.text.isNotEmpty) {
+                              try {
+                                await Auth.sendPasswordResetEmail(
+                                    resetEmailController.text);
+                                showTopSnackBar(
+                                  Overlay.of(context),
+                                  CustomSnackBar.success(
+                                    message:
+                                        'รีเซ็ตรหัสผ่านได้ถูกส่งไปยังอีเมล ${resetEmailController.text} แล้ว',
+                                  ),
+                                  displayDuration: const Duration(seconds: 3),
+                                );
+                              } on FirebaseAuthException catch (e) {
+                                String errorMessage =
+                                    'เกิดข้อผิดพลาดไม่คาดคิดขณะรีเซ็ตรหัสผ่าน โปรดลองอีกครั้งในภายหลัง';
+                                if (e.code == 'user-not-found') {
+                                  errorMessage =
+                                      'ไม่พบผู้ใช้ที่ตรงกับอีเมลที่คุณป้อน';
+                                }
+                                showTopSnackBar(
+                                  Overlay.of(context),
+                                  CustomSnackBar.error(
+                                    message: errorMessage,
+                                  ),
+                                  displayDuration: const Duration(seconds: 3),
+                                );
+                              } catch (e) {
+                                showTopSnackBar(
+                                  Overlay.of(context),
+                                  const CustomSnackBar.error(
+                                    message:
+                                        'เกิดข้อผิดพลาดไม่คาดคิด โปรดลองอีกครั้งในภายหลัง',
+                                  ),
+                                  displayDuration: const Duration(seconds: 3),
+                                );
+                              }
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                      'กรุณากรอกอีเมลที่ต้องการรีเซ็ตรหัสผ่าน'),
+                                  backgroundColor: Colors.red,
+                                ),
+                              );
+                              showTopSnackBar(
+                                Overlay.of(context),
+                                const CustomSnackBar.info(
+                                  message:
+                                      'กรุณากรอกอีเมลที่ต้องการรีเซ็ตรหัสผ่าน',
+                                ),
+                                displayDuration: const Duration(seconds: 3),
+                              );
+                            }
+                          }
+                        },
+                        child: const Text(
+                          'ลืมรหัสผ่าน?',
+                          style: TextStyle(
+                            color: Colors.blue,
+                            decoration: TextDecoration.underline,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ).loginAnimate(delay: const Duration(milliseconds: 1000)),
                   const SizedBox(height: 24),
                   ElevatedButton(
                     onPressed: () async {
@@ -240,12 +339,12 @@ class _LoginScreenState extends State<LoginScreen>
                   ).animate(effects: [
                     const ScaleEffect(
                         curve: Curves.easeInOut,
-                        delay: Duration(milliseconds: 1000),
+                        delay: Duration(milliseconds: 1250),
                         duration: Duration(milliseconds: 1000))
                   ]),
                   const SizedBox(height: 16),
                   const Center(child: Text('หรือ'))
-                      .loginAnimate(delay: const Duration(milliseconds: 1250)),
+                      .loginAnimate(delay: const Duration(milliseconds: 1500)),
                   const SizedBox(height: 16),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -293,7 +392,7 @@ class _LoginScreenState extends State<LoginScreen>
                             context,
                             PageRouteBuilder(
                               pageBuilder: (context, animation1, animation2) =>
-                                  const RegisterScreen(),
+                                  const HomeScreen(),
                               transitionDuration: Duration(
                                   milliseconds:
                                       PyoneerAnimation.changeScreenDuration),
@@ -323,7 +422,7 @@ class _LoginScreenState extends State<LoginScreen>
                         color: Colors.grey,
                       ),
                     ],
-                  ).loginAnimate(delay: const Duration(milliseconds: 1500)),
+                  ).loginAnimate(delay: const Duration(milliseconds: 1750)),
                   const SizedBox(height: 24),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -398,7 +497,7 @@ class _LoginScreenState extends State<LoginScreen>
                   ).animate(effects: [
                     const ScaleEffect(
                         curve: Curves.easeInOut,
-                        delay: Duration(milliseconds: 1750),
+                        delay: Duration(milliseconds: 2000),
                         duration: Duration(milliseconds: 1000))
                   ]),
                   const SizedBox(height: 24),
@@ -408,7 +507,7 @@ class _LoginScreenState extends State<LoginScreen>
                   ).animate(effects: [
                     const ScaleEffect(
                         curve: Curves.easeInOut,
-                        delay: Duration(milliseconds: 2000),
+                        delay: Duration(milliseconds: 2250),
                         duration: Duration(milliseconds: 1000))
                   ]),
                   const SizedBox(height: 16),

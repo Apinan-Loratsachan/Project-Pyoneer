@@ -20,13 +20,15 @@ class Auth {
         return null;
       }
 
-      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
       final credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
 
-      UserCredential userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithCredential(credential);
       return userCredential;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'account-exists-with-different-credential') {
@@ -42,19 +44,23 @@ class Auth {
     }
   }
 
-  static Future<UserCredential?> signInWithFacebook(BuildContext context) async {
+  static Future<UserCredential?> signInWithFacebook(
+      BuildContext context) async {
     try {
       final LoginResult loginResult = await FacebookAuth.instance.login(
         permissions: ['public_profile', 'email'],
       );
 
       if (loginResult.status == LoginStatus.success) {
-        final OAuthCredential facebookAuthCredential = FacebookAuthProvider.credential(loginResult.accessToken!.token);
+        final OAuthCredential facebookAuthCredential =
+            FacebookAuthProvider.credential(loginResult.accessToken!.token);
 
         try {
-          UserCredential userCredential = await FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
+          UserCredential userCredential = await FirebaseAuth.instance
+              .signInWithCredential(facebookAuthCredential);
 
-          final facebookUser = await FacebookAuth.instance.getUserData(fields: "picture.width(200)");
+          final facebookUser = await FacebookAuth.instance
+              .getUserData(fields: "picture.width(200)");
           final pictureUrl = facebookUser['picture']['data']['url'];
 
           await UserData.saveUserData(userCredential, 'Facebook');
@@ -83,9 +89,11 @@ class Auth {
     return null;
   }
 
-  static Future<UserCredential?> signUpWithEmailAndPassword(String email, String password, BuildContext context) async {
+  static Future<UserCredential?> signUpWithEmailAndPassword(
+      String email, String password, BuildContext context) async {
     try {
-      UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      UserCredential userCredential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
@@ -97,7 +105,8 @@ class Auth {
           builder: (BuildContext context) {
             return AlertDialog(
               title: const Text('รหัสผ่านไม่ปลอดภัย'),
-              content: const Text('รหัสผ่านที่คุณป้อนไม่ปลอดภัย โปรดใช้รหัสผ่านที่ปลอดภัยมากขึ้น'),
+              content: const Text(
+                  'รหัสผ่านที่คุณป้อนไม่ปลอดภัย โปรดใช้รหัสผ่านที่ปลอดภัยมากขึ้น'),
               actions: [
                 TextButton(
                   child: const Text('ตกลง'),
@@ -115,7 +124,8 @@ class Auth {
           builder: (BuildContext context) {
             return AlertDialog(
               title: const Text('อีเมลนี้ถูกใช้แล้ว'),
-              content: Text('อีเมล $email ได้ถูกใช้ลงทะเบียนแล้ว โปรดใช้อีเมลอื่นหรือลงชื่อเข้าใช้ด้วยอีเมลนี้'),
+              content: Text(
+                  'อีเมล $email ได้ถูกใช้ลงทะเบียนแล้ว โปรดใช้อีเมลอื่นหรือลงชื่อเข้าใช้ด้วยอีเมลนี้'),
               actions: [
                 TextButton(
                   child: const Text('ตกลง'),
@@ -137,9 +147,11 @@ class Auth {
     }
   }
 
-  static Future<UserCredential?> signInWithEmailAndPassword(String email, String password, BuildContext context) async {
+  static Future<UserCredential?> signInWithEmailAndPassword(
+      String email, String password, BuildContext context) async {
     try {
-      UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
@@ -173,7 +185,8 @@ class Auth {
           builder: (BuildContext context) {
             return AlertDialog(
               title: const Text('ไม่พบบัญชีผู้ใช้'),
-              content: const Text('ไม่พบบัญชีผู้ใช้ที่เกี่ยวข้องกับอีเมลนี้ โปรดลองอีกครั้งหรือสร้างบัญชีใหม่'),
+              content: const Text(
+                  'ไม่พบบัญชีผู้ใช้ที่เกี่ยวข้องกับอีเมลนี้ โปรดลองอีกครั้งหรือสร้างบัญชีใหม่'),
               actions: [
                 TextButton(
                   child: const Text('ตกลง'),
@@ -191,7 +204,8 @@ class Auth {
           builder: (BuildContext context) {
             return AlertDialog(
               title: const Text('รหัสผ่านหรืออีเมลไม่ถูกต้อง'),
-              content: const Text('รหัสผ่านหรืออีเมลที่คุณป้อนไม่ถูกต้อง โปรดลองอีกครั้ง'),
+              content: const Text(
+                  'รหัสผ่านหรืออีเมลที่คุณป้อนไม่ถูกต้อง โปรดลองอีกครั้ง'),
               actions: [
                 TextButton(
                   child: const Text('ตกลง'),
@@ -209,7 +223,8 @@ class Auth {
           builder: (BuildContext context) {
             return AlertDialog(
               title: const Text('อีเมลหรือรหัสผ่านไม่ถูกต้อง'),
-              content: const Text('อีเมลหรือรหัสผ่านที่คุณป้อนไม่ถูกต้อง โปรดลองอีกครั้ง'),
+              content: const Text(
+                  'อีเมลหรือรหัสผ่านที่คุณป้อนไม่ถูกต้อง โปรดลองอีกครั้ง'),
               actions: [
                 TextButton(
                   child: const Text('ตกลง'),
@@ -230,6 +245,22 @@ class Auth {
     }
   }
 
+  static Future<void> sendPasswordResetEmail(String email) async {
+    try {
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        throw FirebaseAuthException(
+          code: 'user-not-found',
+          message: 'No user found for that email.',
+        );
+      }
+      rethrow;
+    } catch (e) {
+      throw Exception('An unexpected error occurred. Please try again later.');
+    }
+  }
+
   static Future<void> signOut() async {
     await FirebaseAuth.instance.signOut();
     await GoogleSignIn().signOut();
@@ -237,7 +268,8 @@ class Auth {
     await UserData.clear();
   }
 
-  static void showAccountExistsDialog(BuildContext context, String email, String loginMethod) {
+  static void showAccountExistsDialog(
+      BuildContext context, String email, String loginMethod) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
