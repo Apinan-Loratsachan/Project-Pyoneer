@@ -26,7 +26,7 @@ class _LoginScreenState extends State<LoginScreen>
   bool _obscureText = true;
   bool _isFieldEmpty = true;
   final TextEditingController _controller = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
+  TextEditingController _emailController = TextEditingController();
 
   String _appVersion = '';
   String _email = '';
@@ -161,6 +161,7 @@ class _LoginScreenState extends State<LoginScreen>
                     autofillHints: const [AutofillHints.email],
                     onChanged: (value) {
                       _email = value;
+                      _emailController.text = value;
                     },
                   ).loginAnimate(delay: const Duration(milliseconds: 500)),
                   const SizedBox(height: 16),
