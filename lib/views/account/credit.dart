@@ -41,7 +41,8 @@ class CreditScreen extends StatelessWidget {
                       child: Column(
                         children: [
                           TypeWriterText(
-                            text: "PY৹NEER developer team\n\nApinan Loratsachan\nKraisorn Kuiraksa\nNichakorn Wangwitthayothin\n\nCopyright © 2024 PY৹NEER,\nAll right reserved",
+                            text:
+                                "PY৹NEER developer team\n\nApinan Loratsachan\nKraisorn Kuiraksa\nNichakorn Wangwitthayothin\n\nAsst. Prof. Chanintorn Chalermsuk\n\nCopyright © 2024 PY৹NEER,\nAll right reserved",
                             textStyle: TextStyle(color: Colors.white),
                             typingSpeed: 50,
                             textAlign: TextAlign.center,

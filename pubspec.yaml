@@ -70,6 +70,7 @@ dependencies:
   icons_plus: ^5.0.0
   image_cropper: ^5.0.1
   http: ^1.2.1
+  visibility_detector: ^0.4.0+2
 
   flutter_cache_manager: any
   flutter_highlight: any

@@ -26,7 +26,7 @@ class _LoginScreenState extends State<LoginScreen>
   bool _obscureText = true;
   bool _isFieldEmpty = true;
   final TextEditingController _controller = TextEditingController();
-  TextEditingController _emailController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
 
   String _appVersion = '';
   String _email = '';

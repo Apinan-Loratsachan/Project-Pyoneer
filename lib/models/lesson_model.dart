@@ -1,11 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:pyoneer/components/lesson_component.dart';
+import 'package:pyoneer/models/lesson_video_model.dart';
 import 'package:pyoneer/services/user_data.dart';
-import 'package:pyoneer/utils/color.dart';
-import 'package:pyoneer/utils/duration.dart';
 import 'package:pyoneer/utils/log.dart';
 import 'package:pyoneer/utils/text.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
@@ -32,8 +31,6 @@ class _LessonScreenModelState extends State<LessonScreenModel>
     with TickerProviderStateMixin {
   final ScrollController _scrollController = ScrollController();
   YoutubePlayerController? _youtubePlayerController;
-  bool _isPlayerReady = false;
-  double? _lastScrollPosition;
   bool lessonReadStatusChecked = false;
 
   @override
@@ -164,197 +161,80 @@ class _LessonScreenModelState extends State<LessonScreenModel>
               duration: 1600.ms,
               curve: Curves.easeInOutCubic)
           .fade(duration: 1600.ms, curve: Curves.easeInOutCubic),
+      if (widget.youtubeVideoID != null)
+        Column(
+          children: [
+            PyoneerText.divider(MediaQuery.of(context).size.width * 0.1),
+            Column(
+              children: [
+                const SizedBox(
+                  height: 20,
+                ),
+                const Text(
+                  "วิดีโอประกอบการเรียน",
+                  style: TextStyle(
+                    fontSize: 20,
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => LessonVideoModel(
+                          index: widget.index,
+                          youtubeVideoID: widget.youtubeVideoID,
+                        ),
+                      ),
+                    );
+                  },
+                  child: const Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.play_arrow),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Text("ดูวิดีโอ"),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      const SizedBox(
+        height: 20,
+      ),
+      PyoneerText.divider(MediaQuery.of(context).size.width * 0.1),
+      const SizedBox(
+        height: 40,
+      ),
     ];
 
-    return widget.youtubeVideoID != null
-        ? YoutubePlayerBuilder(
-            onEnterFullScreen: () {
-              if (_scrollController.hasClients) {
-                _lastScrollPosition = _scrollController.offset;
-              }
-              SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive,
-                  overlays: [SystemUiOverlay.top, SystemUiOverlay.bottom]);
-            },
-            onExitFullScreen: () {
-              SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
-                  overlays: [SystemUiOverlay.top, SystemUiOverlay.bottom]);
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                if (_scrollController.hasClients &&
-                    _lastScrollPosition != null) {
-                  _scrollController.jumpTo(_lastScrollPosition!);
-                }
-              });
-            },
-            player: YoutubePlayer(
-              controller: _youtubePlayerController!,
-              topActions: [
-                Text(
-                  "${LessonComponent.lessonContent[widget.index].title} ${LessonComponent.lessonContent[widget.index].subTitle}",
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(color: Colors.white),
-                ),
-              ],
-              aspectRatio: MediaQuery.of(context).size.height /
-                  MediaQuery.of(context).size.width,
-              thumbnail: Container(
-                  width: MediaQuery.of(context).size.width,
-                  decoration: const BoxDecoration(color: Colors.white),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image.asset(
-                        "assets/icons/pyoneer_text.png",
-                        height: MediaQuery.of(context).size.width * 0.2,
-                      ),
-                      Text(LessonComponent.lessonContent[widget.index].subTitle)
-                    ],
-                  )),
-              onReady: () {
-                _isPlayerReady = true;
-                PyoneerLog.green(
-                    "Video Player โหลดเสร็จแล้ว (${_isPlayerReady.toString()})");
-              },
-              onEnded: (metaData) async {
-                _youtubePlayerController
-                    ?.load(_youtubePlayerController!.initialVideoId);
-                await Future.delayed(const Duration(milliseconds: 300));
-                _youtubePlayerController?.pause();
-              },
-              bottomActions: [
-                SizedBox(width: MediaQuery.of(context).size.width * 0.02),
-                CurrentPosition(
-                  controller: _youtubePlayerController,
-                ),
-                SizedBox(width: MediaQuery.of(context).size.width * 0.02),
-                ProgressBar(
-                  isExpanded: true,
-                  colors: const ProgressBarColors(
-                      playedColor: Colors.white,
-                      backgroundColor: Colors.white12,
-                      bufferedColor: Colors.white38,
-                      handleColor: AppColor.primarSnakeColor),
-                ),
-                SizedBox(width: MediaQuery.of(context).size.width * 0.02),
-                RemainingDuration(),
-                Text(
-                  " / ${PyoneeyDuration.durationFormatter(_youtubePlayerController!.metadata.duration.inMilliseconds)}",
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 12,
-                  ),
-                ),
-                FullScreenButton(),
-              ],
+    return Scaffold(
+      appBar: LessonComponent.lessonsAppbar(
+          LessonComponent.lessonContent[widget.index].title,
+          LessonComponent.lessonContent[widget.index].subTitle,
+          context),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: _scrollDown,
+      //   child: const Icon(Icons.arrow_downward),
+      // ),
+      body: Scrollbar(
+        child: SingleChildScrollView(
+          controller: _scrollController,
+          child: Center(
+            child: Column(
+              children: allWidgets,
             ),
-            builder: (context, player) => Scaffold(
-              appBar: LessonComponent.lessonsAppbar(
-                  LessonComponent.lessonContent[widget.index].title,
-                  LessonComponent.lessonContent[widget.index].subTitle,
-                  context),
-              // floatingActionButton: FloatingActionButton(
-              //   onPressed: _scrollDown,
-              //   child: const Icon(Icons.arrow_downward),
-              // ),
-              body: Scrollbar(
-                child: SingleChildScrollView(
-                  controller: _scrollController,
-                  child: Center(
-                    child: Column(
-                      children: [
-                        Column(
-                          children: allWidgets,
-                        ),
-                        if (widget.youtubeVideoID != null)
-                          Padding(
-                            padding: EdgeInsets.only(
-                              left: MediaQuery.of(context).size.width * 0.05,
-                              right: MediaQuery.of(context).size.width * 0.05,
-                            ),
-                            child: Column(
-                              children: [
-                                PyoneerText.divider(0),
-                                const SizedBox(height: 40),
-                                Text(
-                                  "วิดีโอประกอบการเรียน ${LessonComponent.lessonContent[widget.index].title}",
-                                  style: const TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                Text(
-                                  LessonComponent
-                                      .lessonContent[widget.index].subTitle,
-                                  style: const TextStyle(
-                                    fontSize: 16,
-                                  ),
-                                ),
-                                const SizedBox(height: 40),
-                                AspectRatio(
-                                  aspectRatio: 16 / 9,
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(10),
-                                    child: player,
-                                  ),
-                                ),
-                                const SizedBox(height: 40),
-                                const Text(
-                                  "VIDEO by",
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                const SizedBox(height: 20),
-                                Image.asset(
-                                  "assets/icons/pyoneer_long.png",
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.5,
-                                ),
-                                const Text(
-                                  "Copyright © 2024 PY৹NEER,\nAll right reserved",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                const SizedBox(height: 50),
-                              ],
-                            ),
-                          )
-                              .animate()
-                              .slide(
-                                begin: const Offset(0.1, 0),
-                                duration: 1500.ms,
-                              )
-                              .fade(
-                                duration: 1500.ms,
-                              ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          )
-        : Scaffold(
-            appBar: LessonComponent.lessonsAppbar(
-                LessonComponent.lessonContent[widget.index].title,
-                LessonComponent.lessonContent[widget.index].subTitle,
-                context),
-            // floatingActionButton: FloatingActionButton(
-            //   onPressed: _scrollDown,
-            //   child: const Icon(Icons.arrow_downward),
-            // ),
-            body: Scrollbar(
-              child: SingleChildScrollView(
-                controller: _scrollController,
-                child: Center(
-                  child: Column(
-                    children: allWidgets,
-                  ),
-                ),
-              ),
-            ),
-          );
+          ),
+        ),
+      ),
+    );
   }
 }

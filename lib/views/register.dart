@@ -194,9 +194,8 @@ class _RegisterScreenState extends State<RegisterScreen>
                         setState(() {
                           _email = value;
                           _emailError = null;
-                          _showSuggestions = value.contains('@');
 
-                          if (_showSuggestions) {
+                          if (value.contains('@')) {
                             final emailParts = value.split('@');
                             if (emailParts.length == 2) {
                               final typedDomain = emailParts[1].toLowerCase();
@@ -207,12 +206,21 @@ class _RegisterScreenState extends State<RegisterScreen>
                                   .toList();
                               if (matchingDomains.isNotEmpty) {
                                 _suggestedDomain = matchingDomains[0];
+                                _showSuggestions = true;
                               } else {
                                 _suggestedDomain = '';
+                                _showSuggestions = false;
                               }
+                            } else {
+                              _showSuggestions = false;
                             }
                           } else {
                             _suggestedDomain = '';
+                            _showSuggestions = false;
+                          }
+                          if (RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
+                              .hasMatch(value)) {
+                            _showSuggestions = false;
                           }
                         });
                       },
