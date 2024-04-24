@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:pyoneer/components/lesson_component.dart';
 import 'package:pyoneer/utils/color.dart';
 import 'package:pyoneer/utils/duration.dart';
@@ -156,7 +157,20 @@ class _LessonVideoModelState extends State<LessonVideoModel> {
         ),
         body: Column(
           children: [
-            AspectRatio(aspectRatio: 16 / 9, child: player),
+            AspectRatio(aspectRatio: 16 / 9, child: player).animate(
+              effects: [
+                const FadeEffect(
+                  curve: Curves.easeInOut,
+                  delay: Duration(milliseconds: 250),
+                  duration: Duration(milliseconds: 1000),
+                ),
+                const ScaleEffect(
+                  curve: Curves.easeInOut,
+                  delay: Duration(milliseconds: 250),
+                  duration: Duration(milliseconds: 1000),
+                ),
+              ],
+            ),
             const SizedBox(height: 20),
             const SizedBox(height: 20),
             const Text(
@@ -165,11 +179,27 @@ class _LessonVideoModelState extends State<LessonVideoModel> {
                 fontSize: 15,
                 fontWeight: FontWeight.bold,
               ),
+            ).animate(
+              effects: [
+                const ScaleEffect(
+                  curve: Curves.easeInOut,
+                  delay: Duration(milliseconds: 500),
+                  duration: Duration(milliseconds: 1000),
+                )
+              ],
             ),
             const SizedBox(height: 20),
             Image.asset(
               "assets/icons/pyoneer_long.png",
               width: MediaQuery.of(context).size.width * 0.5,
+            ).animate(
+              effects: [
+                const ScaleEffect(
+                  curve: Curves.easeInOut,
+                  delay: Duration(milliseconds: 1000),
+                  duration: Duration(milliseconds: 1000),
+                )
+              ],
             ),
             const Text(
               "Copyright © 2024 PY৹NEER,\nAll right reserved",
@@ -178,6 +208,14 @@ class _LessonVideoModelState extends State<LessonVideoModel> {
                 fontSize: 15,
                 fontWeight: FontWeight.bold,
               ),
+            ).animate(
+              effects: [
+                const ScaleEffect(
+                  curve: Curves.easeInOut,
+                  delay: Duration(milliseconds: 1500),
+                  duration: Duration(milliseconds: 1000),
+                )
+              ],
             ),
             const SizedBox(
               height: 100,
@@ -193,6 +231,14 @@ class _LessonVideoModelState extends State<LessonVideoModel> {
                 );
               },
               child: const Text("กลับหน้าหลัก"),
+            ).animate(
+              effects: [
+                const ScaleEffect(
+                  curve: Curves.easeInOut,
+                  delay: Duration(milliseconds: 2000),
+                  duration: Duration(milliseconds: 1000),
+                ),
+              ],
             ),
           ],
         ),
