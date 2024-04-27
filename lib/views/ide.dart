@@ -1,12 +1,9 @@
 import 'dart:convert';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_code_editor/flutter_code_editor.dart';
 import 'package:flutter_highlight/themes/monokai-sublime.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:highlight/languages/python.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:pyoneer/utils/color.dart';
@@ -219,16 +216,14 @@ class _IDEScreenState extends State<IDEScreen>
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      ElevatedButton(
-                        onPressed: () {
-                          Clipboard.setData(ClipboardData(text: _output));
-                          Fluttertoast.showToast(
-                            msg: "คัดลอกแล้ว",
-                            toastLength: Toast.LENGTH_SHORT,
-                            gravity: ToastGravity.BOTTOM,
-                          );
-                        },
-                        child: const Text("คัดลอก Output"),
+                      Tooltip(
+                        message: "คัดลอก Output",
+                        child: IconButton(
+                          icon: const Icon(Icons.copy),
+                          onPressed: () {
+                            Clipboard.setData(ClipboardData(text: _output));
+                          },
+                        ),
                       ),
                     ],
                   ),

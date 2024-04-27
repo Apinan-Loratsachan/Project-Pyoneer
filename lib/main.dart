@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +11,7 @@ import 'package:pyoneer/services/user_data.dart';
 import 'package:pyoneer/utils/color.dart';
 import 'package:pyoneer/views/home.dart';
 import 'package:pyoneer/views/login.dart';
+import 'package:pyoneer/views/offlineWarningScreen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -48,6 +52,28 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  late StreamSubscription<ConnectivityResult> _connectivitySubscription;
+  bool _isOffline = false;
+  @override
+  void initState() {
+    super.initState();
+    // StreamSubscription<List<ConnectivityResult>> _connectivitySubscription =
+    Connectivity()
+        .onConnectivityChanged
+        .listen((List<ConnectivityResult> results) {
+      setState(() {
+        _isOffline =
+            results.every((result) => result == ConnectivityResult.none);
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _connectivitySubscription.cancel();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -88,7 +114,9 @@ class _MyAppState extends State<MyApp> {
               systemNavigationBarIconBrightness:
                   isDarkMode ? Brightness.light : Brightness.dark,
             ),
-            child: widget.initialScreen,
+            child: _isOffline
+                ? const OfflineWarningScreen()
+                : widget.initialScreen,
           );
         },
       ),
