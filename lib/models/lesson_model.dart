@@ -206,7 +206,15 @@ class _LessonScreenModelState extends State<LessonScreenModel>
               ],
             ),
           ],
-        ),
+        )
+            .animate()
+            .slide(
+                begin: const Offset(0.1, 0),
+                delay: 500.ms,
+                duration: 1500.ms,
+                curve: Curves.easeInOutCubic)
+            .fade(
+                duration: 1500.ms, delay: 500.ms, curve: Curves.easeInOutCubic),
       const SizedBox(
         height: 20,
       ),
