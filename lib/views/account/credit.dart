@@ -42,7 +42,7 @@ class CreditScreen extends StatelessWidget {
                         children: [
                           TypeWriterText(
                             text:
-                                "PY৹NEER developer team\n\nApinan Loratsachan\nKraisorn Kuiraksa\nNichakorn Wangwitthayothin\n\nAsst. Prof. Chanintorn Chalermsuk\n\nCopyright © 2024 PY৹NEER,\nAll right reserved",
+                                "PY৹NEER\nDevelopment Team\n\nApinan Loratsachan\nKraisorn Kuiraksa\nNichakorn Wangwitthayothin\n\nAsst. Prof. Chanintorn Chalermsuk\n\nFaculty of Arts and Sciences,\nDepartment of Digital Technology\nand Innovation\nSoutheast Asia University\n\nCopyright © 2024 PY৹NEER,\nAll right reserved",
                             textStyle: TextStyle(color: Colors.white),
                             typingSpeed: 50,
                             textAlign: TextAlign.center,
