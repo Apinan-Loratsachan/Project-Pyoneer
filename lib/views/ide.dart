@@ -4,7 +4,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_code_editor/flutter_code_editor.dart';
 import 'package:flutter_highlight/themes/monokai-sublime.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:highlight/languages/python.dart';
+import 'package:icons_plus/icons_plus.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:pyoneer/utils/color.dart';
 import 'package:http/http.dart' as http;
@@ -149,107 +151,233 @@ class _IDEScreenState extends State<IDEScreen>
             SizedBox(
               width: 60,
               child: Center(
-                child: _isLoading
-                    ? LoadingAnimationWidget.beat(
-                        color: AppColor.primarSnakeColor,
-                        size: 30,
-                      )
-                    : IconButton(
-                        iconSize: 40,
-                        icon: const Icon(Icons.play_circle_fill),
-                        onPressed: _runCode,
-                      ),
+                child: IconButton(
+                  iconSize: 30,
+                  icon: const Icon(FontAwesome.circle_question_solid),
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text('เกี่ยวกับ IDE'),
+                              IconButton(
+                                  onPressed: () => Navigator.pop(context),
+                                  icon: const Icon(Icons.cancel))
+                            ],
+                          ),
+                          content: const SingleChildScrollView(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "ข้อจำกัด ",
+                                  style: TextStyle(fontSize: 20),
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Text(
+                                    "- ไม่สามารถรับ Input ได้\n- สามารถใช้งานได้แค่ Built-in Module ที่มีอยู่ใน Python\n- auto complete ต้องกด enter ในคีย์บอร์ดเท่านั้น\n\n สร้างโดย PY৹NEER")
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                ),
               ),
             ),
           ],
         ),
         body: Column(
           children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 8, right: 8, top: 8),
+              child: ClipRRect(
+                borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(8), topRight: Radius.circular(8)),
+                child: Container(
+                  color: AppColor.ideColor,
+                  // height: MediaQuery.of(context).size.height * 0.35,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 4),
+                          decoration: const BoxDecoration(
+                            border: Border(
+                              bottom: BorderSide(
+                                color: Color(0xFF1E1E1E),
+                                width: 2,
+                              ),
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Padding(
+                                padding: EdgeInsets.only(left: 8),
+                                child: Text(
+                                  'Editor',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                              Tooltip(
+                                message: 'Excute Code',
+                                child: _isLoading
+                                    ? Padding(
+                                        padding: const EdgeInsets.all(9.0),
+                                        child: LoadingAnimationWidget.beat(
+                                          color: AppColor.primarSnakeColor,
+                                          size: 30,
+                                        ),
+                                      )
+                                    : IconButton(
+                                        onPressed: () {
+                                          _runCode();
+                                        },
+                                        icon: const Icon(Bootstrap.play_circle),
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Theme.of(context)
+                                              .colorScheme
+                                              .background,
+                                          elevation: 0,
+                                        ),
+                                      ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
             Flexible(
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.only(left: 8, right: 8),
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: const BorderRadius.only(
+                      bottomLeft: Radius.circular(8),
+                      bottomRight: Radius.circular(8)),
                   child: Container(
                     color: AppColor.ideColor,
-                    height: MediaQuery.of(context).size.height * 0.35,
+                    height: MediaQuery.of(context).size.height * 0.30,
                     child: SingleChildScrollView(
-                      child: CodeTheme(
-                        data: CodeThemeData(styles: monokaiSublimeTheme),
-                        child: CodeField(
-                          focusNode: _focusNode,
-                          wrap: true,
-                          controller: controller,
-                          gutterStyle: const GutterStyle(
-                              textStyle: TextStyle(
-                            height: 1.55,
-                            fontSize: 10,
-                          )),
-                          textStyle: const TextStyle(fontSize: 16),
-                          onChanged: (codeString) => saveUserCode(codeString),
-                        ),
+                      child: Column(
+                        children: [
+                          CodeTheme(
+                            data: CodeThemeData(styles: monokaiSublimeTheme),
+                            child: CodeField(
+                              focusNode: _focusNode,
+                              wrap: true,
+                              controller: controller,
+                              gutterStyle: const GutterStyle(
+                                  textStyle: TextStyle(
+                                height: 1.55,
+                                fontSize: 10,
+                              )),
+                              textStyle: const TextStyle(fontSize: 16),
+                              onChanged: (codeString) =>
+                                  saveUserCode(codeString),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
                 ),
               ),
             ),
-            Stack(
-              children: [
-                const SizedBox(
-                  height: 50,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Output",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: 50,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Tooltip(
-                        message: "คัดลอก Output",
-                        child: IconButton(
-                          icon: const Icon(Icons.copy),
-                          onPressed: () {
-                            Clipboard.setData(ClipboardData(text: _output));
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                )
-              ],
-            ),
             Flexible(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8),
                   child: Container(
-                    height: MediaQuery.of(context).size.height * 0.25,
+                    height: MediaQuery.of(context).size.height * 0.33,
                     width: double.infinity,
                     color: AppColor.ideColor,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: SingleChildScrollView(
-                        child: Text(
-                          _output,
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: isError ? Colors.red : Colors.white,
+                    child: Column(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 4),
+                          decoration: const BoxDecoration(
+                            border: Border(
+                              bottom: BorderSide(
+                                color: Color(0xFF1E1E1E),
+                                width: 2,
+                              ),
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Padding(
+                                padding: EdgeInsets.only(left: 8),
+                                child: Text(
+                                  'Output',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                              Tooltip(
+                                message: 'คัดลอก Output ไปยัง Clipboard',
+                                child: IconButton(
+                                  onPressed: () {
+                                    Clipboard.setData(
+                                        ClipboardData(text: _output));
+                                    Fluttertoast.showToast(
+                                      msg: "คัดลอกแล้ว",
+                                      toastLength: Toast.LENGTH_SHORT,
+                                      gravity: ToastGravity.BOTTOM,
+                                    );
+                                  },
+                                  icon: const Icon(
+                                      Clarity.copy_to_clipboard_line),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Theme.of(context)
+                                        .colorScheme
+                                        .background,
+                                    elevation: 0,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                      ),
+                        Expanded(
+                          child: SingleChildScrollView(
+                            padding: const EdgeInsets.all(20),
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                _output,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: isError ? Colors.red : Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),

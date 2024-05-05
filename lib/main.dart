@@ -11,7 +11,7 @@ import 'package:pyoneer/services/user_data.dart';
 import 'package:pyoneer/utils/color.dart';
 import 'package:pyoneer/views/home.dart';
 import 'package:pyoneer/views/login.dart';
-import 'package:pyoneer/views/offlineWarningScreen.dart';
+import 'package:pyoneer/utils/offline_warning_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

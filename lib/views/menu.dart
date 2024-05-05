@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -6,6 +7,7 @@ import 'package:pyoneer/services/launch_url.dart';
 import 'package:pyoneer/utils/animation.dart';
 import 'package:pyoneer/utils/color.dart';
 import 'package:pyoneer/utils/hero.dart';
+import 'package:pyoneer/views/menu/challenge.dart';
 import 'package:pyoneer/views/menu/learning_hub.dart';
 import 'package:pyoneer/views/menu/news.dart';
 
@@ -16,10 +18,14 @@ class MenuScreen extends StatefulWidget {
   State<MenuScreen> createState() => _PrimaryScreenState();
 }
 
-class _PrimaryScreenState extends State<MenuScreen> {
+class _PrimaryScreenState extends State<MenuScreen>
+    with AutomaticKeepAliveClientMixin {
   final double listTileSpace = 15;
   Future<int>? newsItemCountFuture;
   Future<int>? learningItemCountFuture;
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   void initState() {
@@ -35,8 +41,31 @@ class _PrimaryScreenState extends State<MenuScreen> {
     });
   }
 
+  // void addExamQuestions() async {
+  //   final firestore = FirebaseFirestore.instance;
+
+  //   for (int i = 1; i <= 100; i++) {
+  //     String docId = i.toString().padLeft(4, '0');
+
+  //     await firestore.collection('challengeQuestion').doc(docId).set({
+  //       'choice': [
+  //         'question$i choice1',
+  //         'question$i choice2',
+  //         'question$i choice3',
+  //         'question$i choice4'
+  //       ],
+  //       'correctChoice': 'question$i choice1',
+  //       'imageUrl': '',
+  //       'question': 'question $i'
+  //     });
+  //   }
+
+  //   print('Added 100 exam questions to Firestore.');
+  // }
+
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       appBar: AppBar(
         title: const Row(
@@ -53,11 +82,10 @@ class _PrimaryScreenState extends State<MenuScreen> {
           onPlay: (controller) => controller.repeat(),
           effects: [
             const ShimmerEffect(
-              delay: Duration(milliseconds: 500),
-              duration: Duration(milliseconds: 1000),
-              color: Colors.blue,
-              angle: 180
-            ),
+                delay: Duration(milliseconds: 500),
+                duration: Duration(milliseconds: 1000),
+                color: Colors.blue,
+                angle: 180),
             const ShimmerEffect(
               delay: Duration(milliseconds: 800),
               duration: Duration(milliseconds: 1000),
@@ -94,7 +122,7 @@ class _PrimaryScreenState extends State<MenuScreen> {
                     //         // Handle error case
                     //         return const Text('0 รายการ');
                     //       }
-            
+
                     //       // Display the news count as a string in the trailing
                     //       return PyoneerHero.hero(
                     //         Text(
@@ -122,8 +150,7 @@ class _PrimaryScreenState extends State<MenuScreen> {
                     //   },
                     // ),
                     onTap: () {
-                      PyoneerAnimation.changeScreen(
-                              context, const NewsScreen())
+                      PyoneerAnimation.changeScreen(context, const NewsScreen())
                           .then((value) => refreshNewsItemCount());
                     },
                   ),
@@ -166,7 +193,7 @@ class _PrimaryScreenState extends State<MenuScreen> {
                     //         // Handle error case
                     //         return const Text('0 รายการ');
                     //       }
-            
+
                     //       // Display the news count as a string in the trailing
                     //       return PyoneerHero.hero(
                     //         Text(
@@ -202,8 +229,7 @@ class _PrimaryScreenState extends State<MenuScreen> {
                   SizedBox(height: listTileSpace),
                   ListTile(
                     leading: PyoneerHero.hero(
-                        Image.asset("assets/icons/unknow3.png"),
-                        "menu4-icon"),
+                        Image.asset("assets/icons/unknow3.png"), "menu4-icon"),
                     title: const Text(
                       "อะไรสักอย่าง 3",
                       style: TextStyle(
@@ -233,7 +259,10 @@ class _PrimaryScreenState extends State<MenuScreen> {
               child: Padding(
                 padding: const EdgeInsets.all(50),
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    PyoneerAnimation.changeScreen(
+                        context, const ChallengeScreen());
+                  },
                   style: ButtonStyle(
                     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                       RoundedRectangleBorder(
