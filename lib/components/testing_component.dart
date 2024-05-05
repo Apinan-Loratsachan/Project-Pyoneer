@@ -1,4 +1,7 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
+import 'package:photo_view/photo_view.dart';
 import 'package:pyoneer/utils/type_writer_text.dart';
 import 'package:pyoneer/views/testings/testing1.dart';
 import 'package:pyoneer/views/testings/testing2.dart';
@@ -468,6 +471,66 @@ class TestingComponent {
                 style: TextStyle(color: Colors.red)),
           ),
         ],
+      ),
+    );
+  }
+
+  static Widget challengeImage(BuildContext context, String imagePath) {
+    return GestureDetector(
+      onTap: () {
+        showDialog(
+          context: context,
+          barrierColor: Colors.transparent,
+          builder: (BuildContext context) {
+            var screenSize = MediaQuery.of(context).size;
+
+            var width = screenSize.width;
+            var height = screenSize.height;
+
+            return BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+              child: Dialog(
+                backgroundColor: Colors.transparent,
+                elevation: 0,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: SizedBox(
+                    width: width,
+                    height: height,
+                    child: PhotoView(
+                      imageProvider: NetworkImage(
+                        imagePath,
+                      ),
+                      minScale: PhotoViewComputedScale.contained * 1,
+                      maxScale: PhotoViewComputedScale.covered * 4.0,
+                      initialScale: PhotoViewComputedScale.contained,
+                      backgroundDecoration: const BoxDecoration(
+                        color: Colors.transparent,
+                      ),
+                      basePosition: Alignment.center,
+                    ),
+                  ),
+                ),
+              ),
+            );
+          },
+        );
+      },
+      child: Image.network(
+        imagePath,
+        errorBuilder:
+            (BuildContext context, Object exception, StackTrace? stackTrace) {
+          return const Text(
+            'ไม่พบรูปภาพ',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+              decoration: TextDecoration.lineThrough,
+            ),
+          );
+        },
       ),
     );
   }

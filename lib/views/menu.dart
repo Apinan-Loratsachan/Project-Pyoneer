@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -7,7 +6,7 @@ import 'package:pyoneer/services/launch_url.dart';
 import 'package:pyoneer/utils/animation.dart';
 import 'package:pyoneer/utils/color.dart';
 import 'package:pyoneer/utils/hero.dart';
-import 'package:pyoneer/views/menu/challenge.dart';
+import 'package:pyoneer/views/menu/challenge/challenge_guide.dart';
 import 'package:pyoneer/views/menu/learning_hub.dart';
 import 'package:pyoneer/views/menu/news.dart';
 
@@ -261,7 +260,7 @@ class _PrimaryScreenState extends State<MenuScreen>
                 child: ElevatedButton(
                   onPressed: () {
                     PyoneerAnimation.changeScreen(
-                        context, const ChallengeScreen());
+                        context, const ChallengeGuideScreen());
                   },
                   style: ButtonStyle(
                     shape: MaterialStateProperty.all<RoundedRectangleBorder>(

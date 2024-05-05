@@ -287,6 +287,7 @@ class _TestingScreenModelState extends State<TestingScreenModel> {
       ),
     );
 
+    // ignore: deprecated_member_use
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
@@ -385,7 +386,7 @@ class _TestingScreenModelState extends State<TestingScreenModel> {
                                       !_isTestSubmitted) ||
                                   selectedChoices[content.proposition] !=
                                       choice ||
-                                  _isTestSubmitted // This line ensures the icon is not shown after submission
+                                  _isTestSubmitted // ensures the icon is not shown after submission
                               ? null
                               : Icon(
                                   choice == content.correctChoice
