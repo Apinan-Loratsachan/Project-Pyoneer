@@ -81,7 +81,7 @@ class _ChallengeScreenState extends State<ChallengeScreen> {
 
     await challengeScoreRef.set({
       'UID': uid,
-      'displayName': userName,
+      'Name': userName,
       'photoUrl': image,
       'timeSpent': time,
       'timeStamp': timestamp,
@@ -111,7 +111,7 @@ class _ChallengeScreenState extends State<ChallengeScreen> {
   void initState() {
     super.initState();
     _timer = Timer(
-      const Duration(seconds: 1),
+      const Duration(milliseconds: 1500),
       () {
         _stopWatchTimer.onStartTimer();
       },
@@ -160,93 +160,118 @@ class _ChallengeScreenState extends State<ChallengeScreen> {
     });
   }
 
+  Future<bool> _confirmExit() async {
+    return await showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('ยืนยันการออก'),
+            content: const Text(
+                'คุณแน่ใจหรือไม่ว่าต้องการออก? ระบบจะไม่บันทึกคะแนนของคุณ และเวลายังคงนับต่อไป'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: const Text('ยกเลิก'),
+              ),
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(true),
+                child: const Text('ออก'),
+              ),
+            ],
+          ),
+        ) ??
+        false;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        toolbarHeight: 80,
-        centerTitle: true,
-        title: Column(
-          children: [
-            const Text("Challenge"),
-            const SizedBox(height: 10),
-            StreamBuilder<int>(
-              stream: _stopWatchTimer.rawTime,
-              initialData: 0,
-              builder: (context, snap) {
-                final value = snap.data;
-                final displayTime = StopWatchTimer.getDisplayTime(value!,
-                    hours: true, milliSecond: true);
-                return Text(
-                  displayTime,
-                  style: const TextStyle(color: AppColor.primarSnakeColor),
-                );
-              },
-            ),
-          ],
+    return WillPopScope(
+      onWillPop: _confirmExit,
+      child: Scaffold(
+        appBar: AppBar(
+          toolbarHeight: 80,
+          centerTitle: true,
+          title: Column(
+            children: [
+              const Text("Challenge"),
+              const SizedBox(height: 10),
+              StreamBuilder<int>(
+                stream: _stopWatchTimer.rawTime,
+                initialData: 0,
+                builder: (context, snap) {
+                  final value = snap.data;
+                  final displayTime = StopWatchTimer.getDisplayTime(value!,
+                      hours: true, milliSecond: true);
+                  return Text(
+                    displayTime,
+                    style: const TextStyle(color: AppColor.primarSnakeColor),
+                  );
+                },
+              ),
+            ],
+          ),
         ),
-      ),
-      body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    ...List.generate(_challengeQuestions.length, (i) {
-                      var question = _challengeQuestions[i];
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "${i + 1}. ${question.question}",
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20,
+        body: _isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ...List.generate(_challengeQuestions.length, (i) {
+                        var question = _challengeQuestions[i];
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "${i + 1}. ${question.question}",
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                              ),
                             ),
+                            question.imageUrl.isNotEmpty
+                                ? ClipRRect(
+                                    borderRadius: BorderRadius.circular(8),
+                                    child: TestingComponent.challengeImage(
+                                        context, question.imageUrl),
+                                  )
+                                : const SizedBox.shrink(),
+                            for (var choice in question.choices)
+                              RadioListTile<String?>(
+                                title: Text(choice),
+                                value: choice,
+                                groupValue: selectedChoices[question.question],
+                                onChanged: (value) {
+                                  setState(() {
+                                    selectedChoices[question.question] = value;
+                                    _checkAllQuestionsAnswered();
+                                  });
+                                },
+                              ),
+                            const SizedBox(height: 20),
+                          ],
+                        );
+                      }),
+                      ElevatedButton(
+                        style: const ButtonStyle(
+                          minimumSize: MaterialStatePropertyAll(
+                            Size(double.infinity, 50),
                           ),
-                          question.imageUrl.isNotEmpty
-                              ? ClipRRect(
-                                  borderRadius: BorderRadius.circular(8),
-                                  child: TestingComponent.challengeImage(
-                                      context, question.imageUrl),
-                                )
-                              : const SizedBox.shrink(),
-                          for (var choice in question.choices)
-                            RadioListTile<String?>(
-                              title: Text(choice),
-                              value: choice,
-                              groupValue: selectedChoices[question.question],
-                              onChanged: (value) {
-                                setState(() {
-                                  selectedChoices[question.question] = value;
-                                  _checkAllQuestionsAnswered();
-                                });
-                              },
-                            ),
-                          const SizedBox(height: 20),
-                        ],
-                      );
-                    }),
-                    ElevatedButton(
-                      style: const ButtonStyle(
-                        minimumSize: MaterialStatePropertyAll(
-                          Size(double.infinity, 50),
                         ),
+                        onPressed: _allQuestionsAnswered && !_isSubmitted
+                            ? _submitAnswers
+                            : null,
+                        child: Text(_allQuestionsAnswered
+                            ? "ส่งคำตอบ"
+                            : "ยังตอบคำถามไม่ครบ"),
                       ),
-                      onPressed: _allQuestionsAnswered && !_isSubmitted
-                          ? _submitAnswers
-                          : null,
-                      child: Text(_allQuestionsAnswered
-                          ? "ส่งคำตอบ"
-                          : "ยังตอบคำถามไม่ครบ"),
-                    ),
-                    const SizedBox(height: 50)
-                  ],
+                      const SizedBox(height: 50)
+                    ],
+                  ),
                 ),
               ),
-            ),
+      ),
     );
   }
 }

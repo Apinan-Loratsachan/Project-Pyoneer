@@ -7,6 +7,7 @@ import 'package:pyoneer/utils/animation.dart';
 import 'package:pyoneer/utils/color.dart';
 import 'package:pyoneer/utils/hero.dart';
 import 'package:pyoneer/views/menu/challenge/challenge_guide.dart';
+import 'package:pyoneer/views/menu/challenge/leaderboard_screen.dart';
 import 'package:pyoneer/views/menu/learning_hub.dart';
 import 'package:pyoneer/views/menu/news.dart';
 
@@ -228,15 +229,21 @@ class _PrimaryScreenState extends State<MenuScreen>
                   SizedBox(height: listTileSpace),
                   ListTile(
                     leading: PyoneerHero.hero(
-                        Image.asset("assets/icons/unknow3.png"), "menu4-icon"),
+                        Image.asset("assets/icons/challenge_icon.png"),
+                        "challenge-icon"),
                     title: const Text(
-                      "อะไรสักอย่าง 3",
+                      "Leaderboard",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    trailing: const Text("ไม่รู้ ไม่รู้ ไม่รู้"),
-                    onTap: () {},
+                    subtitle: const Text("อันดับผู้เล่น Challenge",
+                        style: TextStyle(fontSize: 12)),
+                    trailing: const Icon(Icons.arrow_forward_ios),
+                    onTap: () {
+                      PyoneerAnimation.changeScreen(
+                          context, const LeaderboardScreen());
+                    },
                   ),
                   SizedBox(height: listTileSpace),
                 ],
