@@ -298,7 +298,7 @@ class _ContentScreenState extends State<ContentScreen>
                   // isLast: true,
                   //isPast: true,
                   beforeLineStyle:
-                      const LineStyle(color: AppColor.primarSnakeColor),
+                      const LineStyle(color: AppColor.secondarySnakeColor),
                   indicatorStyle: const IndicatorStyle(
                     width: 40,
                     color: AppColor.primarSnakeColor,
@@ -341,6 +341,8 @@ class _ContentScreenState extends State<ContentScreen>
                         isLast: i == LessonComponent.lessonContent.length - 1
                             ? true
                             : false,
+                        beforeLineStyle:
+                            const LineStyle(color: AppColor.secondarySnakeColor),
                         indicatorStyle: const IndicatorStyle(
                           width: 40,
                           color: AppColor.primarSnakeColor,
@@ -658,7 +660,9 @@ class _ContentScreenState extends State<ContentScreen>
                               ).animate(animation1),
                               child: SlideTransition(
                                 position: Tween<Offset>(
-                                  begin: type == "Lesson" ? const Offset(1.0 , 0.0) : const Offset(0.0 , 1.0),
+                                  begin: type == "Lesson"
+                                      ? const Offset(1.0, 0.0)
+                                      : const Offset(0.0, 1.0),
                                   end: Offset.zero,
                                 ).animate(animation1),
                                 child: child,
