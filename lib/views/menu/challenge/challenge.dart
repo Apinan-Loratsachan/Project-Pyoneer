@@ -110,10 +110,8 @@ class _ChallengeScreenState extends State<ChallengeScreen> {
         displayDuration: const Duration(seconds: 2),
       );
 
-      Future.delayed(const Duration(milliseconds: 1500), () {
-        Navigator.of(context).pop();
-        Navigator.of(context).pop();
-      });
+      Navigator.of(context).pop();
+      Navigator.of(context).pop();
     } else {
       setState(() {
         _isSubmitted = true;
@@ -127,11 +125,8 @@ class _ChallengeScreenState extends State<ChallengeScreen> {
         ),
         displayDuration: const Duration(seconds: 2),
       );
-
-      Future.delayed(const Duration(milliseconds: 1500), () {
-        Navigator.of(context).pop();
-        Navigator.of(context).pop();
-      });
+      Navigator.of(context).pop();
+      Navigator.of(context).pop();
     }
   }
 
