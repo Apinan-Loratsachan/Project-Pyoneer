@@ -79,32 +79,60 @@ class _ChallengeScreenState extends State<ChallengeScreen> {
     final challengeScoreRef =
         FirebaseFirestore.instance.collection('challengeScore').doc(email);
 
-    await challengeScoreRef.set({
-      'UID': uid,
-      'Name': userName,
-      'photoUrl': image,
-      'timeSpent': time,
-      'timeStamp': timestamp,
-      'score': _score,
-    });
+    final currentScoreSnapshot = await challengeScoreRef.get();
+    final currentScore =
+        currentScoreSnapshot.exists ? currentScoreSnapshot.data()!['score'] : 0;
+    final currentTime = currentScoreSnapshot.exists
+        ? currentScoreSnapshot.data()!['timeSpent']
+        : double.infinity;
 
-    setState(() {
-      _isSubmitted = true;
-    });
+    if (_score > currentScore ||
+        (_score == currentScore && time < currentTime)) {
+      await challengeScoreRef.set({
+        'UID': uid,
+        'Name': userName,
+        'photoUrl': image,
+        'timeSpent': time,
+        'timeStamp': timestamp,
+        'score': _score,
+      });
 
-    showTopSnackBar(
-      Overlay.of(context),
-      CustomSnackBar.success(
-        message: 'คุณทำได้ $_score คะแนน',
-        backgroundColor: Colors.green,
-      ),
-      displayDuration: const Duration(seconds: 2),
-    );
+      setState(() {
+        _isSubmitted = true;
+      });
 
-    Future.delayed(const Duration(seconds: 2), () {
-      Navigator.of(context).pop();
-      Navigator.of(context).pop();
-    });
+      showTopSnackBar(
+        Overlay.of(context),
+        CustomSnackBar.success(
+          message: 'คุณทำได้ $_score คะแนน',
+          backgroundColor: Colors.green,
+        ),
+        displayDuration: const Duration(seconds: 2),
+      );
+
+      Future.delayed(const Duration(milliseconds: 1500), () {
+        Navigator.of(context).pop();
+        Navigator.of(context).pop();
+      });
+    } else {
+      setState(() {
+        _isSubmitted = true;
+      });
+
+      showTopSnackBar(
+        Overlay.of(context),
+        CustomSnackBar.success(
+          message: 'คุณทำได้ $_score คะแนน',
+          backgroundColor: Colors.green,
+        ),
+        displayDuration: const Duration(seconds: 2),
+      );
+
+      Future.delayed(const Duration(milliseconds: 1500), () {
+        Navigator.of(context).pop();
+        Navigator.of(context).pop();
+      });
+    }
   }
 
   @override
