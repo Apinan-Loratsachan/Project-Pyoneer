@@ -133,9 +133,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
               return const Center(child: Text('เกิดข้อผิดพลาดในการโหลดข้อมูล'));
             }
             if (!snapshot.hasData || !snapshot.data!.exists) {
-              return const ListTile(
-                title: Text('คุณยังไม่ได้เข้าร่วม Challenge'),
-              );
+              return const SizedBox.shrink();
             }
 
             final doc = snapshot.data!;
