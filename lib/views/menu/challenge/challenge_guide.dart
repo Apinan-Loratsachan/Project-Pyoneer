@@ -54,11 +54,11 @@ class _ChallengeGuideScreenState extends State<ChallengeGuideScreen> {
                 ),
                 SizedBox(height: 30),
                 Text(
-                  "เกณฑ์การตัดสินผลคะแนน",
+                  "เกณฑ์การจัดอันดับ",
                   style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                 ),
                 Text(
-                  "โดยจะแสดงผลอันดับตามคะแนนหากคะแนนเท่ากันจะใช้เวลาในการตัดสิน",
+                  "จะจัดอันดับตามคะแนนหากคะแนนเท่ากันจะใช้เวลาในการตัดสิน",
                   style: TextStyle(fontSize: 18),
                 ),
                 SizedBox(height: 30),
@@ -76,10 +76,10 @@ class _ChallengeGuideScreenState extends State<ChallengeGuideScreen> {
                   style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                 ),
                 Text(
-                  "แบบทดสอบสามารถทำได้ตลอดโดยในการทำแต่ละครั้ง จะมีการสุ่มคำถามใหม่ทั้งหมด โดยจะบันทึกคะแนนที่สูงที่สุดของคุณ",
+                  "แบบทดสอบสามารถทำได้ตลอด โดยในการทำแต่ละครั้งจะมีการสุ่มคำถามใหม่ทั้งหมด ระบบจะบันทึกคะแนนที่สูงที่สุดของคุณ",
                   style: TextStyle(fontSize: 18),
                 ),
-                SizedBox(height: 50),
+                SizedBox(height: 20),
               ],
             ),
           ),

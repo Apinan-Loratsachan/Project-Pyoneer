@@ -84,11 +84,11 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
           }
 
           if (snapshot.hasError) {
-            return const Center(child: Text('Has error in loading data'));
+            return const Center(child: Text('เกิดข้อผิดพลาดในการโหลดข้อมูล'));
           }
 
           if (snapshot.data == null || snapshot.data!.docs.isEmpty) {
-            return const Center(child: Text('No data available'));
+            return const Center(child: Text('ยังไม่มีอันดับ'));
           }
 
           final data = snapshot.data!.docs;
@@ -126,15 +126,15 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const ListTile(
-                title: Text('Loading...'),
+                title: Text('กำลังประมวลผล'),
               );
             }
-
-            if (snapshot.hasError ||
-                !snapshot.hasData ||
-                !snapshot.data!.exists) {
+            if (snapshot.hasError) {
+              return const Center(child: Text('เกิดข้อผิดพลาดในการโหลดข้อมูล'));
+            }
+            if (!snapshot.hasData || !snapshot.data!.exists) {
               return const ListTile(
-                title: Text('No data available'),
+                title: Text('คุณยังไม่ได้เข้าร่วม Challenge'),
               );
             }
 

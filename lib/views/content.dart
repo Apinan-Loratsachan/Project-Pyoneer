@@ -675,10 +675,13 @@ class _ContentScreenState extends State<ContentScreen>
                     overflow: TextOverflow.ellipsis,
                     color: textColor),
               ),
-              subtitle: Text(
-                subtitle,
-                style: TextStyle(
-                    overflow: TextOverflow.ellipsis, color: textColor),
+              subtitle: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Text(
+                  subtitle,
+                  style: TextStyle(
+                      overflow: TextOverflow.ellipsis, color: textColor),
+                ),
               ),
               trailing: type == 'Lesson'
                   ? StreamBuilder<bool>(

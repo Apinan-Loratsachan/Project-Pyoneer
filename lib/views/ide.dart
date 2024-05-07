@@ -307,7 +307,7 @@ class _IDEScreenState extends State<IDEScreen>
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8),
                   child: Container(
-                    height: MediaQuery.of(context).size.height * 0.33,
+                    height: MediaQuery.of(context).size.height * 0.27,
                     width: double.infinity,
                     color: AppColor.ideColor,
                     child: Column(
