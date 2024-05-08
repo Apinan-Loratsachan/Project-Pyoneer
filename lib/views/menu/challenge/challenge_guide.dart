@@ -49,7 +49,7 @@ class _ChallengeGuideScreenState extends State<ChallengeGuideScreen> {
                   style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                 ),
                 Text(
-                  "Challenge เป็นการทดสอบความรู้และแข่งขันกับผู้ใช้คนอื่น จะเป็นการสุ่มคำถามจำนวน 50 ข้อและมีการจับเวลา",
+                  "Challenge เป็นการทดสอบความรู้และแข่งขันกับผู้ใช้คนอื่น จะเป็นการสุ่มคำถามจำนวน 30 ข้อและมีการจับเวลา",
                   style: TextStyle(fontSize: 18),
                 ),
                 SizedBox(height: 30),
