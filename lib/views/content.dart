@@ -341,8 +341,8 @@ class _ContentScreenState extends State<ContentScreen>
                         isLast: i == LessonComponent.lessonContent.length - 1
                             ? true
                             : false,
-                        beforeLineStyle:
-                            const LineStyle(color: AppColor.secondarySnakeColor),
+                        beforeLineStyle: const LineStyle(
+                            color: AppColor.secondarySnakeColor),
                         indicatorStyle: const IndicatorStyle(
                           width: 40,
                           color: AppColor.primarSnakeColor,
