@@ -522,14 +522,7 @@ class TestingComponent {
         imagePath,
         errorBuilder:
             (BuildContext context, Object exception, StackTrace? stackTrace) {
-          return const Text(
-            'ไม่พบรูปภาพ',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
-              decoration: TextDecoration.lineThrough,
-            ),
-          );
+          return const SizedBox.shrink();
         },
       ),
     );
