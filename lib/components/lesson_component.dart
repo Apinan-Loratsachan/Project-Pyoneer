@@ -36,7 +36,7 @@ class LessonComponent {
     LessonContent(
         imageSrc: "assets/images/lesson1/cover.png",
         title: "บทเรียนที่ 1",
-        subTitle: "คุณลักษณะของภาษา Python",
+        subTitle: "Python Interpreter and Tool",
         heroTag: "lesson-1-cover",
         targetScreen: const Lesson1Screen()),
     LessonContent(
@@ -60,7 +60,7 @@ class LessonComponent {
     LessonContent(
         imageSrc: "assets/images/lesson5/cover.png",
         title: "บทเรียนที่ 5",
-        subTitle: "Loops",
+        subTitle: "Loops​",
         heroTag: "lesson-5-cover",
         targetScreen: const Lesson5Screen()),
   ];

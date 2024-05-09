@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pyoneer/components/lesson_component.dart';
 import 'package:pyoneer/utils/text.dart';
 import 'package:pyoneer/models/lesson_model.dart';
 
@@ -58,7 +59,93 @@ class _Lesson2ScreenState extends State<Lesson2Screen> {
         PyoneerText.brakeLine(5),
         PyoneerText.contentText("หมายความว่า ตัวแปร a b c มีค่าเป็น 1 2 และ john ตามลำดับ"),
         PyoneerText.brakeLine(),
-        PyoneerText.contentText("********* ใส่รูปเพิ่ม ********************"),
+        Row(
+          children: [
+            PyoneerText.contentText("", tabSpace: true),
+            PyoneerText.contentText("ตัวอย่างที่ 1", textDecoration: TextDecoration.underline),
+          ],
+        ),
+        LessonComponent.lessonImage( //ใส่รูป
+          context,
+          "assets/images/lesson2/lessonImage2-1.png",
+        ),
+        PyoneerText.brakeLine(),
+        Row(
+          children: [
+            PyoneerText.contentText("", tabSpace: true),
+            PyoneerText.contentText("ตัวอย่างที่ 2", textDecoration: TextDecoration.underline),
+          ],
+        ),
+        LessonComponent.lessonImage( //ใส่รูป
+          context,
+          "assets/images/lesson2/lessonImage2-2.png",
+        ),
+        PyoneerText.brakeLine(),
+        Row(
+          children: [
+            PyoneerText.contentText("", tabSpace: true),
+            PyoneerText.contentText("ตัวอย่างที่ 3", textDecoration: TextDecoration.underline),
+          ],
+        ),
+        LessonComponent.lessonImage( //ใส่รูป
+          context,
+          "assets/images/lesson2/lessonImage2-3.png",
+        ),
+        PyoneerText.brakeLine(),
+        Row(
+          children: [
+            PyoneerText.contentText("", tabSpace: true),
+            PyoneerText.contentText("ตัวอย่างที่ 4", textDecoration: TextDecoration.underline),
+          ],
+        ),
+        LessonComponent.lessonImage( //ใส่รูป
+          context,
+          "assets/images/lesson2/lessonImage2-4.png",
+        ),
+        PyoneerText.brakeLine(),
+        Row(
+          children: [
+            PyoneerText.contentText("", tabSpace: true),
+            PyoneerText.contentText("ตัวอย่างที่ 5", textDecoration: TextDecoration.underline),
+          ],
+        ),
+        LessonComponent.lessonImage( //ใส่รูป
+          context,
+          "assets/images/lesson2/lessonImage2-5.png",
+        ),
+        PyoneerText.brakeLine(),
+        Row(
+          children: [
+            PyoneerText.contentText("", tabSpace: true),
+            PyoneerText.contentText("ตัวอย่างที่ 6", textDecoration: TextDecoration.underline),
+          ],
+        ),
+        LessonComponent.lessonImage( //ใส่รูป
+          context,
+          "assets/images/lesson2/lessonImage2-6.png",
+        ),
+        PyoneerText.brakeLine(),
+        Row(
+          children: [
+            PyoneerText.contentText("", tabSpace: true),
+            PyoneerText.contentText("ตัวอย่างที่ 7", textDecoration: TextDecoration.underline),
+          ],
+        ),
+        LessonComponent.lessonImage( //ใส่รูป
+          context,
+          "assets/images/lesson2/lessonImage2-7.png",
+        ),
+        PyoneerText.brakeLine(),
+        Row(
+          children: [
+            PyoneerText.contentText("", tabSpace: true),
+            PyoneerText.contentText("ตัวอย่างที่ 8", textDecoration: TextDecoration.underline),
+          ],
+        ),
+        LessonComponent.lessonImage( //ใส่รูป
+          context,
+          "assets/images/lesson2/lessonImage2-8.png",
+        ),
         PyoneerText.brakeLine(),
         PyoneerText.divider(50),
         PyoneerText.brakeLine(),
@@ -83,9 +170,15 @@ class _Lesson2ScreenState extends State<Lesson2Screen> {
         PyoneerText.contentText("Type Conversion \n(ประเภทของการแปลงชนิดข้อมูล)",fontWeight: FontWeight.bold, fontSize: 20),
         PyoneerText.brakeLine(10),
         PyoneerText.contentText("1.  Implicit Type Conversion​ เป็นการแปลงชนิดข้อมูลหนึ่งไปเป็นอีกชนิดข้อมูลหนึ่งโดยอัตโนมัติ โดยที่ไม่ต้องทำอะไร​"),
-        PyoneerText.contentText("********* ใส่รูปเพิ่ม ********************"),
+        LessonComponent.lessonImage( //ใส่รูป
+          context,
+          "assets/images/lesson2/lessonImage2-9.png",
+        ),
         PyoneerText.contentText("2.   Explicit Type Conversion​เป็นการแปลงชนิดข้อมูลโดยการใช้คำสั่งต่างๆ ในการแปลงข้อมูล เช่น int(), float(), str()​​"),
-        PyoneerText.contentText("********* ใส่รูปเพิ่ม ********************"),
+        LessonComponent.lessonImage( //ใส่รูป
+          context,
+          "assets/images/lesson2/lessonImage2-10.png",
+        ),
         PyoneerText.brakeLine(),
         PyoneerText.divider(50),
         PyoneerText.brakeLine(),
@@ -93,16 +186,25 @@ class _Lesson2ScreenState extends State<Lesson2Screen> {
         PyoneerText.brakeLine(10),
         PyoneerText.contentText("การรับข้อมูลใดๆ ใน Python จากผู้ใช้งาน User จะใช้ฟังก์ชัน input( [prompt] ) ​โดย prompt คือข้อความที่แสดงเพื่อสื่อความหมายบอกผู้ใช้ว่าต้องป้อนอะไร​", tabSpace: true),
         PyoneerText.contentText("ข้อมูลที่ป้อนจะถือเป็นข้อความ string ​กรณีที่ต้องการนำข้อมูลที่ป้อนไปใช้ยังส่วนต่างๆ ในโค้ด ควรมีตัวแปรมาเก็บสิ่งที่ป้อน​กรณีต้องการนำข้อมูลที่ป้อนไปคำนวณจะต้องทำการแปลงชนิดข้อมูล (Type casting) เป็นตัวเลขเสียก่อน​", tabSpace: true),
-        PyoneerText.contentText("********* ใส่รูปเพิ่ม ********************"),
+        LessonComponent.lessonImage( //ใส่รูป
+          context,
+          "assets/images/lesson2/lessonImage2-11.png",
+        ),
         PyoneerText.brakeLine(10),
         PyoneerText.contentText("*** มีการแปลงชนิดข้อมูลตอนนำไปใช้งาน", tabSpace: true),
         PyoneerText.brakeLine(10),
-        PyoneerText.contentText("********* ใส่รูปเพิ่ม ********************"),
+        LessonComponent.lessonImage( //ใส่รูป
+          context,
+          "assets/images/lesson2/lessonImage2-12.png",
+        ),
         PyoneerText.brakeLine(10),
         PyoneerText.contentText("*** มีการแปลงชนิดข้อมูลตอนรับค่าข้อมูลจากผู้ใช้", tabSpace: true),
         PyoneerText.brakeLine(10),
         PyoneerText.contentText("การรับข้อมูลหลายข้อมูลโดยใช้ฟังก์ชัน input( ) เดียวด้วยเมธอด split( ) โดยต้องเว้นวรรคแต่ละข้อมูลที่ป้อน", tabSpace: true),
-        PyoneerText.contentText("********* ใส่รูปเพิ่ม ********************"),
+        LessonComponent.lessonImage( //ใส่รูป
+          context,
+          "assets/images/lesson2/lessonImage2-13.png",
+        ),
         
         
         

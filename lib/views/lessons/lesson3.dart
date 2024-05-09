@@ -91,7 +91,7 @@ class _Lesson3ScreenState extends State<Lesson3Screen> {
         PyoneerText.contentText("          ..", tabSpace: true, fontWeight: FontWeight.bold),
         LessonComponent.lessonImage(
           context,
-          "assets/images/lesson3/lessonImage3-3.png",
+          "assets/images/lesson3/lessonImage3-1.png",
         ),
         PyoneerText.brakeLine(10),
         PyoneerText.contentText("1.2) Function – Have Parameters/No Return​​"),
@@ -104,7 +104,7 @@ class _Lesson3ScreenState extends State<Lesson3Screen> {
         PyoneerText.contentText("          ..", tabSpace: true, fontWeight: FontWeight.bold),
         LessonComponent.lessonImage(
           context,
-          "assets/images/lesson3/lessonImage3-3.png",
+          "assets/images/lesson3/lessonImage3-2.png",
         ),
         PyoneerText.brakeLine(10),
         PyoneerText.contentText("2.1) Function – No Parameter/Have Returns​"),
@@ -132,14 +132,14 @@ class _Lesson3ScreenState extends State<Lesson3Screen> {
         PyoneerText.contentText("          return value(s)", tabSpace: true, fontWeight: FontWeight.bold),
         LessonComponent.lessonImage(
           context,
-          "assets/images/lesson3/lessonImage3-3.png",
+          "assets/images/lesson3/lessonImage3-4.png",
         ),
         PyoneerText.brakeLine(20),
         PyoneerText.contentText("ตัวอย่างการตั้งค่า Default Arguments", textDecoration: TextDecoration.underline,boxAlign: Alignment.center),
         PyoneerText.brakeLine(10),
         LessonComponent.lessonImage(
           context,
-          "assets/images/lesson3/lessonImage3-3.png",
+          "assets/images/lesson3/lessonImage3-5.png",
         ),
         PyoneerText.contentText("ในที่นี้ 0 คือ default argument กรณีที่ไม่มีการส่งค่า argument มาให้พารามิเตอร์กับ your_age ค่าของพารามิเตอร์ your_age จะมีค่าเป็น 0​", tabSpace: true),
         PyoneerText.brakeLine(20),
@@ -147,7 +147,7 @@ class _Lesson3ScreenState extends State<Lesson3Screen> {
         PyoneerText.brakeLine(10),
         LessonComponent.lessonImage(
           context,
-          "assets/images/lesson3/lessonImage3-3.png",
+          "assets/images/lesson3/lessonImage3-6.png",
         ),
         PyoneerText.contentText("คำสั่ง return ที่ไม่มี values ต่อท้าย เมื่อทำงานจะ เปรียบเสมือนเป็นการบอกว่าสิ้นสุดการทำงานของฟังก์ชันนั้นๆ โดยจะไม่ทำงานคำสั่งที่เหลือใดๆ​", tabSpace: true),
         

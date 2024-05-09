@@ -35,73 +35,149 @@ class _Lesson4ScreenState extends State<Lesson4Screen> {
         ),
         PyoneerText.contentText("   if  condition  :​", tabSpace: true, fontWeight: FontWeight.bold),
         PyoneerText.contentText("         statement(s)​", tabSpace: true, fontWeight: FontWeight.bold),
-        PyoneerText.contentText("- พิสูจน์/ตรวจสอบ ครั้งเดียวผลลัพธ์จากการพิสูจน์ตรวจสอบเป็นจริงจะมีคำสั่งการทำงานที่จะต้องทำ และหากเป็นเท็จก็จะมีคำสั่งการงานที่จะต้องทำเช่นกัน​​", tabSpace: true),
-        PyoneerText.contentText("- พิสูจน์/ตรวจสอบ หลายครั้งโดยเป็นการพิสูจน์ไปที่ละเงื่อนไข (condition) และพิจารณาคำสั่งการทำงานไปทีละเงื่อนไขเมื่อผลการพิสูจน์เป็นจริง หรือเท็จ​", tabSpace: true),
+        LessonComponent.lessonImage( //ใส่รูป
+          context,
+          "assets/images/lesson4/lessonImage4-1.png",
+        ),
         PyoneerText.brakeLine(20),
-        PyoneerText.contentText("* ตัวอย่างเช่น 17 / 3 จะได้เป็น float 5.666666"),
-        PyoneerText.contentText("\t\t\t17 // 3 เป็นการหารแบบเอาแต่ส่วน คำตอบจึงเป็น 5"),
-        PyoneerText.brakeLine(),
-        PyoneerText.contentText("ตัวดำเนินการเปรียบเทียบ", fontWeight: FontWeight.bold,),
-        PyoneerText.contentText("(Comparison Operators)", fontWeight: FontWeight.bold,),
-        PyoneerText.brakeLine(10),
-        LessonComponent.lessonImage(
+        Row(
+          children: [
+            PyoneerText.contentText("", tabSpace: true),
+            PyoneerText.contentText("ตัวอย่างที่ 1", textDecoration: TextDecoration.underline),
+          ],
+        ),
+        LessonComponent.lessonImage( //ใส่รูป
           context,
           "assets/images/lesson4/lessonImage4-2.png",
         ),
-        PyoneerText.brakeLine(50),
-        PyoneerText.contentText("ตัวดำเนินการกำหนดค่า (Assignment Operators)", fontWeight: FontWeight.bold,),
-        PyoneerText.brakeLine(10),
-        LessonComponent.lessonImage(
+        PyoneerText.brakeLine(20),
+        Row(
+          children: [
+            PyoneerText.contentText("", tabSpace: true),
+            PyoneerText.contentText("ตัวอย่างที่ 2", textDecoration: TextDecoration.underline),
+          ],
+        ),
+        LessonComponent.lessonImage( //ใส่รูป
           context,
           "assets/images/lesson4/lessonImage4-3.png",
         ),
-        PyoneerText.brakeLine(50),
-        PyoneerText.contentText("ตัวดำเนินการทางตรรกะ (Logical Operators)", fontWeight: FontWeight.bold,),
-        PyoneerText.brakeLine(10),
-        LessonComponent.lessonImage(
+        PyoneerText.brakeLine(20),
+        PyoneerText.contentText("if…else statement​", tabSpace: true, fontWeight: FontWeight.bold),
+        PyoneerText.contentText("- พิสูจน์/ตรวจสอบ ครั้งเดียวผลลัพธ์จากการพิสูจน์ตรวจสอบเป็นจริงจะมีคำสั่งการทำงานที่จะต้องทำ และหากเป็นเท็จก็จะมีคำสั่งการงานที่จะต้องทำเช่นกัน​​", tabSpace: true),
+        Row(
+          children: [
+            PyoneerText.contentText("", tabSpace: true),
+            PyoneerText.contentText("รูปแบบ​", textDecoration: TextDecoration.underline),
+          ],
+        ),
+        PyoneerText.contentText("   if  condition  :​", tabSpace: true, fontWeight: FontWeight.bold),
+        PyoneerText.contentText("         statement(s)​", tabSpace: true, fontWeight: FontWeight.bold),
+        PyoneerText.contentText("   else  :​", tabSpace: true, fontWeight: FontWeight.bold),
+        PyoneerText.contentText("         statement(s)​", tabSpace: true, fontWeight: FontWeight.bold),
+        LessonComponent.lessonImage( //ใส่รูป
           context,
           "assets/images/lesson4/lessonImage4-4.png",
         ),
-        PyoneerText.contentText("${PyoneerText.startParagraph}นอกจากนี้ยังมีตัวดำเนินการอีก 3 ประเภท คือ"),
-        PyoneerText.contentText("- Bitwise Operator ตัวดำเนินการทางบิต : >> , << , & , |"),
-        PyoneerText.contentText("- Python Membership Operators : in , not in"),
-        PyoneerText.contentText("- Python Identity Operators: is , is not"),
-        PyoneerText.brakeLine(),
-        PyoneerText.contentText("ลำดับความสำคัญของเครื่องหมาย",boxAlign: Alignment.center),
-        PyoneerText.contentText("(Python Operators Precedence)",boxAlign: Alignment.center),
-        PyoneerText.brakeLine(),
-        LessonComponent.lessonImage(
+        PyoneerText.brakeLine(20),
+        Row(
+          children: [
+            PyoneerText.contentText("", tabSpace: true),
+            PyoneerText.contentText("ตัวอย่างที่ 1", textDecoration: TextDecoration.underline),
+          ],
+        ),
+        LessonComponent.lessonImage( //ใส่รูป
           context,
           "assets/images/lesson4/lessonImage4-5.png",
         ),
-        PyoneerText.brakeLine(),
-        PyoneerText.divider(50),
-        PyoneerText.brakeLine(),
-        PyoneerText.contentText("นิพจน์ (Expression)",fontWeight: FontWeight.bold, fontSize: 20,),
-        PyoneerText.contentText("คือ การนำเอาตัวดำเนินการ และตัวถูกกระทำเรียกว่า Operand(คือ ค่าคงที่ ตัวแปร นิพจน์ หรือฟังก์ชั่น ก็ได้) หลายๆตัวมารวมเข้าด้วยกันเป็นประโยคเดียว เราอาจคุ้นเคยกับรูปแบบการเขียนสมการคณิตศาสตร์ เช่น xy - 5z แต่เมื่อเขียนโปรแกรมเราต้องเขียนเป็นนิพจน์ คือ รูปแบบคำสั่งที่ภาษาเข้าใจ เช่น",tabSpace: true),
-        PyoneerText.contentText("สมการคณิตศาสตร์",tabSpace: true),
-        PyoneerText.contentText("xy - 9z"),
-        PyoneerText.contentText("x² + 4y + 5"),
-        PyoneerText.contentText("8y² - 8z"),
-        PyoneerText.contentText("เมื่อเขียนเป็นพิพจน์ในภาษาไพทอน จะได้ดังนี้",tabSpace: true),
-        PyoneerText.contentText("x * y - 9 * z"),
-        PyoneerText.contentText("x**2 + 4 * y + 5"),
-        PyoneerText.contentText("8 * y**2 - 8 * z"),
-        PyoneerText.brakeLine(),
-        LessonComponent.lessonImage(
+        PyoneerText.brakeLine(20),
+        Row(
+          children: [
+            PyoneerText.contentText("", tabSpace: true),
+            PyoneerText.contentText("ตัวอย่างที่ 2", textDecoration: TextDecoration.underline),
+          ],
+        ),
+        LessonComponent.lessonImage( //ใส่รูป
           context,
           "assets/images/lesson4/lessonImage4-6.png",
         ),
-        PyoneerText.brakeLine(),
-        LessonComponent.lessonImage(
+        PyoneerText.brakeLine(20),
+        PyoneerText.contentText("if…elif…else statement​", tabSpace: true, fontWeight: FontWeight.bold),
+        PyoneerText.contentText("- พิสูจน์/ตรวจสอบ หลายครั้งโดยเป็นการพิสูจน์ไปที่ละเงื่อนไข (condition) และพิจารณาคำสั่งการทำงานไปทีละเงื่อนไขเมื่อผลการพิสูจน์เป็นจริง หรือเท็จ​", tabSpace: true),
+        Row(
+          children: [
+            PyoneerText.contentText("", tabSpace: true),
+            PyoneerText.contentText("รูปแบบ​", textDecoration: TextDecoration.underline),
+          ],
+        ),PyoneerText.contentText("   if  condition  :​", tabSpace: true, fontWeight: FontWeight.bold),
+        PyoneerText.contentText("         statement(s)​", tabSpace: true, fontWeight: FontWeight.bold),
+        PyoneerText.contentText("   elif  condition :​", tabSpace: true, fontWeight: FontWeight.bold),
+        PyoneerText.contentText("         statement(s)​", tabSpace: true, fontWeight: FontWeight.bold),
+        PyoneerText.contentText("   elif  condition :​", tabSpace: true, fontWeight: FontWeight.bold),
+        PyoneerText.contentText("         statement(s)​", tabSpace: true, fontWeight: FontWeight.bold),
+        PyoneerText.contentText("   else :​", tabSpace: true, fontWeight: FontWeight.bold),
+        PyoneerText.contentText("         statement(s)​", tabSpace: true, fontWeight: FontWeight.bold),
+        LessonComponent.lessonImage( //ใส่รูป
           context,
           "assets/images/lesson4/lessonImage4-7.png",
         ),
-        PyoneerText.brakeLine(),
-        LessonComponent.lessonImage(
+        Row(
+          children: [
+            PyoneerText.contentText("", tabSpace: true),
+            PyoneerText.contentText("ตัวอย่างที่ 1", textDecoration: TextDecoration.underline),
+          ],
+        ),
+        LessonComponent.lessonImage( //ใส่รูป
           context,
           "assets/images/lesson4/lessonImage4-8.png",
         ),
+        PyoneerText.brakeLine(20),
+        Row(
+          children: [
+            PyoneerText.contentText("", tabSpace: true),
+            PyoneerText.contentText("ตัวอย่างที่ 2", textDecoration: TextDecoration.underline),
+          ],
+        ),
+        LessonComponent.lessonImage( //ใส่รูป
+          context,
+          "assets/images/lesson4/lessonImage4-9.png",
+        ),
+        PyoneerText.brakeLine(20),
+        PyoneerText.contentText("การซ้อนคำสั่ง if (Nested if statements)", fontWeight: FontWeight.bold),
+        PyoneerText.contentText("เป็นคำสั่งของ Python ที่ใช้สำหรับการแก้ไขปัญหาในกระบวนการทำงานของโปรแกรมที่มีความซับซ้อนในการพิสูจน์/ตรวจสอบ เงื่อนไขใดๆโดยการที่สามารถซ้อนคำสั่ง if ลงในคำสั่ง if อื่นอีกได้​", tabSpace: true),
+        PyoneerText.brakeLine(20),
+        Row(
+          children: [
+            PyoneerText.contentText("", tabSpace: true),
+            PyoneerText.contentText("ตัวอย่างที่ 1", textDecoration: TextDecoration.underline),
+          ],
+        ),
+        LessonComponent.lessonImage( //ใส่รูป
+          context,
+          "assets/images/lesson4/lessonImage4-10.png",
+        ),
+        PyoneerText.brakeLine(20),
+        Row(
+          children: [
+            PyoneerText.contentText("", tabSpace: true),
+            PyoneerText.contentText("ตัวอย่างที่ 2", textDecoration: TextDecoration.underline),
+          ],
+        ),
+        LessonComponent.lessonImage( //ใส่รูป
+          context,
+          "assets/images/lesson4/lessonImage4-11.png",
+        ),
+        PyoneerText.brakeLine(20),
+        Row(
+          children: [
+            PyoneerText.contentText("", tabSpace: true),
+            PyoneerText.contentText("ตัวอย่างที่ 3", textDecoration: TextDecoration.underline),
+          ],
+        ),
+        LessonComponent.lessonImage( //ใส่รูป
+          context,
+          "assets/images/lesson4/lessonImage4-12.png",
+        ),
+        
         PyoneerText.brakeLine(50),
       ],
     );
