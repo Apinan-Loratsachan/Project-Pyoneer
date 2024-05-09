@@ -31,7 +31,7 @@ class TestingScreenModel extends StatefulWidget {
 }
 
 class _TestingScreenModelState extends State<TestingScreenModel> {
-  Map<String, String?> selectedChoices = {};
+  Map<int, String?> selectedChoices = {};
   bool _hasAlreadyTested = false;
   int _userScore = 0;
   int _totalQuestions = 0;
@@ -42,8 +42,8 @@ class _TestingScreenModelState extends State<TestingScreenModel> {
   void initState() {
     super.initState();
     _checkTest();
-    _fetchUserChoices();
     _shufflePropositionsAndChoices();
+    _fetchUserChoices();
     _checkUserTestStatus();
     _fetchTestResults();
   }
@@ -71,8 +71,15 @@ class _TestingScreenModelState extends State<TestingScreenModel> {
         .get();
 
     if (doc.exists) {
-      Map<String, String?> fetchedChoices =
-          Map<String, String?>.from(doc.data() as Map);
+      Map<String, dynamic> fetchedData = doc.data() as Map<String, dynamic>;
+      Map<int, String?> fetchedChoices = {};
+
+      widget.testingContent.asMap().forEach((index, testingContent) {
+        String proposition = testingContent.proposition;
+        String? selectedChoice = fetchedData[proposition];
+        fetchedChoices[index] = selectedChoice;
+      });
+
       setState(() {
         selectedChoices = fetchedChoices;
       });
@@ -141,13 +148,13 @@ class _TestingScreenModelState extends State<TestingScreenModel> {
 
   bool _allAnswersSelected() {
     return selectedChoices.length == widget.testingContent.length &&
-        !selectedChoices.containsValue(null);
+        selectedChoices.values.every((value) => value != null);
   }
 
   int _countCorrectAnswers() {
     int correctCount = 0;
-    for (var content in widget.testingContent) {
-      if (selectedChoices[content.proposition] == content.correctChoice) {
+    for (int i = 0; i < widget.testingContent.length; i++) {
+      if (selectedChoices[i] == widget.testingContent[i].correctChoice) {
         correctCount++;
       }
     }
@@ -336,75 +343,65 @@ class _TestingScreenModelState extends State<TestingScreenModel> {
                           title: Text(
                             choice,
                             style: TextStyle(
-                                // Adjust color to stay neutral after submission
-                                color: (!_hasAlreadyTested && !_isTestSubmitted)
-                                    ? Theme.of(context)
-                                        .textTheme
-                                        .bodyMedium!
-                                        .color
-                                    : (!_isTestSubmitted)
-                                        ? selectedChoices[
-                                                    content.proposition] ==
-                                                choice
-                                            ? (choice == content.correctChoice
-                                                ? Colors.green
-                                                : Colors.red)
-                                            : Theme.of(context)
-                                                .textTheme
-                                                .bodyMedium!
-                                                .color
-                                        : Theme.of(context)
-                                            .textTheme
-                                            .bodyMedium!
-                                            .color // Keep text color neutral after submission
-                                ),
+                              color: (!_hasAlreadyTested && !_isTestSubmitted)
+                                  ? Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium!
+                                      .color
+                                  : (!_isTestSubmitted)
+                                      ? selectedChoices[i] == choice
+                                          ? (choice == content.correctChoice
+                                              ? Colors.green
+                                              : Colors.red)
+                                          : Theme.of(context)
+                                              .textTheme
+                                              .bodyMedium!
+                                              .color
+                                      : Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium!
+                                          .color,
+                            ),
                           ),
                           value: choice,
-                          groupValue: selectedChoices[content.proposition],
+                          groupValue: selectedChoices[i],
                           activeColor: (!_hasAlreadyTested && !_isTestSubmitted)
                               ? AppColor.secondarySnakeColor
                               : null,
                           fillColor: MaterialStateProperty.resolveWith<Color>(
                               (states) {
-                            // Adjust fillColor to stay neutral after submission
                             if (!_hasAlreadyTested && !_isTestSubmitted) {
                               return AppColor.secondarySnakeColor;
                             } else if (!_isTestSubmitted &&
                                 states.contains(MaterialState.selected)) {
-                              return selectedChoices[content.proposition] ==
-                                      choice
+                              return selectedChoices[i] == choice
                                   ? (choice == content.correctChoice
                                       ? Colors.green
                                       : Colors.red)
                                   : AppColor.secondarySnakeColor;
                             }
-                            // Return a default color that does not indicate correctness/incorrectness
-                            return Theme.of(context)
-                                .disabledColor; // Use the theme's disabled color or any other neutral color
+                            return Theme.of(context).disabledColor;
                           }),
-                          secondary: (!_hasAlreadyTested &&
-                                      !_isTestSubmitted) ||
-                                  selectedChoices[content.proposition] !=
-                                      choice ||
-                                  _isTestSubmitted // ensures the icon is not shown after submission
-                              ? null
-                              : Icon(
-                                  choice == content.correctChoice
-                                      ? Icons.check
-                                      : Icons.close,
-                                  color: (!_isTestSubmitted)
-                                      ? choice == content.correctChoice
-                                          ? Colors.green
-                                          : Colors.red
-                                      : Theme.of(context)
-                                          .disabledColor, // Make icon neutral after submission
-                                ),
+                          secondary:
+                              (!_hasAlreadyTested && !_isTestSubmitted) ||
+                                      selectedChoices[i] != choice ||
+                                      _isTestSubmitted
+                                  ? null
+                                  : Icon(
+                                      choice == content.correctChoice
+                                          ? Icons.check
+                                          : Icons.close,
+                                      color: (!_isTestSubmitted)
+                                          ? choice == content.correctChoice
+                                              ? Colors.green
+                                              : Colors.red
+                                          : Theme.of(context).disabledColor,
+                                    ),
                           onChanged: _hasAlreadyTested || _isTestSubmitted
                               ? null
                               : (value) async {
                                   setState(() {
-                                    selectedChoices[content.proposition] =
-                                        value;
+                                    selectedChoices[i] = value;
                                   });
                                   await saveUserChoice(
                                       content.proposition, value);
@@ -443,6 +440,27 @@ class _TestingScreenModelState extends State<TestingScreenModel> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class UserChoice {
+  final String proposition;
+  final String? selectedChoice;
+
+  UserChoice({required this.proposition, this.selectedChoice});
+
+  Map<String, dynamic> toMap() {
+    return {
+      'proposition': proposition,
+      'selectedChoice': selectedChoice,
+    };
+  }
+
+  factory UserChoice.fromMap(Map<String, dynamic> map) {
+    return UserChoice(
+      proposition: map['proposition'],
+      selectedChoice: map['selectedChoice'],
     );
   }
 }

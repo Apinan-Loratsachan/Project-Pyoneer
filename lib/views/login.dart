@@ -466,6 +466,7 @@ class _LoginScreenState extends State<LoginScreen>
                           if (result != null && result is String) {
                             setState(() {
                               _emailController.text = result;
+                              _email = result;
                             });
                             Navigator.push(
                               context,

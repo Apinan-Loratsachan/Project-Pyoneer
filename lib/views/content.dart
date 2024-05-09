@@ -518,7 +518,7 @@ class _ContentScreenState extends State<ContentScreen>
                                                 builder: (context,
                                                     lessonReadSnapshot) {
                                                   String subtitle =
-                                                      "ต้องเรียนบทนี้ก่อนทำแบบทดสอบนี้";
+                                                      "กรุณาเรียนบทนี้ก่อนทำแบบทดสอบนี้";
                                                   Color postTestColor =
                                                       Colors.grey.shade200;
                                                   if (lessonReadSnapshot

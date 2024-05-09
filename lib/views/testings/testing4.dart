@@ -15,7 +15,7 @@ class _Testing4ScreenState extends State<Testing4Screen> {
   Widget build(BuildContext context) {
     return TestingScreenModel(
       testingContent: Testing4.testingContent,
-      appBarTitle: "Testing 4",
+      appBarTitle: "บทที่ 4",
       appBarSubTitle: widget.isPreTest
           ? "แบบทดสอบก่อนเรียนบทที่ 4"
           : "แบบทดสอบหลังเรียนบทที่ 4",
