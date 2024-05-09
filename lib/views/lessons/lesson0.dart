@@ -24,7 +24,6 @@ class _Lesson0ScreenState extends State<Lesson0Screen> {
             tabSpace: true),
         PyoneerText.brakeLine(50),
       ],
-      youtubeVideoID: "XKHEtdqhLK8",
     );
   }
 }

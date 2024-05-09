@@ -42,25 +42,25 @@ class LessonComponent {
     LessonContent(
         imageSrc: "assets/images/lesson2/cover.png",
         title: "บทเรียนที่ 2",
-        subTitle: "ตัวแปรและการกำหนดค่า",
+        subTitle: "Primitive Data Types, ​Variables, Expressions, Type Conversions, Input​",
         heroTag: "lesson-2-cover",
         targetScreen: const Lesson2Screen()),
     LessonContent(
         imageSrc: "assets/images/lesson3/cover.png",
         title: "บทเรียนที่ 3",
-        subTitle: "ชนิดข้อมูล",
+        subTitle: "Function",
         heroTag: "lesson-3-cover",
         targetScreen: const Lesson3Screen()),
     LessonContent(
         imageSrc: "assets/images/lesson4/cover.png",
         title: "บทเรียนที่ 4",
-        subTitle: "ตัวดำเนินการและนิพจน์",
+        subTitle: "Conditions​",
         heroTag: "lesson-4-cover",
         targetScreen: const Lesson4Screen()),
     LessonContent(
         imageSrc: "assets/images/lesson5/cover.png",
         title: "บทเรียนที่ 5",
-        subTitle: "คำสั่งรับค่าและแสดงผล",
+        subTitle: "Loops",
         heroTag: "lesson-5-cover",
         targetScreen: const Lesson5Screen()),
   ];

@@ -44,58 +44,113 @@ class TestingScreen {
 class Testing1 {
   static List<TestingContent> testingContent = [
     TestingContent(
-      proposition: "proposition1",
+      proposition: "ใครเป็นผู้พัฒนาภาษาไพธอน",
       choice: [
-        "proposition1 choice1",
-        "proposition1 choice2",
-        "proposition1 choice3",
-        "proposition1 choice4"
+        "Dennis Ritchie",
+        "Guido van Rossum",
+        "Lady Ada",
+        "James Gosling"
       ],
-      correctChoice: "proposition1 choice1",
-      imagePath: 'assets/icons/pyoneer_snake.png',
-    ),
-    TestingContent(
-      proposition: "proposition2",
-      choice: [
-        "proposition2 choice1",
-        "proposition2 choice2",
-        "proposition2 choice3",
-        "proposition2 choice4"
-      ],
-      correctChoice: "proposition2 choice2",
+      correctChoice: "Guido van Rossum",
       imagePath: '',
     ),
     TestingContent(
-      proposition: "proposition3",
+      proposition: "ตัวแปลภาษาไพธอนเป็นตัวแปลภาษาประเภทใด",
       choice: [
-        "proposition3 choice1",
-        "proposition3 choice2",
-        "proposition3 choice3",
-        "proposition3 choice4"
+        "Compiler",
+        "Script",
+        "Object Oriented",
+        "Interpreter"
       ],
-      correctChoice: "proposition3 choice3",
+      correctChoice: "Interpreter",
       imagePath: '',
     ),
     TestingContent(
-      proposition: "proposition4",
+      proposition: "ข้อใดเป็นเครื่องมือที่ใช้ในการเขียนโปรแกรมภาษาไพธอนในแบบ Online",
       choice: [
-        "proposition4 choice1",
-        "proposition4 choice2",
-        "proposition4 choice3",
-        "proposition4 choice4"
+        "Notepad",
+        "Colab",
+        "Visual Studio Code",
+        "Jupyter Notebook"
       ],
-      correctChoice: "proposition4 choice4",
+      correctChoice: "Colab",
       imagePath: '',
     ),
     TestingContent(
-      proposition: "proposition5",
+      proposition: "การเขียนโปรแกรมภาษาไพธอนกรณีที่ 1 บรรทัดมีหลายคำสั่งหรือหลาย Statement จะต้องคั่นแต่ละคำสั่งหรือแต่ละ Statement ด้วยสัญลักษณ์หรือเครื่องหมายในข้อใด",
       choice: [
-        "proposition5 choice1",
-        "proposition5 choice2",
-        "proposition5 choice3",
-        "proposition5 choice4"
+        ": (colon)",
+        ", (comma)",
+        "; (semi-colon)",
+        "| (pipe)"
       ],
-      correctChoice: "proposition5 choice1",
+      correctChoice: "; (semi-colon)",
+      imagePath: '',
+    ),
+    TestingContent(
+      proposition: "ในการกำหนดขอบเขตการทำงาน (Code block) ในภาษาไพธอน ข้อใดถูกต้อง",
+      choice: [
+        "ใช้การย่อหน้า (indentation)",
+        "ใช้วงเล็บปีกกา (curly brackets)",
+        "ใช้วงเล็บก้ามปู (square brackets)",
+        "ใช้วงเล็บ (parenthesis)"
+      ],
+      correctChoice: "ใช้การย่อหน้า (indentation)",
+      imagePath: '',
+    ),
+    TestingContent( 
+      proposition: "นามสกุลของไฟล์ภาษาไพธอน ข้อใดถูกต้อง",
+      choice: [
+        ".p",
+        ".pl",
+        ".py",
+        ".python"
+      ],
+      correctChoice: ".py",
+      imagePath: '',
+    ),
+    TestingContent(
+      proposition: "ข้อใดไม่ใช่เครื่องหมายที่ใช้สำหรับการทำ Comment ในภาษาไพธอน",
+      choice: [
+        "// comment",
+        "# comment",
+        "\'\'\' comment \'\'\'",
+        "\"\"\" comment \"\"\""
+      ],
+      correctChoice: "// comment",
+      imagePath: '',
+    ),
+    TestingContent(
+      proposition: "ข้อใดกล่าวไม่ถูกต้องสำหรับ Identifier ในภาษาไพธอน",
+      choice: [
+        "ตัวอักษรตัวเล็ก และตัวอักษรตัวใหญ่ถือเป็นคนละตัวกัน",
+        "สามารถใช้ _ (under score) ขึ้นต้นเป็นตัวแรกได้",
+        "สามารถมีช่องว่างได้",
+        "ลงท้ายด้วยตัวเลขหรือ _ (under score) ได้"
+      ],
+      correctChoice: "สามารถมีช่องว่างได้",
+      imagePath: '',
+    ),
+    TestingContent(
+      proposition: "การตั้งขื่อแบบที่มีการใช้ _ (under score) ในการแยกคำ เรียกว่าเป็นการตั้งชื่อแบบใด",
+      choice: [
+        "Pascal Case",
+        "Snake Case",
+        "Camel Case",
+        "Fish Case"
+      ],
+      correctChoice: "Snake Case",
+      imagePath: '',
+    ),
+    TestingContent(
+      proposition: "เมธอดในข้อใดใช้ในการตรวจสอบว่าเป็น identifier หรือไม่",
+      choice: [
+        "setidentifier( )",
+        "isidentifier( )",
+        "setIdentifier( )",
+        "isIdentifier( )"
+      ],
+      correctChoice: "isidentifier( )",
       imagePath: '',
     ),
   ];
@@ -104,58 +159,114 @@ class Testing1 {
 class Testing2 {
   static List<TestingContent> testingContent = [
     TestingContent(
-      proposition: "จากรูปต่อไปนี้ขัอใดถูกต้อง",
+      proposition: "ข้อใดไม่ใช่ Primitive Data Type ในภาษาไพธอน",
       choice: [
-        "proposition1 choice1",
-        "proposition1 choice2",
-        "proposition1 choice3",
-        "proposition1 choice4"
+        "List",
+        "Complex",
+        "Number",
+        "Boolean"
       ],
-      correctChoice: "proposition1 choice1",
-      imagePath: 'assets/icons/pyoneer_snake.png',
-    ),
-    TestingContent(
-      proposition: "proposition2",
-      choice: [
-        "proposition2 choice1",
-        "proposition2 choice2",
-        "proposition2 choice3",
-        "proposition2 choice4"
-      ],
-      correctChoice: "proposition2 choice4",
+      correctChoice: "List",
       imagePath: '',
     ),
     TestingContent(
-      proposition: "proposition3",
+      proposition: "True และ False ถือเป็นข้อมูลประเภทใด",
       choice: [
-        "proposition3 choice1",
-        "proposition3 choice2",
-        "proposition3 choice3",
-        "proposition3 choice4"
+        "List",
+        "Complex",
+        "Number",
+        "Boolean"
       ],
-      correctChoice: "proposition3 choice3",
+      correctChoice: "Boolean",
       imagePath: '',
     ),
     TestingContent(
-      proposition: "proposition4",
+      proposition: "ข้อใดกล่าวไม่ถูกต้องเกี่ยวกับตัวแปร (variable)",
       choice: [
-        "proposition4 choice1",
-        "proposition4 choice2",
-        "proposition4 choice3",
-        "proposition4 choice4"
+        "เป็นชื่อที่นักพัฒนาตั้งขึ้นมาเอง",
+        "ต้องประกาศตัวแปร (declaration of variable) ก่อนการใช้งานทุกครั้ง",
+        "การใช้งานตัวแปรเป็นการนำข้อมูลมาเก็บในตัวแปรหรือการนำข้อมูลที่อยู่ในตัวแปรไปใช้งาน",
+        "ข้อมูลที่เก็บอยู่ในตัวแปรไม่สามารถเปลี่ยนค่าได้"
       ],
-      correctChoice: "proposition4 choice2",
+      correctChoice: "ข้อมูลที่เก็บอยู่ในตัวแปรไม่สามารถเปลี่ยนค่าได้",
       imagePath: '',
     ),
     TestingContent(
-      proposition: "proposition5",
+      proposition: "ข้อใดคือ Logical Operator ที่ใช้ในภาษาไพธอน",
       choice: [
-        "proposition5 choice1",
-        "proposition5 choice2",
-        "proposition5 choice3",
-        "proposition5 choice4"
+        "+ , - , * , /",
+        "! , && , ||",
+        "not , and , or",
+        "== , != , < , >"
       ],
-      correctChoice: "proposition5 choice1",
+      correctChoice: "not , and , or",
+      imagePath: '',
+    ),
+    TestingContent(
+      proposition: "ข้อใดให้ผลลัพธ์เป็น True",
+      choice: [
+        "10 + 5 * 1  > 1 * 5 + 10",
+        "7 < 10 and 10 > 7",
+        "5 == 5 && 55 == 55",
+        "30 % 10 * 10 == 10 * 10 % 30"
+      ],
+      correctChoice: "7 < 10 and 10 > 7",
+      imagePath: '',
+    ),
+    TestingContent(
+      proposition: "ข้อใดเป็นผลลัพธ์ที่ได้จากการทำงานของโค้ดคำสั่งภาษาไพธอนต่อไปนี้ \n\t\t\tprint(8 / 4 + 5 * (3 + 1) - 7 % 4)",
+      // print(8 / 4 + 5 * (3 + 1) - 7 % 4)
+      choice: [
+        "13.0",
+        "15.0",
+        "17.0",
+        "19.0"
+      ],
+      correctChoice: "19.0",
+      imagePath: '',
+    ),
+    TestingContent(
+      proposition: "ข้อใดถูกต้องเมื่อต้องการแสดงข้อความ I'm 25 years old. ด้วยภาษาไพธอน",
+      choice: [
+        "print(I'm 25 years old.)",
+        "print(I\\'m 25 years old.)",
+        "print(\'I\'m 25 years old.\')",
+        "print(\"I'm 25 years old.\")"
+      ],
+      correctChoice: "print(\"I'm 25 years old.\")",
+      imagePath: '',
+    ),
+    TestingContent(
+      proposition: "ฟังก์ชันในข้อใดใช้ในการตรวจสอบชนิดข้อมูลในภาษาไพธอน",
+      choice: [
+        "type( )",
+        "istype( )",
+        "checktype( )",
+        "whattype( )"
+      ],
+      correctChoice: "type( )",
+      imagePath: '',
+    ),
+    TestingContent(
+      proposition: "คำสั่งใดใช้ในการรับค่าข้อมูลจากผู้ใช้งานทางแป้นพิมพ์",
+      choice: [
+        "scanf( )",
+        "read( )",
+        "input( )",
+        "keyboard( )"
+      ],
+      correctChoice: "input( )",
+      imagePath: '',
+    ),
+    TestingContent(
+      proposition: "ข้อใดเป็นผลลัพธ์ที่ได้จากการทำงานของโค้ดคำสั่งภาษาไพธอนต่อไปนี้",
+      choice: [
+        "'Love''Python''Love'",
+        "'LovePythonLove'",
+        "LovePythonLove",
+        "Love \nPython \nLove "
+      ],
+      correctChoice: "'LovePythonLove'",
       imagePath: '',
     ),
   ];
@@ -164,59 +275,117 @@ class Testing2 {
 class Testing3 {
   static List<TestingContent> testingContent = [
     TestingContent(
-      proposition: "จากรูปต่อไปนี้ขัอใดถูกต้อง",
+      proposition: "คีย์เวิร์ดใดใช้ในการนิยามฟังก์ชัน",
       choice: [
-        "proposition1 choice1",
-        "proposition1 choice2",
-        "proposition1 choice3",
-        "proposition1 choice4"
+        "func",
+        "function",
+        "def",
+        "definition"
       ],
-      correctChoice: "proposition1 choice1",
-      imagePath: 'assets/icons/pyoneer_snake.png',
-    ),
-    TestingContent(
-      proposition: "proposition2",
-      choice: [
-        "proposition2 choice1",
-        "proposition2 choice2",
-        "proposition2 choice3",
-        "proposition2 choice4"
-      ],
-      correctChoice: "proposition2 choice4",
+      correctChoice: "def",
       imagePath: '',
     ),
     TestingContent(
-      proposition: "proposition3",
+      proposition: "ข้อมูลที่ส่งให้กับ parameter เรียกว่าอะไร",
       choice: [
-        "proposition3 choice1",
-        "proposition3 choice2",
-        "proposition3 choice3",
-        "proposition3 choice4"
+        "variable",
+        "value",
+        "construtor",
+        "argument"
       ],
-      correctChoice: "proposition3 choice3",
+      correctChoice: "argument",
       imagePath: '',
     ),
     TestingContent(
-      proposition: "proposition4",
+      proposition: "สิ่งใดใช้บ่งบอกขอบเขตการทำงานของฟังก์ชัน",
       choice: [
-        "proposition4 choice1",
-        "proposition4 choice2",
-        "proposition4 choice3",
-        "proposition4 choice4"
+        "ย่อหน้า (indentation)",
+        "วงเล็บปีกกา { } (curly brackets)",
+        "เครื่องหมาย : (semi-colon)",
+        "คำสั่ง return"
       ],
-      correctChoice: "proposition4 choice2",
+      correctChoice: "ย่อหน้า (indentation)",
       imagePath: '',
     ),
     TestingContent(
-      proposition: "proposition5",
+      proposition: "จำนวนข้อมูลในการส่งค่ากลับ (return value) ในภาษาไพธอนมีได้จำนวนทั้งหมดกี่ข้อมูล",
       choice: [
-        "proposition5 choice1",
-        "proposition5 choice2",
-        "proposition5 choice3",
-        "proposition5 choice4"
+        "1 ข้อมูล",
+        "2 ข้อมูล",
+        "3 ข้อมูล",
+        "ไม่จำกัด"
       ],
-      correctChoice: "proposition5 choice1",
+      correctChoice: "ไม่จำกัด",
       imagePath: '',
+    ),
+    TestingContent(
+      proposition: "นิยามฟังก์ชันในข้อใดถูกต้อง",
+      choice: [
+        "def fund(data1 = 10, data2 = 20, data3) : \n\t\t\t\t\t\t\tpass ",
+        "def func(data1 = 10; data2 = 20; data3) : \n\t\t\t\t\t\t\tpass ",
+        "def func(data1, data2 = 10, data3 = 20) : \n\t\t\t\t\t\t\tpass ",
+        "def func(data1; data2 = 10; data3 = 20) : \n\t\t\t\t\t\t\tpass "
+      ],
+      correctChoice: "def func(data1, data2 = 10, data3 = 20) : \n\t\t\t\t\t\t\tpass ",
+      imagePath: '',
+    ),
+    TestingContent(
+      proposition: "ข้อใดเป็นผลลัพธ์ที่ได้จากการทำงานของโค้ดคำสั่งภาษาไพธอนต่อไปนี้(1)",
+      // ข้อ 6 มีรูป
+      choice: [
+        "1000",
+        "100",
+        "10",
+        "10 * 10 * 10"
+      ],
+      correctChoice: "1000",
+      imagePath: 'assets/images/lesson3/test3-6.png',
+    ),
+    TestingContent(
+      proposition: "ข้อใดเป็นผลลัพธ์ที่ได้จากการทำงานของโค้ดคำสั่งภาษาไพธอนต่อไปนี้(2)",
+      //ข้อ 7 มีรูป
+      choice: [
+        "live and share",
+        "Live and share",
+        "Live And Share",
+        "LIVE AND SHARE"
+      ],
+      correctChoice: "Live and share",
+      imagePath: 'assets/images/lesson3/test3-7.png',
+    ),
+    TestingContent(
+      proposition: "ฟังก์ชันประเภทใดเป็นการเรียกใช้งานฟังก์ชันตัวเอง",
+      choice: [
+        "Repeat Function",
+        "Recursive Function",
+        "Rewrite Function",
+        "Reload Function"
+      ],
+      correctChoice: "Recursive Function",
+      imagePath: '',
+    ),
+    TestingContent(
+      proposition: "เมื่อต้องการอ้างถึงตัวแปรที่อยู่นอกฟังก์ชัน และต้องการเปลี่ยนค่าในตัวแปรนั้น ให้ระบุคีย์เวิร์ดใดที่ตัวแปรที่ต้องการใช้นั้น",
+      choice: [
+        "local",
+        "global",
+        "def",
+        "function"
+      ],
+      correctChoice: "global",
+      imagePath: '',
+    ),
+    TestingContent(
+      proposition: "ข้อใดเป็นผลลัพธ์ที่ได้จากการทำงานของโค้ดคำสั่งภาษาไพธอนต่อไปนี้(3)",
+      //ข้อ 10 มีรูป
+      choice: [
+        "1 3",
+        "2 3",
+        "3 3",
+        "Error"
+      ],
+      correctChoice: "3 3",
+      imagePath: 'assets/images/lesson3/test3-10.png',
     ),
   ];
 }
@@ -224,59 +393,121 @@ class Testing3 {
 class Testing4 {
   static List<TestingContent> testingContent = [
     TestingContent(
-      proposition: "จากรูปต่อไปนี้ขัอใดถูกต้อง",
+      proposition: "คำสั่งในข้อใดเหมาะสมกับการจัดการโพรเซสการทำงานของโปรแกรมมีมากกว่า 1 เงื่อนไข ",
       choice: [
-        "proposition1 choice1",
-        "proposition1 choice2",
-        "proposition1 choice3",
-        "proposition1 choice4"
+        "if statement",
+        "if-else statement",
+        "if-elif statement",
+        "while statement"
       ],
-      correctChoice: "proposition1 choice1",
-      imagePath: 'assets/icons/pyoneer_snake.png',
-    ),
-    TestingContent(
-      proposition: "proposition2",
-      choice: [
-        "proposition2 choice1",
-        "proposition2 choice2",
-        "proposition2 choice3",
-        "proposition2 choice4"
-      ],
-      correctChoice: "proposition2 choice4",
+      correctChoice: "if-elif statement",
       imagePath: '',
     ),
     TestingContent(
-      proposition: "proposition3",
+      proposition: "ข้อใดเป็นผลลัพธ์ที่ได้จากการทำงานของโค้ดคำสั่งภาษาไพธอนต่อไปนี้(1)",
+      // ข้อ2 มีรูป
       choice: [
-        "proposition3 choice1",
-        "proposition3 choice2",
-        "proposition3 choice3",
-        "proposition3 choice4"
+        "200",
+        "50",
+        "70",
+        "x"
       ],
-      correctChoice: "proposition3 choice3",
+      correctChoice: "200",
+      imagePath: 'assets/images/lesson4/test4-2.png',
+    ),
+    TestingContent(
+      proposition: "ข้อใดถูกต้องสำหรับ else statement ในภาษาไพธอน",
+      choice: [
+        "else { }",
+        "else :",
+        "else [ ]",
+        "else ->"
+      ],
+      correctChoice: "else :",
       imagePath: '',
     ),
     TestingContent(
-      proposition: "proposition4",
+      proposition: "ข้อใดเป็นผลลัพธ์ที่ได้จากการทำงานของโค้ดคำสั่งภาษาไพธอนต่อไปนี้(2)",
+      //ข้อ 4 มีรูป
       choice: [
-        "proposition4 choice1",
-        "proposition4 choice2",
-        "proposition4 choice3",
-        "proposition4 choice4"
+        "True 8",
+        "False 8",
+        "True",
+        "False"
       ],
-      correctChoice: "proposition4 choice2",
+      correctChoice: "True 8",
+      imagePath: 'assets/images/lesson4/test4-4.png',
+    ),
+    TestingContent(
+      proposition: "ข้อใดเป็นผลลัพธ์ที่ได้จากการทำงานของโค้ดคำสั่งภาษาไพธอนต่อไปนี้(3)",
+      //ข้อ 5 มีรูป
+      choice: [
+        "2",
+        "5",
+        "25",
+        "32"
+      ],
+      correctChoice: "25",
+      imagePath: 'assets/images/lesson4/test4-5.png',
+    ),
+    TestingContent(
+      proposition: "ข้อใดเป็นผลลัพธ์ที่ได้จากการทำงานของโค้ดคำสั่งภาษาไพธอนต่อไปนี้(4)",
+      //ข้อ 6 มีรูป
+      choice: [
+        "true",
+        "false",
+        "not true",
+        "not false"
+      ],
+      correctChoice: "not false",
+      imagePath: 'assets/images/lesson4/test4-6.png',
+    ),
+    TestingContent(
+      proposition: "ผลจากการพิสูจน์เงื่อนไข (condition) ของคำสั่ง if เป็นค่าใดได้บ้าง",
+      choice: [
+        "boolean",
+        "number",
+        "string",
+        "list"
+      ],
+      correctChoice: "boolean",
       imagePath: '',
     ),
     TestingContent(
-      proposition: "proposition5",
+      proposition: "ข้อใดเป็นผลลัพธ์ที่ได้จากการทำงานของโค้ดคำสั่งภาษาไพธอนต่อไปนี้(5)",
+      //ข้อ 8 มีรูป
       choice: [
-        "proposition5 choice1",
-        "proposition5 choice2",
-        "proposition5 choice3",
-        "proposition5 choice4"
+        "1",
+        "2",
+        "3",
+        "4"
       ],
-      correctChoice: "proposition5 choice1",
-      imagePath: '',
+      correctChoice: "3",
+      imagePath: 'assets/images/lesson4/test4-8.png',
+    ),
+    TestingContent(
+      proposition: "ข้อใดเป็นผลลัพธ์ที่ได้จากการทำงานของโค้ดคำสั่งภาษาไพธอนต่อไปนี้(6)",
+      //ข้อ 9 มีรูป
+      choice: [
+        "1 2",
+        "1 3",
+        "3",
+        "1 2 3"
+      ],
+      correctChoice: "1 2 3",
+      imagePath: 'assets/images/lesson4/test4-9.png',
+    ),
+    TestingContent(
+      proposition: "ข้อใดเป็นผลลัพธ์ที่ได้จากการทำงานของโค้ดคำสั่งภาษาไพธอนต่อไปนี้(7)",
+      //ข้อ 10 มีรูป
+      choice: [
+        "False",
+        "True",
+        "1",
+        "0"
+      ],
+      correctChoice: "False",
+      imagePath: 'assets/images/lesson4/test4-10.png',
     ),
   ];
 }
@@ -284,59 +515,123 @@ class Testing4 {
 class Testing5 {
   static List<TestingContent> testingContent = [
     TestingContent(
-      proposition: "จากรูปต่อไปนี้ขัอใดถูกต้อง",
+      proposition: "จากโค้ดคำสั่งต่อไปนี้ จะมีการวนทำซ้ำคำสั่ง print('Python') กี่รอบ",
+      //ข้อ 1 มีรูป
       choice: [
-        "proposition1 choice1",
-        "proposition1 choice2",
-        "proposition1 choice3",
-        "proposition1 choice4"
+        "1 รอบ",
+        "2 รอบ",
+        "3 รอบ",
+        "4 รอบ"
       ],
-      correctChoice: "proposition1 choice1",
-      imagePath: 'assets/icons/pyoneer_snake.png',
+      correctChoice: "4 รอบ",
+      imagePath: 'assets/images/lesson5/test5-1.png',
     ),
     TestingContent(
-      proposition: "proposition2",
+      proposition: "ข้อใดเป็นผลลัพธ์ที่ได้จากการทำงานของโค้ดคำสั่งภาษาไพธอนต่อไปนี้(1)",
+      //ข้อ 2 มีรูป
       choice: [
-        "proposition2 choice1",
-        "proposition2 choice2",
-        "proposition2 choice3",
-        "proposition2 choice4"
+        "1 6 11 16 21",
+        "1 5 10 15 20 25",
+        "1 5 25",
+        "1 25 5"
       ],
-      correctChoice: "proposition2 choice4",
+      correctChoice: "1 6 11 16 21",
+      imagePath: 'assets/images/lesson5/test5-2.png',
+    ),
+    TestingContent(
+      proposition: "ข้อใดเป็นผลลัพธ์ที่ได้จากการทำงานของโค้ดคำสั่งภาษาไพธอนต่อไปนี้(2)",
+      //ข้อ 3 มีรูป
+      choice: [
+        "Hi",
+        "Hi Hi",
+        "ไม่แสดงผลข้อมูลใดๆ",
+        "Error"
+      ],
+      correctChoice: "ไม่แสดงผลข้อมูลใดๆ",
+      imagePath: 'assets/images/lesson5/test5-3.png',
+    ),
+    TestingContent(
+      proposition: "ข้อใดเป็นผลลัพธ์ที่ได้จากการทำงานของโค้ดคำสั่งภาษาไพธอนต่อไปนี้(3)",
+      //ข้อ 4 มีรูป
+      choice: [
+        "1",
+        "1 2",
+        "1 2 3",
+        "1 2 3 4"
+      ],
+      correctChoice: "1 2 3 4",
+      imagePath: 'assets/images/lesson5/test5-4.png',
+    ),
+    TestingContent(
+      proposition: "ข้อใดเป็นผลลัพธ์ที่ได้จากการทำงานของโค้ดคำสั่งภาษาไพธอนต่อไปนี้(4)",
+      //ข้อ 5 มีรูป
+      choice: [
+        "0 1 2 3",
+        "0 1 2",
+        "0 1",
+        "0"
+      ],
+      correctChoice: "0 1 2",
+      imagePath: 'assets/images/lesson5/test5-5.png',
+    ),
+    TestingContent(
+      proposition: "ข้อใดเป็นผลลัพธ์ที่ได้จากการทำงานของโค้ดคำสั่งภาษาไพธอนต่อไปนี้(5)",
+      //ข้อ 6 มีรูป
+      choice: [
+        "0",
+        "0 1 2 3 4 5",
+        "W e l c o m e",
+        "Error"
+      ],
+      correctChoice: "Error",
+      imagePath: 'assets/images/lesson5/test5-6.png',
+    ),
+    TestingContent(
+      proposition: "ผลจากการพิสูจน์เงื่อนไข (condition) ของคำสั่ง if เป็นค่าใดได้บ้าง",
+      //ข้อ 7 มีรูป
+      choice: [
+        "1 2 4",
+        "1 2 3 4",
+        "1 2",
+        "1 2 3"
+      ],
+      correctChoice: "1 2 4",
+      imagePath: 'assets/images/lesson5/test5-7.png',
+    ),
+    TestingContent(
+      proposition: "ข้อใดเป็นผลลัพธ์ที่ได้จากการทำงานของโค้ดคำสั่งภาษาไพธอนต่อไปนี้(6)",
+      //ข้อ 8 มีรูป
+      choice: [
+        "2 2 4",
+        "2 4 6",
+        "2 4 8",
+        "2 4 6 8"
+      ],
+      correctChoice: "2 4 6",
+      imagePath: 'assets/images/lesson5/test5-8.png',
+    ),
+    TestingContent(
+      proposition: "ข้อใดถูกต้องในการเขียน syntax ของ while statement",
+      choice: [
+        "while condition :",
+        "while (condition)",
+        "while [condition] :",
+        "while condition do :"
+      ],
+      correctChoice: "while condition :",
       imagePath: '',
     ),
     TestingContent(
-      proposition: "proposition3",
+      proposition: "ข้อใดเป็นผลลัพธ์ที่ได้จากการทำงานของโค้ดคำสั่งภาษาไพธอนต่อไปนี้(7)",
+      //ข้อ 10 มีรูป
       choice: [
-        "proposition3 choice1",
-        "proposition3 choice2",
-        "proposition3 choice3",
-        "proposition3 choice4"
+        "0 1 2",
+        "pass",
+        "Done",
+        "Error"
       ],
-      correctChoice: "proposition3 choice3",
-      imagePath: '',
-    ),
-    TestingContent(
-      proposition: "proposition4",
-      choice: [
-        "proposition4 choice1",
-        "proposition4 choice2",
-        "proposition4 choice3",
-        "proposition4 choice4"
-      ],
-      correctChoice: "proposition4 choice2",
-      imagePath: '',
-    ),
-    TestingContent(
-      proposition: "proposition5",
-      choice: [
-        "proposition5 choice1",
-        "proposition5 choice2",
-        "proposition5 choice3",
-        "proposition5 choice4"
-      ],
-      correctChoice: "proposition5 choice1",
-      imagePath: '',
+      correctChoice: "Done",
+      imagePath: 'assets/images/lesson5/test5-10.png',
     ),
   ];
 }

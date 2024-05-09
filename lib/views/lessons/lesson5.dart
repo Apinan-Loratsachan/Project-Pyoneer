@@ -16,6 +16,7 @@ class _Lesson5ScreenState extends State<Lesson5Screen> {
     return LessonScreenModel(
       index: 5,
       lessonTitle: "คำสั่งรับค่า\nและ การแสดงผล",
+      youtubeVideoID: "LHBE6Q9XlzI",
       contentWidgets: [
         PyoneerText.contentText(
             "การทำงานเพื่อติดต่อกับผู้ใช้ เราสามารถเรียกใช้ฟังก์ชั่นเพื่อรับ หรือแสดงผลลักษณะของฟังก์ชั่น คือ คำสั่งหลายๆ คำสั่ง ที่สร้างไว้แล้ว เราสามารถเรียกใช้ได้แต่ต้องเป็นไปตามรูปแบบที่กำหนด ในส่วนนี้ เพื่อรับและแสดงผล เราจะศึกษาดังนี้",
