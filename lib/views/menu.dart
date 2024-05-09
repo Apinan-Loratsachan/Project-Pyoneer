@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -44,7 +45,7 @@ class _PrimaryScreenState extends State<MenuScreen>
   // void addExamQuestions() async {
   //   final firestore = FirebaseFirestore.instance;
 
-  //   for (int i = 1; i <= 100; i++) {
+  //   for (int i = 1; i <= 30; i++) {
   //     String docId = i.toString().padLeft(4, '0');
 
   //     await firestore.collection('challengeQuestion').doc(docId).set({

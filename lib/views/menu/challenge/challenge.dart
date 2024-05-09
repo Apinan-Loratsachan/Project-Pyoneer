@@ -168,7 +168,9 @@ class _ChallengeScreenState extends State<ChallengeScreen> {
     final random = Random();
     final selectedQuestions = <ChallengeQuestion>[];
 
-    while (selectedQuestions.length < 5) {
+    final questionCount = min(30, allQuestions.length);
+
+    while (selectedQuestions.length < questionCount) {
       final randomIndex = random.nextInt(allQuestions.length);
       final question = allQuestions[randomIndex];
 

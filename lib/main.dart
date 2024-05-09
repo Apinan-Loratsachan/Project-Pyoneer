@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -23,6 +24,14 @@ void main() async {
     bool hasUserData = await UserData.hasData();
     if (hasUserData) {
       await UserData.loadUserData();
+      CollectionReference users =
+          FirebaseFirestore.instance.collection('users');
+      await users.doc(currentUser.email).set({
+        'uid': currentUser.uid,
+        'email': currentUser.email,
+        'displayName': currentUser.displayName,
+        'photoURL': currentUser.photoURL,
+      });
     } else {
       await UserData.clear();
       await Auth.signOut();

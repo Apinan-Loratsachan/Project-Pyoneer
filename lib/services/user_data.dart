@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -31,6 +32,14 @@ class UserData {
     await prefs.setString('image', userCredential.user?.photoURL ?? "");
     await prefs.setString('tel', userCredential.user?.phoneNumber ?? "");
     await prefs.setString('accountType', accountType);
+
+    CollectionReference users = FirebaseFirestore.instance.collection('users');
+    await users.doc(userCredential.user?.email).set({
+      'uid': userCredential.user?.uid,
+      'email': userCredential.user?.email,
+      'displayName': userCredential.user?.displayName,
+      'photoURL': userCredential.user?.photoURL,
+    });
   }
 
   static Future<void> clear() async {
