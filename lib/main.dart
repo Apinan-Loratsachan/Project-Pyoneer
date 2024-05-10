@@ -31,7 +31,7 @@ void main() async {
         'email': currentUser.email,
         'displayName': currentUser.displayName,
         'photoURL': currentUser.photoURL,
-      });
+      }, SetOptions(merge: true));
     } else {
       await UserData.clear();
       await Auth.signOut();
