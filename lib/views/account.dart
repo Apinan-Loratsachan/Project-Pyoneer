@@ -164,67 +164,80 @@ class _AccountSettigScreenState extends State<AccountSettigScreen> {
                       trailing: SizedBox(
                         width: 150,
                         child: TextField(
+                          textAlign: TextAlign.center,
                           controller: _teacherCodeController,
+                          onChanged: (value) {
+                            setState(() {});
+                          },
                           decoration: InputDecoration(
                             hintText: "ใส่รหัส",
-                            suffixIcon: IconButton(
-                              onPressed: () async {
-                                String teacherCode =
-                                    _teacherCodeController.text;
-                                DocumentSnapshot userDoc =
-                                    await FirebaseFirestore.instance
-                                        .collection('users')
-                                        .where('teacherCode',
-                                            isEqualTo: teacherCode)
-                                        .limit(1)
-                                        .get()
-                                        .then(
-                                            (snapshot) => snapshot.docs.first);
-
-                                if (userDoc.exists) {
-                                  String teacherEmail = userDoc.id;
-                                  await FirebaseFirestore.instance
-                                      .collection('bookmarks')
-                                      .doc(teacherEmail)
-                                      .update({
-                                    'emails':
-                                        FieldValue.arrayUnion([UserData.email])
-                                  });
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) => AlertDialog(
-                                      title: const Text("สำเร็จ"),
-                                      content: const Text(
-                                          "เพิ่มรหัสผู้สอนเรียบร้อยแล้ว"),
-                                      actions: [
-                                        TextButton(
-                                          onPressed: () =>
-                                              Navigator.pop(context),
-                                          child: const Text("ตกลง"),
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                } else {
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) => AlertDialog(
-                                      title: const Text("Error"),
-                                      content:
-                                          const Text("Invalid teacher code."),
-                                      actions: [
-                                        TextButton(
-                                          onPressed: () =>
-                                              Navigator.pop(context),
-                                          child: const Text("OK"),
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                }
-                              },
-                              icon: const Icon(Icons.check),
+                            hintStyle: const TextStyle(
+                              overflow: TextOverflow.ellipsis,
                             ),
+                            suffixIcon: _teacherCodeController.text.isNotEmpty
+                                ? IconButton(
+                                    onPressed: () async {
+                                      String teacherCode =
+                                          _teacherCodeController.text;
+                                      DocumentSnapshot userDoc =
+                                          await FirebaseFirestore
+                                              .instance
+                                              .collection('users')
+                                              .where('teacherCode',
+                                                  isEqualTo: teacherCode)
+                                              .limit(1)
+                                              .get()
+                                              .then((snapshot) =>
+                                                  snapshot.docs.first);
+
+                                      if (userDoc.exists) {
+                                        String teacherEmail = userDoc.id;
+                                        await FirebaseFirestore.instance
+                                            .collection('bookmarks')
+                                            .doc(teacherEmail)
+                                            .set(
+                                          {
+                                            'emails': FieldValue.arrayUnion(
+                                                [UserData.email])
+                                          },
+                                          SetOptions(merge: true),
+                                        );
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) => AlertDialog(
+                                            title: const Text("สำเร็จ"),
+                                            content: const Text(
+                                                "เพิ่มรหัสผู้สอนเรียบร้อยแล้ว"),
+                                            actions: [
+                                              TextButton(
+                                                onPressed: () =>
+                                                    Navigator.pop(context),
+                                                child: const Text("ตกลง"),
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      } else {
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) => AlertDialog(
+                                            title: const Text("เกิดข้อผิดพลาด"),
+                                            content:
+                                                const Text("รหัสไม่ถูกต้อง"),
+                                            actions: [
+                                              TextButton(
+                                                onPressed: () =>
+                                                    Navigator.pop(context),
+                                                child: const Text("OK"),
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      }
+                                    },
+                                    icon: const Icon(Icons.check),
+                                  )
+                                : null,
                           ),
                         ),
                       ),

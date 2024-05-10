@@ -34,12 +34,25 @@ class UserData {
     await prefs.setString('accountType', accountType);
 
     CollectionReference users = FirebaseFirestore.instance.collection('users');
-    await users.doc(userCredential.user?.email).set({
-      'uid': userCredential.user?.uid,
-      'email': userCredential.user?.email,
-      'displayName': userCredential.user?.displayName,
-      'photoURL': userCredential.user?.photoURL,
-    });
+    DocumentReference userRef = users.doc(userCredential.user?.email);
+
+    bool exists = (await userRef.get()).exists;
+
+    if (exists) {
+      await userRef.update({
+        'uid': userCredential.user?.uid,
+        'email': userCredential.user?.email,
+        'displayName': userCredential.user?.displayName,
+        'photoURL': userCredential.user?.photoURL,
+      });
+    } else {
+      await userRef.set({
+        'uid': userCredential.user?.uid,
+        'email': userCredential.user?.email,
+        'displayName': userCredential.user?.displayName,
+        'photoURL': userCredential.user?.photoURL,
+      });
+    }
   }
 
   static Future<void> clear() async {
