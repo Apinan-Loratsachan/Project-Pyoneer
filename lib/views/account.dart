@@ -20,6 +20,7 @@ class AccountSettigScreen extends StatefulWidget {
 
 class _AccountSettigScreenState extends State<AccountSettigScreen> {
   bool _isCopied = false;
+  final TextEditingController _teacherCodeController = TextEditingController();
 
   Future<void> deleteTestResults(String userEmail) async {
     List<String> testType = ["pre-test", "post-test"];
@@ -55,6 +56,12 @@ class _AccountSettigScreenState extends State<AccountSettigScreen> {
       }
       await batch.commit();
     }
+  }
+
+  @override
+  void dispose() {
+    _teacherCodeController.dispose();
+    super.dispose();
   }
 
   @override
@@ -150,6 +157,77 @@ class _AccountSettigScreenState extends State<AccountSettigScreen> {
                       leading: const Icon(Icons.link),
                       title: const Text("ประเภทบัญชี"),
                       trailing: UserData.getLoginProviderIcon(),
+                    ),
+                    ListTile(
+                      leading: const Icon(Icons.code),
+                      title: const Text("รหัสผู้สอน"),
+                      trailing: SizedBox(
+                        width: 150,
+                        child: TextField(
+                          controller: _teacherCodeController,
+                          decoration: InputDecoration(
+                            hintText: "ใส่รหัส",
+                            suffixIcon: IconButton(
+                              onPressed: () async {
+                                String teacherCode =
+                                    _teacherCodeController.text;
+                                DocumentSnapshot userDoc =
+                                    await FirebaseFirestore.instance
+                                        .collection('users')
+                                        .where('teacherCode',
+                                            isEqualTo: teacherCode)
+                                        .limit(1)
+                                        .get()
+                                        .then(
+                                            (snapshot) => snapshot.docs.first);
+
+                                if (userDoc.exists) {
+                                  String teacherEmail = userDoc.id;
+                                  await FirebaseFirestore.instance
+                                      .collection('bookmarks')
+                                      .doc(teacherEmail)
+                                      .update({
+                                    'emails':
+                                        FieldValue.arrayUnion([UserData.email])
+                                  });
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) => AlertDialog(
+                                      title: const Text("สำเร็จ"),
+                                      content: const Text(
+                                          "เพิ่มรหัสผู้สอนเรียบร้อยแล้ว"),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () =>
+                                              Navigator.pop(context),
+                                          child: const Text("ตกลง"),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                } else {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) => AlertDialog(
+                                      title: const Text("Error"),
+                                      content:
+                                          const Text("Invalid teacher code."),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () =>
+                                              Navigator.pop(context),
+                                          child: const Text("OK"),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                }
+                              },
+                              icon: const Icon(Icons.check),
+                            ),
+                          ),
+                        ),
+                      ),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
