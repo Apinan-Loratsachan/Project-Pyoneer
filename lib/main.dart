@@ -26,12 +26,12 @@ void main() async {
       await UserData.loadUserData();
       CollectionReference users =
           FirebaseFirestore.instance.collection('users');
-      await users.doc(currentUser.email).set({
+      await users.doc(currentUser.email).update({
         'uid': currentUser.uid,
         'email': currentUser.email,
         'displayName': currentUser.displayName,
         'photoURL': currentUser.photoURL,
-      }, SetOptions(merge: true));
+      });
     } else {
       await UserData.clear();
       await Auth.signOut();
